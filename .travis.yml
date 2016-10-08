@@ -1,2 +1,5 @@
-sada
-
+language: python
+python:
+  - "3.4"
+# command to run tests
+script: nosetests -v --nocapture tests_ftwa.py
