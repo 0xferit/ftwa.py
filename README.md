@@ -1,7 +1,7 @@
 # ftwa
 Family Tree Warehouse Application
 
-[![Build Status](https://travis-ci.org/ferittuncer/ftwa.svg?branch=master)](https://travis-ci.org/ferittuncer/ftwa)
+[![Build Status](https://travis-ci.com/ferittuncer/ftwa.svg?branch=master)](https://travis-ci.com/ferittuncer/ftwa)
 
 `simple_interactive.py` Interactive shell'e çevirmek için, şimdilik değiştirmeye gerek yok.
 
