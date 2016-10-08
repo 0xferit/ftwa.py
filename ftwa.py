@@ -7,9 +7,10 @@ import argparse
 import re
 import locale
 
+
 class Person(object):
 	
-	def __init__(self, gender, name, surname, birthdate, deathdate, father, mother, *children):
+	def __init__(self, name=None, surname=None, gender=None, birthdate=None, deathdate=None, father=None, mother=None, *children):
 		self.gender = gender
 		self.name = name
 		self.surname = surname
@@ -18,30 +19,46 @@ class Person(object):
 		self.father = father
 		self.mother = mother
 		self.children = children
+		self.set_is_placeholder()
 
-	def add_child(self, Person):
-		print ()
+	def add_child(self, person):
+		temp_tuple = (person, )
+		self.children = self.children + temp_tuple
 
-	def add_father(self, Person):
-		print ()
-	def add_mother(self, Person):
-		print ()
+	def add_father(self, person):
+		self.father = person
+	def add_mother(self, person):
+		self.mother = person
 	def set_is_placeholder(self):
 		if self.gender:
-			self.placeholder = False
+			self.is_placeholder = False
+		else:
+			self.is_placeholder = True
+
+	def str(self):
+		temp = "name={}, surn={}, g={}, bd={}, dd={}, f={}, m={}, p={}".format(self.gender, self.name, self.surname, self.birthdate, self.deathdate, self.father, self.mother, self.is_placeholder)
+		temp2 = " - children %s" % ', '.join(str(e.name) for e in self.children)
+		return temp + temp2
+
 
 
 def main():
 	print ("test")
-	Veli = Person("male", "veli", "deli", "1.1.1020", "1.1.1121", None, None)
-	Veli2 = Person("male", "veli2", "deli", "1.12.1020", "1.12.1121", None, None)
-	Ali = Person("male", "ali", "deli", "1.1.1001", "1.1.1101", None, None, Veli, Veli2)
-	Fitnat = Person("female", "fitnat", "deli", "1.2.1001", "1.3.1111", None, None, Veli, Veli2)
+	Veli = Person("veli", "deli", "male", "1.1.1020", "1.1.1121", None, None)
+	Veli2 = Person("veli2", "deli", "male", "1.12.1020", "1.12.1121", None, None)
+	Ali = Person("ali", "deli", "1.1.1001", "male", "1.1.1101", None, None, Veli, Veli2)
+	Fitnat = Person("fitnat", "deli", "1.2.1001", "female", "1.3.1111", None, None, Veli, Veli2)
 
+	asda = Person(name="veledizina")
 
+	print(asda.str())
+	print(asda.gender == True)
 
 	#print(Veli.mother.gender)
-	print(Ali.children[1].name)
+	print(Fitnat.str())
+	print(type(Fitnat.children))
+	Fitnat.add_child(asda)
+	print(Fitnat.str())
 
 if __name__ == '__main__':
 	main()
