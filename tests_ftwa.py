@@ -7,6 +7,7 @@ import re
 
 class Test(unittest.TestCase):
 
+    def test(self):
 
 
 if __name__ == '__main__':
