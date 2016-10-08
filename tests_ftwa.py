@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-import pipeline_caller
+import ftwa
 import unittest
 import os
 import re
