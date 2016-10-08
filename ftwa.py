@@ -7,10 +7,24 @@ import argparse
 import re
 import locale
 
+from datetime import date
 
 class Person(object):
-	
-	def __init__(self, name=None, surname=None, gender=None, birthdate=None, deathdate=None, father=None, mother=None, *children):
+	@staticmethod
+	def is_date(*args):
+  		return all(isinstance(arg, date) for arg in args) 
+
+	def __init__(self, name=None, surname=None, gender=None, birthdate: date=None, deathdate: date=None, father=None, mother=None, *children):
+
+		#if not isinstance(deathdate, date) or not isinstance(birthdate, date):
+		#	raise TypeError
+		
+		if not Person.is_date(deathdate, birthdate):
+  			raise TypeError
+
+
+		#var_is_good = any(isinstance(var, t) for t in [type1, type2, type3])
+
 		self.gender = gender
 		self.name = name
 		self.surname = surname
@@ -34,9 +48,13 @@ class Person(object):
 			self.is_placeholder = False
 		else:
 			self.is_placeholder = True
+	def get_age(self):
+		return
+
+	
 
 	def str(self):
-		temp = "name={}, surn={}, g={}, bd={}, dd={}, f={}, m={}, p={}".format(self.gender, self.name, self.surname, self.birthdate, self.deathdate, self.father, self.mother, self.is_placeholder)
+		temp = "name={}, surn={}, g={}, bd={}, dd={}, f={}, m={}, p={}".format(self.name, self.surname, self.gender, self.birthdate, self.deathdate, self.father, self.mother, self.is_placeholder)
 		temp2 = " - children %s" % ', '.join(str(e.name) for e in self.children)
 		return temp + temp2
 
@@ -44,19 +62,19 @@ class Person(object):
 
 def main():
 	print ("test")
-	Veli = Person("veli", "deli", "male", "1.1.1020", "1.1.1121", None, None)
-	Veli2 = Person("veli2", "deli", "male", "1.12.1020", "1.12.1121", None, None)
-	Ali = Person("ali", "deli", "1.1.1001", "male", "1.1.1101", None, None, Veli, Veli2)
-	Fitnat = Person("fitnat", "deli", "1.2.1001", "female", "1.3.1111", None, None, Veli, Veli2)
+	Veli = Person("veli", "deli", "male", date.today(), date.today(), None, None)
+	Veli2 = Person("veli2", "deli", "male", date.today(), date.today(), None, None)
+	Ali = Person("ali", "deli", "male", date.today(), date.today(), None, None, Veli, Veli2)
+	Fitnat = Person("fitnat", "deli", "female", date.today(), date.today(), None, None, Veli, Veli2)
 
-	asda = Person(name="veledizina")
+	asda = Person(name="veledizina", deathdate="", birthdate=date.today())
 
 	print(asda.str())
 	print(asda.gender == True)
 
 	#print(Veli.mother.gender)
 	print(Fitnat.str())
-	print(type(Fitnat.children))
+	#print(type(Fitnat.children))
 	Fitnat.add_child(asda)
 	print(Fitnat.str())
 
