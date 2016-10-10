@@ -44,6 +44,7 @@ class Person(object): #This is our Person object which creates struct to keep in
 		self.mother = mother
 		self.children = children
 
+
 	def add_child(self, person):
 		temp_tuple = (person, )
 		self.children = self.children + temp_tuple
@@ -60,7 +61,7 @@ class Person(object): #This is our Person object which creates struct to keep in
 	def get_mother(self):
 		return self.mother
 
-	def is_placeholder(self):
+	def is_placeholder(self): #We agreed that the missing information as placeholder
 		if self.name and self.surname and self.gender and self.birthdate and self.deathdate and ((self.father and self.mother) or (not self.father and not self.mother)):
 			return False
 		else:
