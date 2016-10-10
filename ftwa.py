@@ -22,7 +22,7 @@ class Person(object): #This is our Person object which creates struct to keep in
 	def is_none(*args):
 		return all(isinstance(None, (date)) for arg in args) 
 
-	def __init__(self, name=None, surname=None, gender=None, birthdate: date=None, deathdate: date=None, father=None, mother=None, spouse=None *children):
+	def __init__(self, name=None, surname=None, gender=None, birthdate: date=None, deathdate: date=None, father=None, mother=None, spouse=None, *children):
 
 		#if not isinstance(deathdate, date) or not isinstance(birthdate, date):
 		#	raise TypeError
