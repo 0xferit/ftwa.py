@@ -49,6 +49,9 @@ class Person(object): #This is our Person object which creates struct to keep in
 		temp_tuple = (person, )
 		self.children = self.children + temp_tuple
 
+	def get_children(self):
+		return self.children
+
 	def set_father(self, person):
 		self.father = person
 
