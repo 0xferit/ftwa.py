@@ -34,8 +34,14 @@ class Test(unittest.TestCase):
 		assert Fitnat.get_father() == None
 		assert Fitnat.get_mother() == None
 
-		Veledizina = ftwa.Person(name="Veledizina")
 
+		Veledizina = ftwa.Person(name="Veledizina", father=ftwa.Person())
+	
+		assert Veli.is_placeholder() == False
+		assert Deli.is_placeholder() == False
+		assert Ali.is_placeholder() == False
+		assert Fitnat.is_placeholder() == False
+		assert Veledizina.is_placeholder() == True
 
 		assert 1==1
 

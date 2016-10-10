@@ -43,7 +43,6 @@ class Person(object): #This is our Person object which creates struct to keep in
 		self.father = father
 		self.mother = mother
 		self.children = children
-		self.set_is_placeholder()
 
 	def add_child(self, person):
 		temp_tuple = (person, )
@@ -61,11 +60,11 @@ class Person(object): #This is our Person object which creates struct to keep in
 	def get_mother(self):
 		return self.mother
 
-	def set_is_placeholder(self):
-		if self.name and self.surname and self.gender and self.birthdate and self.deathdate and self.father and self.mother:
-			self.is_placeholder = False
+	def is_placeholder(self):
+		if self.name and self.surname and self.gender and self.birthdate and self.deathdate and ((self.father and self.mother) or (not self.father and not self.mother)):
+			return False
 		else:
-			self.is_placeholder = True
+			return True
 	
 	def get_age(self):
 		return
