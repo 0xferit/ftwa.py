@@ -33,15 +33,19 @@ class HelloWorld(cmd.Cmd):
 		G=nx.Graph()
 
 		# adding just one node:
-		G.add_node("a")
+		G.add_node("a", time="5pm")
+		G.add_node("b")
+		G.add_node("c")
+		G.add_node("d")
 		# a list of nodes:
 		G.add_nodes_from(["b","c"])
 
+		
+		G.add_edges_from([("a","c"),("c","d"), ("a",1), (1,"d"), ("a",2)])
 		print("Nodes of graph: ")
 		print(G.nodes())
 		print("Edges of graph: ")
 		print(G.edges())
-		G.add_edges_from([("a","c"),("c","d"), ("a",1), (1,"d"), ("a",2)])
 		nx.draw(G)
 		plt.savefig("simple_path.png") # save as png
 		plt.show() # display
