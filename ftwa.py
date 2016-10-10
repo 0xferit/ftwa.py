@@ -62,7 +62,7 @@ class Person(object): #This is our Person object which creates struct to keep in
 		return self.mother
 
 	def set_is_placeholder(self):
-		if self.gender:
+		if self.name and self.surname and self.gender and self.birthdate and self.deathdate and self.father and self.mother:
 			self.is_placeholder = False
 		else:
 			self.is_placeholder = True
