@@ -43,7 +43,7 @@ class Person(object): #This is our Person object which creates struct to keep in
 		self.father = father
 		self.mother = mother
 		self.children = children
-		self.set_is_placeholder()
+		self.set_is_placeholder() #We agreed that the missing information as placeholder
 
 	def add_child(self, person):
 		temp_tuple = (person, )
