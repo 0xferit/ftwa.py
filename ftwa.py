@@ -70,8 +70,17 @@ class Person(object): #This is our Person object which creates struct to keep in
 		else:
 			return True
 	
-	def get_age(self):
+	def get_age(self): # TODO
 		return
+
+	def is_alive(self): #TODO
+		return
+
+	def get_level(self): #TODO
+		return
+
+	def get_relationship_with(self, relative): # Returns relationship between this object and "relative" arg
+		return:
 
 	def str(self):
 		temp = "name={}, surn={}, g={}, bd={}, dd={}, f={}, m={}, p={}".format(self.name, self.surname, self.gender, self.birthdate, self.deathdate, self.father, self.mother, self.is_placeholder)
