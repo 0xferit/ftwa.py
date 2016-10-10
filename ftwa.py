@@ -33,7 +33,7 @@ class Person(object): #This is our Person object which creates struct to keep in
 		#if not Person.is_person(father, mother, *children):
   		#	raise TypeError
 	
-		#print("any:{}".format(all(isinstance(var, date) for var in [birthdate, deathdate])))
+		#print("any:{}".format(all(isinstance(var, date) for var in [birthdate, deathdate]))) 
 
 		self.gender = gender
 		self.name = name
