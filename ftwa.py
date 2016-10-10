@@ -80,7 +80,7 @@ class Person(object): #This is our Person object which creates struct to keep in
 		return
 
 	def get_relationship_with(self, relative): # Returns relationship between this object and "relative" arg
-		return:
+		return
 
 	def str(self):
 		temp = "name={}, surn={}, g={}, bd={}, dd={}, f={}, m={}, p={}".format(self.name, self.surname, self.gender, self.birthdate, self.deathdate, self.father, self.mother, self.is_placeholder)
