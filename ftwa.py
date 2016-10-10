@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-import sys
+import sys #sys library is importing
 import time
 import os.path
 import argparse
@@ -9,7 +9,7 @@ import locale
 
 from datetime import date
 
-class Person(object):
+class Person(object): #This is our Person object which creates struct to keep information
 	@staticmethod
 	def is_date(*args):
   		return all(isinstance(arg, date) for arg in args)
