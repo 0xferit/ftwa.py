@@ -22,7 +22,7 @@ class Person(object): #This is our Person object which creates struct to keep in
 	def is_none(*args):
 		return all(isinstance(None, (date)) for arg in args) 
 
-	def __init__(self, name=None, surname=None, gender=None, birthdate: date=None, deathdate: date=None, father=None, mother=None, *children):
+	def __init__(self, name=None, surname=None, gender=None, birthdate: date=None, deathdate: date=None, father=None, mother=None, spouse=None *children):
 
 		#if not isinstance(deathdate, date) or not isinstance(birthdate, date):
 		#	raise TypeError
@@ -43,6 +43,7 @@ class Person(object): #This is our Person object which creates struct to keep in
 		self.father = father
 		self.mother = mother
 		self.children = children
+		self.spouse = spouse
 
 
 	def add_child(self, person):
@@ -63,6 +64,12 @@ class Person(object): #This is our Person object which creates struct to keep in
 
 	def get_mother(self):
 		return self.mother
+
+	def set_spouse(self, person):
+		self.spouse = person
+
+	def get_spouse(self):
+		return self.spouse
 
 	def is_placeholder(self): #We agreed that the missing information as placeholder
 		if self.name and self.surname and self.gender and self.birthdate and self.deathdate and ((self.father and self.mother) or (not self.father and not self.mother)):
