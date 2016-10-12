@@ -178,9 +178,9 @@ class Person(object): #This is our Person object which creates struct to keep in
 		
 
 	def str(self):
-		temp = "name={}, surn={}, g={}, bd={}, dd={}, f={}, m={}, p={}".format(self.name, self.surname, self.gender, self.birthdate, self.deathdate, self.father, self.mother, self.is_placeholder)
-		temp2 = " - children %s" % ', '.join(str(e.name) for e in self.children)
-		return temp + temp2
+		temp = "name={}, surn={}, g={}, bd={}, dd={}, f={}, m={}, p={}".format(self.name, self.surname, self.gender, self.birthdate, self.deathdate, self.father, self.mother, self.is_placeholder())
+		#temp2 = " - children %s" % ', '.join(str(e.name) for e in self.children)
+		return temp
 
 
 

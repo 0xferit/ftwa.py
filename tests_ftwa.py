@@ -78,7 +78,13 @@ class Test(unittest.TestCase):
 		assert 3 == len(Veli.get_first_degree_relatives())
 		assert 3 == len(Deli.get_first_degree_relatives())
 		
-		
+	
+
+	def test_str(self):
+		Veli.str()
+		Deli.str()
+		Ali.str()
+		Huri.str()
 if __name__ == '__main__':
 	unittest.main()
 
