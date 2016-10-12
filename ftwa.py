@@ -83,7 +83,9 @@ class Person(object): #This is our Person object which creates struct to keep in
 		return today.year - birthdate.year - ((today.month, today.day) < (birthdate.month, birthdate.day))
 
 	def is_alive(self): #TODO
-		return
+		today = date.today()
+		deathdate = self.deathdate
+		return (0 > (today.year - deathdate.year - ((today.month, today.day) < (deathdate.month, deathdate.day))))
 
 	def get_level(self): #TODO
 		return
@@ -102,7 +104,7 @@ def main():
 	print ("test")
 	Veli = Person("veli", "deli", "male", date.today(), date.today(), "o", None)
 	Veli2 = Person("veli2", "deli", "male", date.today(), date.today(), None, None)
-	Ali = Person("ali", "deli", "male", date.today(), date.today(), None, None, Veli, Veli2)
+	Ali = Person("ali", "deli", "male", date.today(), None, None, None, Veli, Veli2)
 	Fitnat = Person("fitnat", "deli", "female", date.today(), date.today(), None, None, Veli, Veli2)
 
 	asda = Person(name="veledizina")
