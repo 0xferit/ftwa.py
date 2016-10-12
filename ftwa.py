@@ -92,12 +92,12 @@ class Person(object): #This is our Person object which creates struct to keep in
 		birthdate = self.birthdate
 		return today.year - birthdate.year - ((today.month, today.day) < (birthdate.month, birthdate.day))
 
-	def is_alive(self): #TODO
+	def is_alive(self): 
 		today = date.today()
 		deathdate = self.deathdate
 		return (0 > (today.year - deathdate.year - ((today.month, today.day) < (deathdate.month, deathdate.day))))
 
-	def get_level(self): #TODO
+	def get_level(self):
 		if self.father == None and self.father == None:
 			return 0
 		if not self.father == None and not self.mother == None:
@@ -107,7 +107,7 @@ class Person(object): #This is our Person object which creates struct to keep in
 		else:
 			return 1 + self.mother.get_level()
 
-	def get_relationship_with(self, relative, path=[], rel_path=[]): # Returns relationship between this object and "relative" arg
+	def get_relationship_with(self, relative, path=[], rel_path=[]): # Taslak
 		path.append(self)		
 		if(self == relative):
 			print("kendine eşit {}".format(self.name))
@@ -149,7 +149,7 @@ class Person(object): #This is our Person object which creates struct to keep in
 			minimum_path_len = min(len(rp) for rp in rel_paths)
 			rel_paths_with_min_len = (rp for rp in rel_paths if len(rp) in minimum_path_len)
 
-	def get_relation(self, relative):
+	def get_relation(self, relative): # taslak
 		current = self
 		path = []
 		while not current == relative:
@@ -164,7 +164,7 @@ class Person(object): #This is our Person object which creates struct to keep in
 
 
 
-	def bfs_paths(graph, start, goal):
+	def bfs_paths(graph, start, goal): # taslak
 		start = self		
 		queue = [(start, [start])]	
 		while queue:
