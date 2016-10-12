@@ -77,8 +77,10 @@ class Person(object): #This is our Person object which creates struct to keep in
 		else:
 			return True
 	
-	def get_age(self): # TODO
-		return
+	def get_age(self):
+		today = date.today()
+		birthdate = self.birthdate
+		return today.year - birthdate.year - ((today.month, today.day) < (birthdate.month, birthdate.day))
 
 	def is_alive(self): #TODO
 		return
