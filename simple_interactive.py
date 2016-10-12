@@ -3,16 +3,32 @@ import networkx as nx
 import tkinter
 import matplotlib.pyplot as plt
 import ftwa
+from datetime import date
 
 class HelloWorld(cmd.Cmd):
 	"""Simple command processor example."""
 	
 	FRIENDS = [ 'Alice', 'Adam', 'Barbara', 'Bob' ]
 	PERSONS = []
+	
+	Veli 	= ftwa.Person("Veli", "Yanyatan",   "male", date(2005, 12, 15), date(2075, 12, 15), None, None, None)	#Çocuk	
+	Ali 	= ftwa.Person("Ali", "Yanyatan",    "male", date(1980, 12, 15), date(2055, 12, 15), None, None, None, Veli) # Baba
+	Huri 	= ftwa.Person("Huri", "Yanyatan", "female", date(1983, 12, 15), date(2075, 12, 15), None, None, Ali, Veli) # Anne
+	Deli 	= ftwa.Person("Deli", "Yanyatan",   "male", date(2007, 12, 15), date(2075, 12, 15), Ali, Huri, None) # Çocuk
 
-	def parse(arg):
-    		'Convert a series of zero or more numbers to an argument tuple'
-    		return tuple(map(int, arg.split()))
+	Ali.set_spouse(Huri)
+
+	Veli.set_mother(Huri)
+	Veli.set_father(Ali)
+
+	Ali.add_child(Deli)
+	Huri.add_child(Deli)
+
+	PERSONS.append(Veli)
+	PERSONS.append(Ali)
+	PERSONS.append(Huri)
+	PERSONS.append(Deli)
+
 	
 	def do_greet(self, person):
 		"Greet the person"
@@ -35,8 +51,18 @@ class HelloWorld(cmd.Cmd):
 		return completions
 
 	def do_create(self, arg):
-		temp = ftwa.Person(tuple(map(int, arg.split())))
+		print(*parse(arg))
+		temp = ftwa.Person(*parse(arg))
 		print(temp.str())
+		self.PERSONS.append(temp)
+
+	def do_search(self, arg):
+		print()
+
+	def do_list(self, arg):
+		for person in self.PERSONS:
+			print(person.str())
+		
 	
 	
 	def do_print(self, arg):
@@ -61,18 +87,43 @@ class HelloWorld(cmd.Cmd):
 			X.add_edge("a", z)
 		
 		#
+		labels = {}
+		labels['AliYanyatan']=r'$AliYanyatan$'
+		labels['DeliYanyatan']=r'$DeliYanyatan$'
+		labels['HuriYanyatan']=r'$HuriYanyatan$'
+		labels['VeliYanyatan']=r'$VeliYanyatan$'
+		Y=nx.Graph()
+		for person in self.PERSONS:
+			try:
+				Y.nodes().index(person.name+person.surname)
+			except:
+				print("person not found, new person created: {}".format(person.name))
+				Y.add_node(person.name + person.surname)
+				first_degree_relatives = person.get_first_degree_relatives()
+				for rel in first_degree_relatives:
+					if rel:
+						print("inner")
+						print("rel: {}".format(rel))
+						try:
+							Y.nodes().index(rel.name + rel.surname)
+						except:
+							Y.add_node(rel.name+rel.surname)
+							Y.add_edge(rel.name+rel.surname, person.name+person.surname)
+					
+
 		print("Nodes of graph: ")
-		print(G.nodes())
+		print(Y.nodes())
 		print("Edges of graph: ")
-		print(G.edges())
-		nx.draw(X)
+		print(Y.edges())
+		nx.draw(Y, labels=labels)
 		plt.savefig("simple_path.png") # save as png
 		plt.show() # display
 	
 	def do_EOF(self, line):
 		return True
 
-
+def parse(arg):
+	return arg.split()
 
 
 if __name__ == '__main__':

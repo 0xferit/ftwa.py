@@ -9,12 +9,18 @@ import locale
 from enum import Enum
 from datetime import date
 	
+
+class MetaPerson(type):
+    def __iter__(self):
+        for attr in dir(Person):
+            if not attr.startswith("__"):
+                yield attr
 	
 class Relation(Enum):
 	SPOUSE, FATHER, MOTHER, CHILD = range(4)
 		
 
-class Person(object): #This is our Person object which creates struct to keep information
+class Person(metaclass=MetaPerson): #This is our Person object which creates struct to keep information
 	@staticmethod
 	def is_date(*args):
   		return all(isinstance(arg, date) for arg in args)
@@ -26,6 +32,10 @@ class Person(object): #This is our Person object which creates struct to keep in
 	@staticmethod
 	def is_none(*args):
 		return all(isinstance(None, (date)) for arg in args) 
+
+	def __iter__(self):
+		for each in self.__dict__.keys():
+			yield self.__getattribute__(each)
 
 	def __init__(self, name=None, surname=None, gender=None, birthdate: date=None, deathdate: date=None, father=None, mother=None, spouse=None, *children):
 
@@ -53,7 +63,7 @@ class Person(object): #This is our Person object which creates struct to keep in
 
 	def add_child(self, person):
 		temp_tuple = [person]
-		self.children.append(temp_tuple)
+		self.children.extend(temp_tuple)
 
 	def get_children(self):
 		return self.children
@@ -85,7 +95,9 @@ class Person(object): #This is our Person object which creates struct to keep in
 	def get_first_degree_relatives(self):
 		temp = [x for x in [self.mother, self.father, self.spouse] if x is not None]
 		temp2 = [y for y in self.children if y is not None]
-		return temp + temp2
+		temp.extend(temp2)
+		print(type(temp))
+		return temp
 	
 	def get_age(self):
 		today = date.today()
@@ -178,7 +190,7 @@ class Person(object): #This is our Person object which creates struct to keep in
 		
 
 	def str(self):
-		temp = "name={}, surn={}, g={}, bd={}, dd={}, f={}, m={}, p={}".format(self.name, self.surname, self.gender, self.birthdate, self.deathdate, self.father, self.mother, self.is_placeholder())
+		temp = "name={}, surn={}, g={}, bd={}, dd={}, f={}, m={}, s={}, p={}".format(self.name, self.surname, self.gender, self.birthdate, self.deathdate, self.father, self.mother, self.spouse, self.is_placeholder())
 		#temp2 = " - children %s" % ', '.join(str(e.name) for e in self.children)
 		return temp
 
