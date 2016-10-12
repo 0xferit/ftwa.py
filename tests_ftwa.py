@@ -7,29 +7,33 @@ import re
 import time
 from datetime import date
 
-Veli 	= ftwa.Person("Veli", 	"Yanyatan",   "male", date(2005, 12, 15), date(2075, 12, 15), None, None)	#Çocuk	
-Ali 	= ftwa.Person("Ali", 	"Yanyatan",   "male", date(1980, 12, 15), date(2055, 12, 15), None, None, Veli) # Baba
-Fitnat 	= ftwa.Person("Fitnat", "Yanyatan", "female", date(1983, 12, 15), date(2075, 12, 15), None, None, Veli) # Anne
-Deli 	= ftwa.Person("Deli", 	"Yanyatan",   "male", date(2007, 12, 15), date(2075, 12, 15), Ali, Fitnat) # Çocuk
+Veli 	= ftwa.Person("Veli", "Yanyatan",   "male", date(2005, 12, 15), date(2075, 12, 15), None, None, None)	#Çocuk	
+Ali 	= ftwa.Person("Ali", "Yanyatan",    "male", date(1980, 12, 15), date(2055, 12, 15), None, None, None, Veli) # Baba
+Huri 	= ftwa.Person("Huri", "Yanyatan", "female", date(1983, 12, 15), date(2075, 12, 15), None, None, Ali, Veli) # Anne
+Deli 	= ftwa.Person("Deli", "Yanyatan",   "male", date(2007, 12, 15), date(2075, 12, 15), Ali, Huri, None) # Çocuk
+
+Ali.set_spouse(Huri)
+
+Veli.set_mother(Huri)
+Veli.set_father(Ali)
+
+Ali.add_child(Deli)
+Huri.add_child(Deli)
+
 
 class Test(unittest.TestCase):
 
 	def test_overall(self):
 
-		Ali.add_child(Deli)
-		Fitnat.add_child(Deli)
-		
-		Veli.set_father(Ali)
-		Veli.set_mother(Fitnat)
 
 		assert Veli.get_father() == Ali
-		assert Veli.get_mother() == Fitnat
+		assert Veli.get_mother() == Huri
 		assert Deli.get_father() == Ali
-		assert Deli.get_mother() == Fitnat
+		assert Deli.get_mother() == Huri
 		assert Ali.get_father() == None		
 		assert Ali.get_mother() == None
-		assert Fitnat.get_father() == None
-		assert Fitnat.get_mother() == None
+		assert Huri.get_father() == None
+		assert Huri.get_mother() == None
 
 
 		Veledizina = ftwa.Person(name="Veledizina", father=ftwa.Person())
@@ -37,7 +41,7 @@ class Test(unittest.TestCase):
 		assert Veli.is_placeholder() == False
 		assert Deli.is_placeholder() == False
 		assert Ali.is_placeholder() == False
-		assert Fitnat.is_placeholder() == False
+		assert Huri.is_placeholder() == False
 		assert Veledizina.is_placeholder() == True
 
 	def test_get_age(self):
@@ -64,8 +68,15 @@ class Test(unittest.TestCase):
 	def test_get_level(self):
 
 		assert 0 == Ali.get_level()
-		assert 0 == Fitnat.get_level()
+		assert 0 == Huri.get_level()
 		assert 1 == Deli.get_level()
+		assert 1 == Veli.get_level()
+
+	def test_get_first_degree_relatives(self):
+		assert 3 == len(Ali.get_first_degree_relatives())
+		assert 3 == len(Huri.get_first_degree_relatives())
+		assert 3 == len(Veli.get_first_degree_relatives())
+		assert 3 == len(Deli.get_first_degree_relatives())
 		
 		
 if __name__ == '__main__':
