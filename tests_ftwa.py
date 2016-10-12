@@ -73,6 +73,7 @@ class Test(unittest.TestCase):
 		assert 1 == Veli.get_level()
 
 	def test_get_first_degree_relatives(self):
+		print(len(Ali.get_first_degree_relatives()))
 		assert 3 == len(Ali.get_first_degree_relatives())
 		assert 3 == len(Huri.get_first_degree_relatives())
 		assert 3 == len(Veli.get_first_degree_relatives())

@@ -17,8 +17,10 @@ class MetaPerson(type):
                 yield attr
 	
 class Relation(Enum):
+
 	SPOUSE, FATHER, MOTHER, CHILD = range(4)
-		
+
+relation_table = {}		
 
 class Person(metaclass=MetaPerson): #This is our Person object which creates struct to keep information
 	@staticmethod
@@ -55,9 +57,19 @@ class Person(metaclass=MetaPerson): #This is our Person object which creates str
 		self.surname = surname
 		self.birthdate = birthdate
 		self.deathdate = deathdate
+
 		self.father = father
+		if self.father == 2:
+			if not self.father.name == None:
+				print()
+				self.get_father().add_child(self)
+
 		self.mother = mother
+
+
 		self.children = [children]
+		
+
 		self.spouse = spouse
 
 
@@ -198,24 +210,19 @@ class Person(metaclass=MetaPerson): #This is our Person object which creates str
 
 def main():
 	print ("test")
-	Veli = Person("veli", "deli", "male", date.today(), date.today(), "o", None)
-	Veli2 = Person("veli2", "deli", "male", date.today(), date.today(), None, None)
-	Ali = Person("ali", "deli", "male", date.today(), date.today(), None, None, None, Veli, Veli2)
-	Fitnat = Person("fitnat", "deli", "female", date.today(), date.today(), None, None, Ali, Veli, Veli2)
-	Ali.set_spouse(Fitnat)
-	asda = Person(name="veledizina")
+	Veli 	= Person("Veli", "Yanyatan",   "male", date(2005, 12, 15), date(2075, 12, 15), None, None, None)	#Çocuk	
+	Ali 	= Person("Ali", "Yanyatan",    "male", date(1980, 12, 15), date(2055, 12, 15), None, None, None, Veli) # Baba
+	Huri 	= Person("Huri", "Yanyatan", "female", date(1983, 12, 15), date(2075, 12, 15), None, None, Ali, Veli) # Anne
+	Deli 	= Person("Deli", "Yanyatan",   "male", date(2007, 12, 15), date(2075, 12, 15), Ali, Huri, None) # Çocuk
+	
+	Ali.set_spouse(Huri)
 
-	print(asda.str())
-	print(asda.gender == True)
+	Veli.set_mother(Huri)
+	Veli.set_father(Ali)
 
-	#print(Veli.mother.gender)
-	print(Fitnat.str())
-	#print(type(Fitnat.children))
-	Fitnat.add_child(asda)
-	print(Fitnat.str())
-
-	#print("Relation F to A:{}".format(Fitnat.get_relationship_with(Ali)))
-	#print("Relation F to V:{}".format(Fitnat.get_relationship_with(Veli)))
+	Ali.add_child(Deli)
+	Huri.add_child(Deli)
+	
 
 
 if __name__ == '__main__':

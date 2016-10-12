@@ -93,6 +93,7 @@ class HelloWorld(cmd.Cmd):
 		labels['HuriYanyatan']=r'$HuriYanyatan$'
 		labels['VeliYanyatan']=r'$VeliYanyatan$'
 		Y=nx.Graph()
+
 		for person in self.PERSONS:
 			try:
 				Y.nodes().index(person.name+person.surname)
@@ -103,7 +104,7 @@ class HelloWorld(cmd.Cmd):
 				for rel in first_degree_relatives:
 					if rel:
 						print("inner")
-						print("rel: {}".format(rel))
+						print("rel: {}".format(rel.name))
 						try:
 							Y.nodes().index(rel.name + rel.surname)
 						except:
