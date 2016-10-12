@@ -7,13 +7,10 @@ import re
 import time
 from datetime import date
 
-Veli = ftwa.Person("Veli", "Yanyatan", "male", date(1980, 12, 15), date(2055, 12, 15), None, None)		
-
-Ali = ftwa.Person("Ali", "Yanyatan", "male", date(2005, 12, 15), date(2055, 12, 15), None, None, Veli)
-Fitnat = ftwa.Person("Fitnat", "Yanyatan", "female", date(1983, 12, 15), date(2075, 12, 15), None, None, Veli)
-
-		
-Deli = ftwa.Person("Deli", "Yanyatan", "male", date(2007, 12, 15), date(2075, 12, 15), Ali, Fitnat)
+Veli 	= ftwa.Person("Veli", 	"Yanyatan",   "male", date(2005, 12, 15), date(2075, 12, 15), None, None)	#Çocuk	
+Ali 	= ftwa.Person("Ali", 	"Yanyatan",   "male", date(1980, 12, 15), date(2055, 12, 15), None, None, Veli) # Baba
+Fitnat 	= ftwa.Person("Fitnat", "Yanyatan", "female", date(1983, 12, 15), date(2075, 12, 15), None, None, Veli) # Anne
+Deli 	= ftwa.Person("Deli", 	"Yanyatan",   "male", date(2007, 12, 15), date(2075, 12, 15), Ali, Fitnat) # Çocuk
 
 class Test(unittest.TestCase):
 
@@ -48,7 +45,7 @@ class Test(unittest.TestCase):
 		date2 = date(2016, 12, 15)
 		date3 = date(2016, 12, 16)
 
-		birthdate = Veli.birthdate
+		birthdate = Ali.birthdate
 		assert 35 == (date1.year - birthdate.year - ((date1.month, date1.day) < (birthdate.month, birthdate.day)))
 		assert 36 == (date1.year - birthdate.year - ((date2.month, date2.day) < (birthdate.month, birthdate.day)))
 		assert 36 == (date1.year - birthdate.year - ((date3.month, date3.day) < (birthdate.month, birthdate.day)))
@@ -58,11 +55,17 @@ class Test(unittest.TestCase):
 		date2 = date(2055, 12, 15)
 		date3 = date(2055, 12, 16)
 
-		deathdate = Veli.deathdate
+		deathdate = Ali.deathdate
 
 		assert True == (0 >(date1.year - deathdate.year - ((date1.month, date1.day) < (deathdate.month, deathdate.day))))
 		assert False == (0 >(date1.year - deathdate.year - ((date2.month, date2.day) < (deathdate.month, deathdate.day))))
 		assert False == (0 >(date1.year - deathdate.year - ((date3.month, date3.day) < (deathdate.month, deathdate.day))))
+
+	def test_get_level(self):
+
+		assert 0 == Ali.get_level()
+		assert 0 == Fitnat.get_level()
+		assert 1 == Deli.get_level()
 		
 		
 if __name__ == '__main__':

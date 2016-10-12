@@ -88,7 +88,14 @@ class Person(object): #This is our Person object which creates struct to keep in
 		return (0 > (today.year - deathdate.year - ((today.month, today.day) < (deathdate.month, deathdate.day))))
 
 	def get_level(self): #TODO
-		return
+		if self.father == None and self.father == None:
+			return 0
+		if not self.father == None and not self.mother == None:
+			return 1 + max(self.father.get_level(), self.mother.get_level())
+		if not self.father == None and self.mother == None: 
+			return 1 + self.father.get_level()
+		else:
+			return 1 + self.mother.get_level()
 
 	def get_relationship_with(self, relative): # Returns relationship between this object and "relative" arg
 		return
@@ -104,7 +111,7 @@ def main():
 	print ("test")
 	Veli = Person("veli", "deli", "male", date.today(), date.today(), "o", None)
 	Veli2 = Person("veli2", "deli", "male", date.today(), date.today(), None, None)
-	Ali = Person("ali", "deli", "male", date.today(), None, None, None, Veli, Veli2)
+	Ali = Person("ali", "deli", "male", date.today(), date.today(), None, None, Veli, Veli2)
 	Fitnat = Person("fitnat", "deli", "female", date.today(), date.today(), None, None, Veli, Veli2)
 
 	asda = Person(name="veledizina")
