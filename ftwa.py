@@ -16,11 +16,7 @@ class MetaPerson(type):
             if not attr.startswith("__"):
                 yield attr
 	
-class Relation(Enum):
-
-	SPOUSE, FATHER, MOTHER, CHILD = range(4)
-
-relation_table = {}		
+	
 
 class Person(metaclass=MetaPerson): #This is our Person object which creates struct to keep information
 	@staticmethod
@@ -39,7 +35,7 @@ class Person(metaclass=MetaPerson): #This is our Person object which creates str
 		for each in self.__dict__.keys():
 			yield self.__getattribute__(each)
 
-	def __init__(self, name=None, surname=None, gender=None, birthdate: date=None, deathdate: date=None, father=None, mother=None, spouse=None, *children):
+	def __init__(self, name=None, surname=None, gender=None, birthdate: date=None, deathdate: date=None):
 
 		#if not isinstance(deathdate, date) or not isinstance(birthdate, date):
 		#	raise TypeError
@@ -58,58 +54,15 @@ class Person(metaclass=MetaPerson): #This is our Person object which creates str
 		self.birthdate = birthdate
 		self.deathdate = deathdate
 
-		self.father = father
-		if self.father == 2:
-			if not self.father.name == None:
-				print()
-				self.get_father().add_child(self)
 
-		self.mother = mother
-
-
-		self.children = [children]
-		
-
-		self.spouse = spouse
-
-
-	def add_child(self, person):
-		temp_tuple = [person]
-		self.children.extend(temp_tuple)
-
-	def get_children(self):
-		return self.children
-
-	def set_father(self, person):
-		self.father = person
-
-	def get_father(self):
-		return self.father
-
-	def set_mother(self, person):
-		self.mother = person
-
-	def get_mother(self):
-		return self.mother
-
-	def set_spouse(self, person):
-		self.spouse = person
-
-	def get_spouse(self):
-		return self.spouse
 
 	def is_placeholder(self): #We agreed that the missing information as placeholder
-		if self.name and self.surname and self.gender and self.birthdate and self.deathdate and ((self.father and self.mother) or (not self.father and not self.mother)):
+		if self.name and self.surname and self.gender and self.birthdate:
 			return False
 		else:
 			return True
 
-	def get_first_degree_relatives(self):
-		temp = [x for x in [self.mother, self.father, self.spouse] if x is not None]
-		temp2 = [y for y in self.children if y is not None]
-		temp.extend(temp2)
-		print(type(temp))
-		return temp
+
 	
 	def get_age(self):
 		today = date.today()
@@ -121,17 +74,9 @@ class Person(metaclass=MetaPerson): #This is our Person object which creates str
 		deathdate = self.deathdate
 		return (0 > (today.year - deathdate.year - ((today.month, today.day) < (deathdate.month, deathdate.day))))
 
-	def get_level(self):
-		if self.father == None and self.father == None:
-			return 0
-		if not self.father == None and not self.mother == None:
-			return 1 + max(self.father.get_level(), self.mother.get_level())
-		if not self.father == None and self.mother == None: 
-			return 1 + self.father.get_level()
-		else:
-			return 1 + self.mother.get_level()
 
-	def get_relationship_with(self, relative, path=[], rel_path=[]): # Taslak
+
+	def get_relationship_with(self, relative, path=[], rel_path=[]): #TODO
 		path.append(self)		
 		if(self == relative):
 			print("kendine eşit {}".format(self.name))
@@ -173,7 +118,7 @@ class Person(metaclass=MetaPerson): #This is our Person object which creates str
 			minimum_path_len = min(len(rp) for rp in rel_paths)
 			rel_paths_with_min_len = (rp for rp in rel_paths if len(rp) in minimum_path_len)
 
-	def get_relation(self, relative): # taslak
+	def get_relation(self, relative): #TODO
 		current = self
 		path = []
 		while not current == relative:
@@ -188,7 +133,7 @@ class Person(metaclass=MetaPerson): #This is our Person object which creates str
 
 
 
-	def bfs_paths(graph, start, goal): # taslak
+	def bfs_paths(graph, start, goal): #TODO
 		start = self		
 		queue = [(start, [start])]	
 		while queue:
@@ -202,27 +147,64 @@ class Person(metaclass=MetaPerson): #This is our Person object which creates str
 		
 
 	def str(self):
-		temp = "name={}, surn={}, g={}, bd={}, dd={}, f={}, m={}, s={}, p={}".format(self.name, self.surname, self.gender, self.birthdate, self.deathdate, self.father, self.mother, self.spouse, self.is_placeholder())
+		temp = "name={}, surn={}, g={}, bd={}, dd={}, p={}".format(self.name, self.surname, self.gender, self.birthdate, self.deathdate, self.is_placeholder())
 		#temp2 = " - children %s" % ', '.join(str(e.name) for e in self.children)
 		return temp
 
+class Relation(Enum):
 
+	SPOUSE, FATHER, MOTHER, CHILD = range(4)
+
+class FamilyGraph():
+	relation_list = []
+	person_list = []
+
+	def new_relation(self, p1: Person, r: Relation, p2: Person):
+		self.relation_list.append((p1, r, p2))
+
+	def del_relation(self, p1: Person, r: Relation, p2: Person): #TODO 
+		return	
+
+	def get_first_degree_relatives(self, p: Person):
+		temp = []
+		for relation in self.relation_list:
+			if p in relation:
+				if relation[0] == p:
+					temp.append(relation[2])
+				else:
+					temp.append(relation[0])
+
+		return temp
+
+	def list_relations(self):
+		for relation in self.relation_list:
+			print(relation)
+					
+	def get_level(self, p: Person): #TODO
+		if p.father == None and p.father == None:
+			return 0
+		if not self.father == None and not self.mother == None:
+			return 1 + max(self.father.get_level(), self.mother.get_level())
+		if not self.father == None and self.mother == None: 
+			return 1 + self.father.get_level()
+		else:
+			return 1 + self.mother.get_level()				
 
 def main():
 	print ("test")
-	Veli 	= Person("Veli", "Yanyatan",   "male", date(2005, 12, 15), date(2075, 12, 15), None, None, None)	#Çocuk	
-	Ali 	= Person("Ali", "Yanyatan",    "male", date(1980, 12, 15), date(2055, 12, 15), None, None, None, Veli) # Baba
-	Huri 	= Person("Huri", "Yanyatan", "female", date(1983, 12, 15), date(2075, 12, 15), None, None, Ali, Veli) # Anne
-	Deli 	= Person("Deli", "Yanyatan",   "male", date(2007, 12, 15), date(2075, 12, 15), Ali, Huri, None) # Çocuk
+	Veli 	= Person("Veli", "Yanyatan",   "male", date(2005, 12, 15), date(2075, 12, 15))	#Çocuk	
+	Ali 	= Person("Ali", "Yanyatan",    "male", date(1980, 12, 15), date(2055, 12, 15)) # Baba
+	Huri 	= Person("Huri", "Yanyatan", "female", date(1983, 12, 15), date(2075, 12, 15)) # Anne
+	Deli 	= Person("Deli", "Yanyatan",   "male", date(2007, 12, 15), date(2075, 12, 15)) # Çocuk
 	
-	Ali.set_spouse(Huri)
+	g = FamilyGraph()
+	g.person_list.append(Veli)
+	g.person_list.append(Huri)
+	g.new_relation(Veli, Relation.SPOUSE, Huri)
 
-	Veli.set_mother(Huri)
-	Veli.set_father(Ali)
+	print(g.get_first_degree_relatives(Veli))
 
-	Ali.add_child(Deli)
-	Huri.add_child(Deli)
-	
+	g.list_relations()
 
 
 if __name__ == '__main__':

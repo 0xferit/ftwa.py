@@ -4,6 +4,7 @@ import tkinter
 import matplotlib.pyplot as plt
 import ftwa
 from datetime import date
+import collections
 
 class HelloWorld(cmd.Cmd):
 	"""Simple command processor example."""
@@ -11,23 +12,24 @@ class HelloWorld(cmd.Cmd):
 	FRIENDS = [ 'Alice', 'Adam', 'Barbara', 'Bob' ]
 	PERSONS = []
 	
-	Veli 	= ftwa.Person("Veli", "Yanyatan",   "male", date(2005, 12, 15), date(2075, 12, 15), None, None, None)	#Çocuk	
-	Ali 	= ftwa.Person("Ali", "Yanyatan",    "male", date(1980, 12, 15), date(2055, 12, 15), None, None, None, Veli) # Baba
-	Huri 	= ftwa.Person("Huri", "Yanyatan", "female", date(1983, 12, 15), date(2075, 12, 15), None, None, Ali, Veli) # Anne
-	Deli 	= ftwa.Person("Deli", "Yanyatan",   "male", date(2007, 12, 15), date(2075, 12, 15), Ali, Huri, None) # Çocuk
+	Veli 	= ftwa.Person("Veli", "Yanyatan",   "male", date(2005, 12, 15), date(2075, 12, 15)) #Çocuk	
+	Ali 	= ftwa.Person("Ali", "Yanyatan",    "male", date(1980, 12, 15), date(2055, 12, 15)) # Baba
+	Huri 	= ftwa.Person("Huri", "Yanyatan", "female", date(1983, 12, 15), date(2075, 12, 15)) # Anne
+	Deli 	= ftwa.Person("Deli", "Yanyatan",   "male", date(2007, 12, 15), date(2075, 12, 15)) # Çocuk
 
-	Ali.set_spouse(Huri)
 
-	Veli.set_mother(Huri)
-	Veli.set_father(Ali)
+	THE_GRAPH = ftwa.FamilyGraph()
 
-	Ali.add_child(Deli)
-	Huri.add_child(Deli)
+	THE_GRAPH.person_list.append(Veli)
+	THE_GRAPH.person_list.append(Ali)
+	THE_GRAPH.person_list.append(Huri)
+	THE_GRAPH.person_list.append(Deli)
 
-	PERSONS.append(Veli)
-	PERSONS.append(Ali)
-	PERSONS.append(Huri)
-	PERSONS.append(Deli)
+	THE_GRAPH.new_relation(Veli, ftwa.Relation.SPOUSE, Huri)
+	THE_GRAPH.new_relation(Veli, ftwa.Relation.CHILD, Ali)
+	THE_GRAPH.new_relation(Veli, ftwa.Relation.CHILD, Deli)
+	THE_GRAPH.new_relation(Huri, ftwa.Relation.CHILD, Ali)
+	THE_GRAPH.new_relation(Huri, ftwa.Relation.CHILD, Deli)
 
 	
 	def do_greet(self, person):
@@ -54,13 +56,13 @@ class HelloWorld(cmd.Cmd):
 		print(*parse(arg))
 		temp = ftwa.Person(*parse(arg))
 		print(temp.str())
-		self.PERSONS.append(temp)
+		self.THE_GRAPH.person_list.append(temp)
 
 	def do_search(self, arg):
 		print()
 
 	def do_list(self, arg):
-		for person in self.PERSONS:
+		for person in self.THE_GRAPH.person_list:
 			print(person.str())
 		
 	
@@ -88,35 +90,70 @@ class HelloWorld(cmd.Cmd):
 		
 		#
 		labels = {}
-		labels['AliYanyatan']=r'$AliYanyatan$'
-		labels['DeliYanyatan']=r'$DeliYanyatan$'
-		labels['HuriYanyatan']=r'$HuriYanyatan$'
-		labels['VeliYanyatan']=r'$VeliYanyatan$'
+		labels['AliYanyatan']=r'$Ali Yanyatan$'
+		labels['DeliYanyatan']=r'$Deli Yanyatan$'
+		labels['HuriYanyatan']=r'$Huri Yanyatan$'
+		labels['VeliYanyatan']=r'$Veli Yanyatan$'
+		
+		edgelabels = collections.OrderedDict()
+		
+		edgelabels2 = collections.OrderedDict()
+
+		edgelabels2['HuriYanyatan', 'DeliYanyatan']=r'$x$'
+		edgelabels2['HuriYanyatan', 'VeliYanyatan']=r'$x$'
+		edgelabels2['HuriYanyatan', 'AliYanyatan']=r'$x$'
+		edgelabels2['DeliYanyatan', 'VeliYanyatan']=r'$x$'
+		edgelabels2['VeliYanyatan', 'AliYanyatan']=r'$x$'
+
+		print(edgelabels2['HuriYanyatan', 'DeliYanyatan'])
+		
+		edgelabels3 = collections.OrderedDict()
+		edgelabels3['HuriYanyatan', 'AliYanyatan']=r'$x$'
+		
 		Y=nx.Graph()
 
-		for person in self.PERSONS:
-			try:
-				Y.nodes().index(person.name+person.surname)
-			except:
-				print("person not found, new person created: {}".format(person.name))
-				Y.add_node(person.name + person.surname)
-				first_degree_relatives = person.get_first_degree_relatives()
-				for rel in first_degree_relatives:
-					if rel:
-						print("inner")
-						print("rel: {}".format(rel.name))
-						try:
-							Y.nodes().index(rel.name + rel.surname)
-						except:
-							Y.add_node(rel.name+rel.surname)
-							Y.add_edge(rel.name+rel.surname, person.name+person.surname)
-					
+		#for person in self.THE_GRAPH.person_list:
+		#	try:
+		#		Y.nodes().index(person.name+person.surname)
+		#	except:
+		#		print("person not found, new person created: {}".format(person.name))
+		#		Y.add_node(person.name + person.surname)
+		#		first_degree_relatives = self.THE_GRAPH.get_first_degree_relatives(person)
+		#		for rel in first_degree_relatives:
+		#			if rel:
+		#				print("inner")
+		#				print("rel: {}".format(rel.name))
+		#				try:
+		#					Y.nodes().index(rel.name + rel.surname)
+		#				except:
+		#					Y.add_node(rel.name+rel.surname)
+		#					Y.add_edge(rel.name+rel.surname, person.name+person.surname)
 
+		for person in self.THE_GRAPH.person_list:
+			try:
+				Y.nodes().index(person.name + person.surname)
+			except:
+				Y.add_node(person.name + person.surname)
+
+		for rel in self.THE_GRAPH.relation_list:
+			try:
+				Y.edges().index(rel[0].name+rel[0].surname, rel[2].name+rel[2].surname)
+			except:
+				Y.add_edge(rel[0].name+rel[0].surname, rel[2].name+rel[2].surname)
+				#edgelabels[rel[0].name+rel[0].surname, rel[2].name+rel[2].surname] = r'$x$'
+		
+		for edge in Y.edges():
+			edgelabels[edge]=r'$asd$'
+		
+		pos=nx.spring_layout(G)
+		print("keys\n{}".format(dict(edgelabels)))
 		print("Nodes of graph: ")
 		print(Y.nodes())
 		print("Edges of graph: ")
 		print(Y.edges())
 		nx.draw(Y, labels=labels)
+		#nx.draw_networkx_edge_labels(G,pos, dict(edgelabels))
+		#nx.draw(Y)		
 		plt.savefig("simple_path.png") # save as png
 		plt.show() # display
 	
