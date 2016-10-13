@@ -19,11 +19,12 @@ G.person_list.append(Huri)
 G.person_list.append(Deli)
 G.person_list.append(Ali)
 
-G.new_relation(Veli, ftwa.Relation.SPOUSE, Huri)
-G.new_relation(Veli, ftwa.Relation.CHILD, Ali)
-G.new_relation(Veli, ftwa.Relation.CHILD, Deli)
-G.new_relation(Huri, ftwa.Relation.CHILD, Ali)
+G.new_relation(Ali, ftwa.Relation.SPOUSE, Huri)
+G.new_relation(Ali, ftwa.Relation.CHILD, Veli)
+G.new_relation(Ali, ftwa.Relation.CHILD, Deli)
+G.new_relation(Huri, ftwa.Relation.CHILD, Veli)
 G.new_relation(Huri, ftwa.Relation.CHILD, Deli)
+G.new_relation(Veli, ftwa.Relation.SIBLING, Deli)
 
 
 class Test(unittest.TestCase):
@@ -66,11 +67,11 @@ class Test(unittest.TestCase):
 		assert 1 == G.get_level(Veli)
 
 	def test_get_first_degree_relatives(self):
-		print(len(Ali.get_first_degree_relatives()))
-		assert 3 == len(Ali.get_first_degree_relatives())
-		assert 3 == len(Huri.get_first_degree_relatives())
-		assert 3 == len(Veli.get_first_degree_relatives())
-		assert 3 == len(Deli.get_first_degree_relatives())
+		print(len(G.get_first_degree_relatives(Ali)))
+		assert 3 == len(G.get_first_degree_relatives(Ali))
+		assert 3 == len(G.get_first_degree_relatives(Huri))
+		assert 3 == len(G.get_first_degree_relatives(Veli))
+		assert 3 == len(G.get_first_degree_relatives(Deli))
 		
 	
 

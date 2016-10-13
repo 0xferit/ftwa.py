@@ -153,7 +153,7 @@ class Person(metaclass=MetaPerson): #This is our Person object which creates str
 
 class Relation(Enum):
 
-	SPOUSE, FATHER, MOTHER, CHILD = range(4)
+	SPOUSE, FATHER, MOTHER, CHILD, SIBLING = range(5)
 
 class FamilyGraph():
 	relation_list = []
@@ -197,14 +197,19 @@ def main():
 	Huri 	= Person("Huri", "Yanyatan", "female", date(1983, 12, 15), date(2075, 12, 15)) # Anne
 	Deli 	= Person("Deli", "Yanyatan",   "male", date(2007, 12, 15), date(2075, 12, 15)) # Çocuk
 	
-	g = FamilyGraph()
-	g.person_list.append(Veli)
-	g.person_list.append(Huri)
-	g.new_relation(Veli, Relation.SPOUSE, Huri)
+	G = FamilyGraph()
+	G.person_list.append(Veli)
+	G.person_list.append(Huri)
+	
+	G.new_relation(Veli, Relation.SPOUSE, Huri)
+	G.new_relation(Veli, Relation.CHILD, Ali)
+	G.new_relation(Veli, Relation.CHILD, Deli)
+	G.new_relation(Huri, Relation.CHILD, Ali)
+	G.new_relation(Huri, Relation.CHILD, Deli)
 
-	print(g.get_first_degree_relatives(Veli))
+	print("FDR:{}".format(G.get_first_degree_relatives(Veli)))
 
-	g.list_relations()
+	G.list_relations()
 
 
 if __name__ == '__main__':
