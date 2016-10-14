@@ -1,3 +1,4 @@
 networkx http://www.python-course.eu/networkx.php
 matplotlib
 tkinter
+#bunlar bize lzım
