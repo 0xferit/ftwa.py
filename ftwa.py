@@ -200,36 +200,66 @@ class FamilyGraph():
 			print(relation)
 					
 	def get_level(self, p: Person): #TODO
-		print("diagnosing {}".format(p.name))
+
+		print("------\ndiagnosing {}".format(p.name))
 		for x in self.relation_list:
 			print(x[0].name, x[1].name, x[2].name, x[3].name)
 		father_rel = self.get_persons_relations_of_a_kind(p, Relation.FATHER)
 		mother_rel = self.get_persons_relations_of_a_kind(p, Relation.MOTHER)
 		
-		print(len(father_rel))
+		print("FATHER REL LEN {}".format(len(father_rel)))
 		for x in father_rel:
 			print(x[0].name, x[1].name, x[2].name, x[3].name)		
 		
-		print(len(mother_rel))
+		print("MOTHER REL LEN {}".format(len(mother_rel)))
 		for x in mother_rel:
 			print(x[0].name, x[1].name, x[2].name, x[3].name)
+		
+		father = None
+		mother = None
+
+		if father_rel:
+			for y in father_rel[0]:
+				if y != p and type(y) == type(p):
+					father = y
+		
+		if mother_rel:
+			for y in mother_rel[0]:
+				if y != p and type(y) == type(p):
+					mother = y
 
 
-		if not father_rel and not mother_rel:
+
+		if not father and not mother:
 			print("öksüz {}".format(p.name))
 			return 0
-		if father_rel and  mother_rel:
-			return 1 + max(self.get_level(father_rel[2]), self.get_level(mother_rel[2]))
-		if  father_rel and not mother_rel: 
-			return 1 + self.get_level(father_rel[2])
+		if father and  mother:
+			return 1 + max(self.get_level(father), self.get_level(mother))
+		if  father and not mother: 
+			return 1 + self.get_level(father)
 		else:
-			return 1 + self.get_level(mother_rel[2])
+			return 1 + self.get_level(mother)
 
 	def get_persons_relations(self, p: Person):
+		#for item in [rel for rel in self.relation_list if p in rel]: print("X {}".format(item))
+		#print("exit")
 		return [rel for rel in self.relation_list if p in rel]	
 
 	def get_persons_relations_of_a_kind(self, p: Person, r: Relation):
-		return [rel for rel in self.get_persons_relations(p) if (rel[1] is r or (rel[2] == (Person.get_reverse_relation(r))))]	## BURDA KALDIM	
+				
+		
+		r_reverse = Person.get_reverse_relation(r)
+		#print("r_reverse {}".format(r_reverse))
+		#for item in [rel for rel in self.get_persons_relations(p) if rel[1] == r]: print("asd {}".format(rel[1]))
+		
+		direct = [rel for rel in self.get_persons_relations(p) if rel[1] == r and rel[0] == p]
+		reverse = [rel for rel in self.get_persons_relations(p) if rel[2] == r and rel[3] == p]	
+
+		#print("reverse rel {}".format(reverse))	
+		if direct:
+			return direct
+		else:
+			return reverse
 
 def main():
 	print ("test")

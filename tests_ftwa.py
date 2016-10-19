@@ -61,8 +61,8 @@ class Test(unittest.TestCase):
 
 	def test_get_level(self):
 
-		#assert 0 == G.get_level(Ali)
-		#assert 0 == G.get_level(Huri)
+		assert 0 == G.get_level(Ali)
+		assert 0 == G.get_level(Huri)
 		assert 1 == G.get_level(Deli)
 		assert 1 == G.get_level(Veli)
 
