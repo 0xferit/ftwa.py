@@ -21,17 +21,6 @@ class Relation(Enum):
 
 	SPOUSE, FATHER, MOTHER, CHILD, SIBLING = range(5)
 
-	def get_reverse(r):
-		switcher = {
-			1: "x",
-			2: "y"
-		}
-
-		return switcher.get(r, "")
-
-	def get_reverse2(r):
-		if r == self(1):
-			return self.CHILD
 	
 
 class Person(metaclass=MetaPerson): #This is our Person object which creates struct to keep information
@@ -91,48 +80,6 @@ class Person(metaclass=MetaPerson): #This is our Person object which creates str
 		return (0 > (today.year - deathdate.year - ((today.month, today.day) < (deathdate.month, deathdate.day))))
 
 
-
-	def get_relationship_with(self, relative, path=[], rel_path=[]): #TODO
-		path.append(self)		
-		if(self == relative):
-			print("kendine eşit {}".format(self.name))
-			for p in path:
-				print (p.name)
-			return rel_path
-		else:
-			rel_paths = []
-			if not self.spouse == None and not self.spouse in path:
-				print("spouse:{}".format(self.spouse.str()))
-				print("newpath:{}".format(rel_path))
-				rel_path.append(Relation.SPOUSE)
-				
-
-				rel_paths.append(self.spouse.get_relationship_with(relative, path, rel_path))
-
-			if not self.father == None and not self.father in path:
-				print("father:{}".format(self.father.str()))
-				print("newpath:{}".format(rel_path))
-
-				rel_path.append(Relation.FATHER)
-				rel_paths.append(self.father.get_relationship_with(relative, path, rel_path))
-
-			if not self.mother == None and not self.mother in path:
-				print("mother:{}".format(self.mother.str()))
-				print("newpath:{}".format(rel_path))
-
-				rel_path.append(Relation.MOTHER)
-				rel_path.append(self.mother.get_relationship_with(relative, path, rel_path))
-
-			if not self.children == None:
-				for child in self.children:
-					if not child in path:
-						rel_path.append(Relation.MOTHER)
-						rel_paths.append(child.get_relationship_with(relative, path, rel_path))
-			else:
-				print("boş dönecek")
-				
-			minimum_path_len = min(len(rp) for rp in rel_paths)
-			rel_paths_with_min_len = (rp for rp in rel_paths if len(rp) in minimum_path_len)
 
 	def get_relation(self, relative): #TODO
 		current = self
@@ -247,16 +194,11 @@ class FamilyGraph():
 		return [rel for rel in self.relation_list if p in rel]	
 
 	def get_persons_relations_of_a_kind(self, p: Person, r: Relation):
-				
-		
-		r_reverse = Person.get_reverse_relation(r)
-		#print("r_reverse {}".format(r_reverse))
-		#for item in [rel for rel in self.get_persons_relations(p) if rel[1] == r]: print("asd {}".format(rel[1]))
 		
 		direct = [rel for rel in self.get_persons_relations(p) if rel[1] == r and rel[0] == p]
 		reverse = [rel for rel in self.get_persons_relations(p) if rel[2] == r and rel[3] == p]	
 
-		#print("reverse rel {}".format(reverse))	
+	
 		if direct:
 			return direct
 		else:

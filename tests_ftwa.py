@@ -72,14 +72,49 @@ class Test(unittest.TestCase):
 		assert 0 == G.get_level(Rıza)
 
 	def test_get_first_degree_relatives(self):
-		print(len(G.get_first_degree_relatives(Ali)))
 		assert 4 == len(G.get_first_degree_relatives(Ali))
 		assert 3 == len(G.get_first_degree_relatives(Huri))
 		assert 3 == len(G.get_first_degree_relatives(Veli))
 		assert 3 == len(G.get_first_degree_relatives(Deli))
 		assert 1 == len(G.get_first_degree_relatives(Rıza))
 		
-	
+	def test_get_persons_relations(self):
+		assert 4 == len(G.get_persons_relations(Ali))
+		assert 3 == len(G.get_persons_relations(Huri))
+		assert 3 == len(G.get_persons_relations(Veli))
+		assert 3 == len(G.get_persons_relations(Deli))
+		assert 1 == len(G.get_persons_relations(Rıza))
+
+	def test_get_persons_relations_of_a_kind(self):
+		assert 1 == len(G.get_persons_relations_of_a_kind(Ali, ftwa.Relation.FATHER))
+		assert 1 == len(G.get_persons_relations_of_a_kind(Ali, ftwa.Relation.SPOUSE))
+		assert 2 == len(G.get_persons_relations_of_a_kind(Ali, ftwa.Relation.CHILD))
+		assert 0 == len(G.get_persons_relations_of_a_kind(Ali, ftwa.Relation.MOTHER))
+		assert 0 == len(G.get_persons_relations_of_a_kind(Ali, ftwa.Relation.SIBLING))
+
+		assert 0 == len(G.get_persons_relations_of_a_kind(Huri, ftwa.Relation.FATHER))
+		assert 1 == len(G.get_persons_relations_of_a_kind(Huri, ftwa.Relation.SPOUSE))
+		assert 2 == len(G.get_persons_relations_of_a_kind(Huri, ftwa.Relation.CHILD))
+		assert 0 == len(G.get_persons_relations_of_a_kind(Huri, ftwa.Relation.MOTHER))
+		assert 0 == len(G.get_persons_relations_of_a_kind(Huri, ftwa.Relation.SIBLING))
+
+		assert 1 == len(G.get_persons_relations_of_a_kind(Veli, ftwa.Relation.FATHER))
+		assert 0 == len(G.get_persons_relations_of_a_kind(Veli, ftwa.Relation.SPOUSE))
+		assert 0 == len(G.get_persons_relations_of_a_kind(Veli, ftwa.Relation.CHILD))
+		assert 1 == len(G.get_persons_relations_of_a_kind(Veli, ftwa.Relation.MOTHER))
+		assert 1 == len(G.get_persons_relations_of_a_kind(Veli, ftwa.Relation.SIBLING))
+
+		assert 1 == len(G.get_persons_relations_of_a_kind(Deli, ftwa.Relation.FATHER))
+		assert 0 == len(G.get_persons_relations_of_a_kind(Deli, ftwa.Relation.SPOUSE))
+		assert 0 == len(G.get_persons_relations_of_a_kind(Deli, ftwa.Relation.CHILD))
+		assert 1 == len(G.get_persons_relations_of_a_kind(Deli, ftwa.Relation.MOTHER))
+		assert 1 == len(G.get_persons_relations_of_a_kind(Deli, ftwa.Relation.SIBLING))
+
+		assert 0 == len(G.get_persons_relations_of_a_kind(Rıza, ftwa.Relation.FATHER))
+		assert 0 == len(G.get_persons_relations_of_a_kind(Rıza, ftwa.Relation.SPOUSE))
+		assert 1 == len(G.get_persons_relations_of_a_kind(Rıza, ftwa.Relation.CHILD))
+		assert 0 == len(G.get_persons_relations_of_a_kind(Rıza, ftwa.Relation.MOTHER))
+		assert 0 == len(G.get_persons_relations_of_a_kind(Rıza, ftwa.Relation.SIBLING))
 
 	def test_str(self):
 		Veli.str()
