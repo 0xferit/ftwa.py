@@ -95,19 +95,6 @@ class Person(metaclass=MetaPerson): #This is our Person object which creates str
 					temp_path.append(relative)
 					return temp_path
 
-
-
-	def bfs_paths(graph, start, goal): #TODO
-		start = self		
-		queue = [(start, [start])]	
-		while queue:
-			(vertex, path) = queue.pop(0)
-			for next in graph[vertex] - set(path):
-				if next == goal:
-					yield path + [next]
-				else:
-					queue.append((next, path + [next]))
-
 		
 
 	def str(self):
@@ -205,58 +192,10 @@ class FamilyGraph():
 		else:
 			return reverse
 
-	def bfs(self, g, start):
-		queue, enqueued = deque([(None, start)]), set([start])
-		while queue:
-			parent, n = queue.popleft()
-			yield parent, n
-			new = set(g[n]) - enqueued
-			enqueued |= new
-			queue.extend([(n, child) for child in new])
 
-	def shortest_path(self, g, start, end):
-		parents = {}
-		for parent, child in self.bfs(g, start):
-			parents[child] = parent
-			if child == end:
-				revpath = [end]
-				while True:
-					parent = parents[child]
-					revpath.append(parent)
-					if parent == start:
-						break
-					child = parent
-				return list(reversed(revpath))
-		return None # or raise appropriate exception
 
-	def mysearch(self, start, goal): # finds and returns goal
-		unvisited = []
-		visited = []
-		next = start
-		
-		queue = deque()
-		stack = []
-		stack.append(next)
-
-		while next != goal:
-			visited.append(next)
-			successors = [x for x in self.get_first_degree_relatives(next) if x not in visited]
-			unvisited.extend(successors)
-			stack.pop()
-			next = unvisited.pop()
-			stack.append(next)
-		
-		for x in stack:
-			print(x.name)
-
-		print("-----")
-		for y in visited:
-			print(y.name)
-		print("------")
-		return next
 
 	def mysearch2(self, start, goal): # finds and returns goal
-		#unvisited = []
 
 		path = []
 		visited = []
@@ -267,45 +206,30 @@ class FamilyGraph():
 		visit_queue.appendleft(start)
 		next = visit_queue.pop()
 
-		stack = []
-		#stack.append(next)
-
-
 		while next != goal:
-			
-			print("\n")
-			print(next.name)
-			for item in visit_queue:
-				print ("q item {}".format(item.name))
-			
-			
+					
 			visited.append(next)
-			
-
+		
 			successors = [x for x in self.get_first_degree_relatives(next) if x not in visited+list(collections.deque(visit_queue))]
 
-			for s in successors:
-				print("successor {}".format(s.name))
-
 			visit_queue.extendleft(successors)
-			print("q len {}".format(len(visit_queue)))
 
 			for s in successors:
 				predecessor[s] = next
 			next = visit_queue.pop()
 
-			for v in visited:
-				print("visited {}".format(v.name))
 		
 		path.append(next)
 		found = copy.deepcopy(next)
+
 		while next in predecessor:
-			print("pred {}".format(predecessor[next].name))
 			path.append(predecessor[next])			
 			next = predecessor[next]
 			
 				
 		return path
+
+	
 		
 
 def main():
@@ -359,7 +283,7 @@ def main():
 
 	print("----------")
 	#print (G.mysearch2(Rıza, Z).name)
-	for x in G.mysearch2(Rıza, Z):
+	for x in G.mysearch2(Rıza, Rıza):
 		print(x.name)
 
 if __name__ == '__main__':

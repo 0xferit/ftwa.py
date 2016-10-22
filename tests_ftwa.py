@@ -116,11 +116,45 @@ class Test(unittest.TestCase):
 		assert 0 == len(G.get_persons_relations_of_a_kind(Rıza, ftwa.Relation.MOTHER))
 		assert 0 == len(G.get_persons_relations_of_a_kind(Rıza, ftwa.Relation.SIBLING))
 
+	def test_mysearch2(self):
+		assert 1 == len(G.mysearch2(Rıza, Rıza))
+		assert 2 == len(G.mysearch2(Rıza, Ali))
+		assert 3 == len(G.mysearch2(Rıza, Huri))
+		assert 3 == len(G.mysearch2(Rıza, Deli))
+		assert 3 == len(G.mysearch2(Rıza, Veli))
+
+		assert 2 == len(G.mysearch2(Ali, Rıza))
+		assert 1 == len(G.mysearch2(Ali, Ali))
+		assert 2 == len(G.mysearch2(Ali, Huri))
+		assert 2 == len(G.mysearch2(Ali, Deli))
+		assert 2 == len(G.mysearch2(Ali, Veli))
+
+		assert 3 == len(G.mysearch2(Huri, Rıza))
+		assert 2 == len(G.mysearch2(Huri, Ali))
+		assert 1 == len(G.mysearch2(Huri, Huri))
+		assert 2 == len(G.mysearch2(Huri, Deli))
+		assert 2 == len(G.mysearch2(Huri, Veli))
+
+		assert 3 == len(G.mysearch2(Veli, Rıza))
+		assert 2 == len(G.mysearch2(Veli, Ali))
+		assert 2 == len(G.mysearch2(Veli, Huri))
+		assert 2 == len(G.mysearch2(Veli, Deli))
+		assert 1 == len(G.mysearch2(Veli, Veli))
+
+		assert 3 == len(G.mysearch2(Deli, Rıza))
+		assert 2 == len(G.mysearch2(Deli, Ali))
+		assert 2 == len(G.mysearch2(Deli, Huri))
+		assert 1 == len(G.mysearch2(Deli, Deli))
+		assert 2 == len(G.mysearch2(Deli, Veli))
+
+
 	def test_str(self):
 		Veli.str()
 		Deli.str()
 		Ali.str()
 		Huri.str()
+
+
 if __name__ == '__main__':
 	unittest.main()
 
