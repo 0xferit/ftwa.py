@@ -21,6 +21,7 @@ class MetaPerson(type):
 class Relation(Enum):
 
 	SPOUSE, FATHER, MOTHER, CHILD, SIBLING = range(5)
+	
 
 	
 
@@ -112,9 +113,13 @@ class Person(metaclass=MetaPerson): #This is our Person object which creates str
 
 class FamilyGraph():
 	relation_list = []
-	person_list = []
+	person_list = {}
 
 	def new_relation(self, p1: Person, r1: Relation, r2: Relation, p2: Person):
+		if  ((not p1.is_placeholder() and p1.get_age() < 18) or (not p2.is_placeholder() and p2.get_age() < 18)) and r1 == Relation.SPOUSE:
+			print("[WARNING] Marriage between {} and {} is a child marriage!".format(p1.name, p2.name))
+
+		
 		self.relation_list.append((p1, r1, r2, p2))
 
 	def del_relation(self, p1: Person, r: Relation, r2: Relation, p2: Person): #TODO 
@@ -226,11 +231,41 @@ class FamilyGraph():
 			path.append(predecessor[next])			
 			next = predecessor[next]
 			
-				
+		path.reverse()		
+	
 		return path
 
+	def node_path_to_edge_path(self, path):
+		relation_path = []
+		for x in range(1, len(path)):
+
+			relations1 = self.get_persons_relations(path[x-1])
+
+
+			relations2 = self.get_persons_relations(path[x])
+
+
+			c3 = list(set(relations1).intersection(relations2))
+			
+			if path[x-1] == c3[0][0]:
+				relation_path.append(c3[0][1])
+			else:
+				relation_path.append(c3[0][2])
+		return relation_path
 	
+	
+	def translate_path_to_relation(self, relation_path, path):
+		if len(relation_path) == 0:
+			return None
+
+
+	def get_relation_between(self, p1: Person, p2: Person):
+		path = self.mysearch2(p1, p2)
+		rel_path = self.node_path_to_edge_path(path)
+		complex_rel = translate_path_to_relation(self, rel_path, path)
 		
+		return complex_rel
+
 
 def main():
 	print ("test")
@@ -245,16 +280,16 @@ def main():
 	Z	= Person(name="Z", surname="Z")
 	
 	G = FamilyGraph()
-	G.person_list.append(Veli)
-	G.person_list.append(Huri)
-	G.person_list.append(Deli)
-	G.person_list.append(Ali)
-	G.person_list.append(Rıza)
+	G.person_list[Veli.name+Veli.surname] = Veli
+	G.person_list[Ali.name+Ali.surname] = Ali
+	G.person_list[Huri.name+Huri.surname] = Huri
+	G.person_list[Deli.name+Deli.surname] = Deli
+	G.person_list[Rıza.name+Rıza.surname] = Rıza
 
 	
-	G.person_list.append(X)
-	G.person_list.append(Y)
-	G.person_list.append(Z)
+	G.person_list[X.name+X.surname] = X
+	G.person_list[Y.name+Y.surname] = Y
+	G.person_list[Z.name+Z.surname] = Z
 	
 	G.new_relation(Ali, Relation.SPOUSE, Relation.SPOUSE, Huri)
 	G.new_relation(Ali, Relation.CHILD, Relation.FATHER, Veli)
@@ -266,7 +301,7 @@ def main():
 	
 	G.new_relation(Rıza, Relation.CHILD, Relation.FATHER, X)
 	G.new_relation(X, Relation.CHILD, Relation.FATHER, Y)
-	G.new_relation(Deli, Relation.CHILD, Relation.FATHER, Z)
+	G.new_relation(Deli, Relation.SPOUSE, Relation.SPOUSE, Z)
 	
 
 
@@ -285,6 +320,11 @@ def main():
 	#print (G.mysearch2(Rıza, Z).name)
 	for x in G.mysearch2(Rıza, Rıza):
 		print(x.name)
+
+	path = G.mysearch2(Rıza, Z)
+	print(G.node_path_to_edge_path(path))
+
+	print(G.get_relation_between(Rıza, Z))
 
 if __name__ == '__main__':
 	main()

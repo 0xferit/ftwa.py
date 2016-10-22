@@ -16,20 +16,26 @@ class HelloWorld(cmd.Cmd):
 	Ali 	= ftwa.Person("Ali", "Yanyatan",    "male", date(1980, 12, 15), date(2055, 12, 15)) # Baba
 	Huri 	= ftwa.Person("Huri", "Yanyatan", "female", date(1983, 12, 15), date(2075, 12, 15)) # Anne
 	Deli 	= ftwa.Person("Deli", "Yanyatan",   "male", date(2007, 12, 15), date(2075, 12, 15)) # Çocuk
+	Riza	= ftwa.Person("Riza", "Yanyatan",   "male", date(1970, 1, 1), date(2030, 12, 12)) # Dede, Ali'nin babası
+	Fatmagul= ftwa.Person("Fatmagul", "Yanyatan", "female", birthdate = date(2000, 1, 1))
 
+	G = ftwa.FamilyGraph()
 
-	THE_GRAPH = ftwa.FamilyGraph()
+	G.person_list[Veli.name+Veli.surname] = Veli
+	G.person_list[Ali.name+Ali.surname] = Ali
+	G.person_list[Huri.name+Huri.surname] = Huri
+	G.person_list[Deli.name+Deli.surname] = Deli
+	G.person_list[Riza.name+Riza.surname] = Riza
+	G.person_list[Fatmagul.name+Fatmagul.surname] = Fatmagul
 
-	THE_GRAPH.person_list.append(Veli)
-	THE_GRAPH.person_list.append(Ali)
-	THE_GRAPH.person_list.append(Huri)
-	THE_GRAPH.person_list.append(Deli)
-
-	THE_GRAPH.new_relation(Veli, ftwa.Relation.SPOUSE, Huri)
-	THE_GRAPH.new_relation(Veli, ftwa.Relation.CHILD, Ali)
-	THE_GRAPH.new_relation(Veli, ftwa.Relation.CHILD, Deli)
-	THE_GRAPH.new_relation(Huri, ftwa.Relation.CHILD, Ali)
-	THE_GRAPH.new_relation(Huri, ftwa.Relation.CHILD, Deli)
+	G.new_relation(Ali, ftwa.Relation.SPOUSE, ftwa.Relation.SPOUSE, Huri)
+	G.new_relation(Ali, ftwa.Relation.CHILD, ftwa.Relation.FATHER, Veli)
+	G.new_relation(Ali, ftwa.Relation.CHILD, ftwa.Relation.FATHER, Deli)
+	G.new_relation(Huri, ftwa.Relation.CHILD, ftwa.Relation.MOTHER, Veli)
+	G.new_relation(Huri, ftwa.Relation.CHILD, ftwa.Relation.MOTHER, Deli)
+	G.new_relation(Veli, ftwa.Relation.SIBLING, ftwa.Relation.SIBLING, Deli)
+	G.new_relation(Riza, ftwa.Relation.CHILD, ftwa.Relation.FATHER, Ali)
+	G.new_relation(Deli, ftwa.Relation.SPOUSE, ftwa.Relation.SPOUSE, Fatmagul)
 
 	
 	def do_greet(self, person):
@@ -53,107 +59,61 @@ class HelloWorld(cmd.Cmd):
 		return completions
 
 	def do_create(self, arg):
+		"Creates person"
 		print(*parse(arg))
 		temp = ftwa.Person(*parse(arg))
 		print(temp.str())
-		self.THE_GRAPH.person_list.append(temp)
+		self.G.person_list.append(temp)
 
 	def do_search(self, arg):
 		print()
 
 	def do_list(self, arg):
-		for person in self.THE_GRAPH.person_list:
-			print(person.str())
-		
+		for key in self.G.person_list.keys():
+			print((self.G.person_list[key]).str())
+
+	def do_list2(self, arg):
+		for k, v in self.G.person_list.items():
+			print(k, v.str())
+	
+	def do_relation(self, arg):
+		"Prints relation between two persons"
+		print(self.G.get_relation_between(self.G.person_list[parse(arg)[0]], self.G.person_list[parse(arg)[1]]))
 	
 	
 	def do_print(self, arg):
-		G=nx.Graph()
 
-		# adding just one node:
-		G.add_node("a", time="5pm")
-		G.add_node("b")
-		G.add_node("c")
-		G.add_node("d")
-		# a list of nodes:
-		G.add_nodes_from(["b","c"])
-
-		
-		G.add_edges_from([("a","c"),("c","d"), ("a",1), (1,"d"), ("a",2)])
-
-		#
-		X=nx.Graph()
-		X.add_node("a")
-		for z in range(5):
-			X.add_node(z)
-			X.add_edge("a", z)
-		
-		#
-		labels = {}
-		labels['AliYanyatan']=r'$Ali Yanyatan$'
-		labels['DeliYanyatan']=r'$Deli Yanyatan$'
-		labels['HuriYanyatan']=r'$Huri Yanyatan$'
-		labels['VeliYanyatan']=r'$Veli Yanyatan$'
-		
-		edgelabels = collections.OrderedDict()
+		labels2 = {}
 		
 		edgelabels2 = collections.OrderedDict()
 
-		edgelabels2['HuriYanyatan', 'DeliYanyatan']=r'$x$'
-		edgelabels2['HuriYanyatan', 'VeliYanyatan']=r'$x$'
-		edgelabels2['HuriYanyatan', 'AliYanyatan']=r'$x$'
-		edgelabels2['DeliYanyatan', 'VeliYanyatan']=r'$x$'
-		edgelabels2['VeliYanyatan', 'AliYanyatan']=r'$x$'
+		Y=nx.DiGraph()
 
-		print(edgelabels2['HuriYanyatan', 'DeliYanyatan'])
-		
-		edgelabels3 = collections.OrderedDict()
-		edgelabels3['HuriYanyatan', 'AliYanyatan']=r'$x$'
-		
-		Y=nx.Graph()
 
-		#for person in self.THE_GRAPH.person_list:
-		#	try:
-		#		Y.nodes().index(person.name+person.surname)
-		#	except:
-		#		print("person not found, new person created: {}".format(person.name))
-		#		Y.add_node(person.name + person.surname)
-		#		first_degree_relatives = self.THE_GRAPH.get_first_degree_relatives(person)
-		#		for rel in first_degree_relatives:
-		#			if rel:
-		#				print("inner")
-		#				print("rel: {}".format(rel.name))
-		#				try:
-		#					Y.nodes().index(rel.name + rel.surname)
-		#				except:
-		#					Y.add_node(rel.name+rel.surname)
-		#					Y.add_edge(rel.name+rel.surname, person.name+person.surname)
-
-		for person in self.THE_GRAPH.person_list:
+		for k, v in self.G.person_list.items():
 			try:
-				Y.nodes().index(person.name + person.surname)
+				Y.nodes().index(v.name + v.surname)
 			except:
-				Y.add_node(person.name + person.surname)
+				Y.add_node(v.name + v.surname)
+				labels2[v.name + v.surname] = v.name + v.surname
 
-		for rel in self.THE_GRAPH.relation_list:
+		for rel in self.G.relation_list:
 			try:
-				Y.edges().index(rel[0].name+rel[0].surname, rel[2].name+rel[2].surname)
+				Y.edges().index(rel[0].name+rel[0].surname, rel[3].name+rel[3].surname)
 			except:
-				Y.add_edge(rel[0].name+rel[0].surname, rel[2].name+rel[2].surname)
-				#edgelabels[rel[0].name+rel[0].surname, rel[2].name+rel[2].surname] = r'$x$'
+				Y.add_edge(rel[0].name+rel[0].surname, rel[3].name+rel[3].surname)
+				edgelabels2[rel[0].name+rel[0].surname, rel[3].name+rel[3].surname] = r'${}$'.format(rel[1].name)
 		
-		for edge in Y.edges():
-			edgelabels[edge]=r'$asd$'
+
 		
-		pos=nx.spring_layout(G)
-		print("keys\n{}".format(dict(edgelabels)))
-		print("Nodes of graph: ")
-		print(Y.nodes())
-		print("Edges of graph: ")
+		pos=nx.spring_layout(Y, iterations=500, scale=3.0)
+
 		print(Y.edges())
-		nx.draw(Y, labels=labels)
-		#nx.draw_networkx_edge_labels(G,pos, dict(edgelabels))
-		#nx.draw(Y)		
+
+
+		nx.draw(Y, pos, labels=labels2, arrows= True)
+		nx.draw_networkx_edge_labels(Y,pos, edgelabels2)
+	
 		plt.savefig("simple_path.png") # save as png
 		plt.show() # display
 	
