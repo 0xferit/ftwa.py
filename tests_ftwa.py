@@ -24,12 +24,12 @@ G.person_list[Riza.name+Riza.surname] = Riza
 G.person_list[Fatmagul.name+Fatmagul.surname] = Fatmagul
 
 G.new_relation(Ali, ftwa.Relation.SPOUSE, ftwa.Relation.SPOUSE, Huri)
-G.new_relation(Ali, ftwa.Relation.CHILD, ftwa.Relation.FATHER, Veli)
-G.new_relation(Ali, ftwa.Relation.CHILD, ftwa.Relation.FATHER, Deli)
-G.new_relation(Huri, ftwa.Relation.CHILD, ftwa.Relation.MOTHER, Veli)
-G.new_relation(Huri, ftwa.Relation.CHILD, ftwa.Relation.MOTHER, Deli)
+G.new_relation(Ali, ftwa.Relation.CHILD, ftwa.Relation.PARENT, Veli)
+G.new_relation(Ali, ftwa.Relation.CHILD, ftwa.Relation.PARENT, Deli)
+G.new_relation(Huri, ftwa.Relation.CHILD, ftwa.Relation.PARENT, Veli)
+G.new_relation(Huri, ftwa.Relation.CHILD, ftwa.Relation.PARENT, Deli)
 G.new_relation(Veli, ftwa.Relation.SIBLING, ftwa.Relation.SIBLING, Deli)
-G.new_relation(Riza, ftwa.Relation.CHILD, ftwa.Relation.FATHER, Ali)
+G.new_relation(Riza, ftwa.Relation.CHILD, ftwa.Relation.PARENT, Ali)
 G.new_relation(Deli, ftwa.Relation.SPOUSE, ftwa.Relation.SPOUSE, Fatmagul)
 
 
@@ -89,34 +89,34 @@ class Test(unittest.TestCase):
 		assert 1 == len(G.get_persons_relations(Riza))
 
 	def test_get_persons_relations_of_a_kind(self):
-		assert 1 == len(G.get_persons_relations_of_a_kind(Ali, ftwa.Relation.FATHER))
+		assert 1 == len(G.get_persons_relations_of_a_kind(Ali, ftwa.Relation.PARENT))
 		assert 1 == len(G.get_persons_relations_of_a_kind(Ali, ftwa.Relation.SPOUSE))
 		assert 2 == len(G.get_persons_relations_of_a_kind(Ali, ftwa.Relation.CHILD))
-		assert 0 == len(G.get_persons_relations_of_a_kind(Ali, ftwa.Relation.MOTHER))
+		assert 1 == len(G.get_persons_relations_of_a_kind(Ali, ftwa.Relation.PARENT))
 		assert 0 == len(G.get_persons_relations_of_a_kind(Ali, ftwa.Relation.SIBLING))
 
-		assert 0 == len(G.get_persons_relations_of_a_kind(Huri, ftwa.Relation.FATHER))
+		assert 0 == len(G.get_persons_relations_of_a_kind(Huri, ftwa.Relation.PARENT))
 		assert 1 == len(G.get_persons_relations_of_a_kind(Huri, ftwa.Relation.SPOUSE))
 		assert 2 == len(G.get_persons_relations_of_a_kind(Huri, ftwa.Relation.CHILD))
-		assert 0 == len(G.get_persons_relations_of_a_kind(Huri, ftwa.Relation.MOTHER))
+		assert 0 == len(G.get_persons_relations_of_a_kind(Huri, ftwa.Relation.PARENT))
 		assert 0 == len(G.get_persons_relations_of_a_kind(Huri, ftwa.Relation.SIBLING))
 
-		assert 1 == len(G.get_persons_relations_of_a_kind(Veli, ftwa.Relation.FATHER))
+		assert 2 == len(G.get_persons_relations_of_a_kind(Veli, ftwa.Relation.PARENT))
 		assert 0 == len(G.get_persons_relations_of_a_kind(Veli, ftwa.Relation.SPOUSE))
 		assert 0 == len(G.get_persons_relations_of_a_kind(Veli, ftwa.Relation.CHILD))
-		assert 1 == len(G.get_persons_relations_of_a_kind(Veli, ftwa.Relation.MOTHER))
+		assert 2 == len(G.get_persons_relations_of_a_kind(Veli, ftwa.Relation.PARENT))
 		assert 1 == len(G.get_persons_relations_of_a_kind(Veli, ftwa.Relation.SIBLING))
 
-		assert 1 == len(G.get_persons_relations_of_a_kind(Deli, ftwa.Relation.FATHER))
+		assert 2 == len(G.get_persons_relations_of_a_kind(Deli, ftwa.Relation.PARENT))
 		assert 1 == len(G.get_persons_relations_of_a_kind(Deli, ftwa.Relation.SPOUSE))
 		assert 0 == len(G.get_persons_relations_of_a_kind(Deli, ftwa.Relation.CHILD))
-		assert 1 == len(G.get_persons_relations_of_a_kind(Deli, ftwa.Relation.MOTHER))
+		assert 2 == len(G.get_persons_relations_of_a_kind(Deli, ftwa.Relation.PARENT))
 		assert 1 == len(G.get_persons_relations_of_a_kind(Deli, ftwa.Relation.SIBLING))
 
-		assert 0 == len(G.get_persons_relations_of_a_kind(Riza, ftwa.Relation.FATHER))
+		assert 0 == len(G.get_persons_relations_of_a_kind(Riza, ftwa.Relation.PARENT))
 		assert 0 == len(G.get_persons_relations_of_a_kind(Riza, ftwa.Relation.SPOUSE))
 		assert 1 == len(G.get_persons_relations_of_a_kind(Riza, ftwa.Relation.CHILD))
-		assert 0 == len(G.get_persons_relations_of_a_kind(Riza, ftwa.Relation.MOTHER))
+		assert 0 == len(G.get_persons_relations_of_a_kind(Riza, ftwa.Relation.PARENT))
 		assert 0 == len(G.get_persons_relations_of_a_kind(Riza, ftwa.Relation.SIBLING))
 
 	def test_mysearch2(self):

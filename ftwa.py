@@ -20,7 +20,7 @@ class MetaPerson(type):
 	
 class Relation(Enum):
 
-	SPOUSE, FATHER, MOTHER, CHILD, SIBLING = range(5)
+	SPOUSE, PARENT, CHILD, SIBLING = range(4)
 	
 
 	
@@ -104,9 +104,9 @@ class Person(metaclass=MetaPerson): #This is our Person object which creates str
 		return temp
 
 	def get_reverse_relation(r: Relation):
-		if r == Relation.FATHER:
+		if r == Relation.PARENT:
 			return Relation.CHILD
-		if r == Relation.MOTHER:
+		if r == Relation.PARENT:
 			return Relation.CHILD
 
 
@@ -116,10 +116,12 @@ class FamilyGraph():
 	person_list = {}
 
 	def new_relation(self, p1: Person, r1: Relation, r2: Relation, p2: Person):
-		if  ((not p1.is_placeholder() and p1.get_age() < 18) or (not p2.is_placeholder() and p2.get_age() < 18)) and r1 == Relation.SPOUSE:
+		if ((not p1.is_placeholder() and p1.get_age() < 18) or (not p2.is_placeholder() and p2.get_age() < 18)) and r1 == Relation.SPOUSE:
 			print("[WARNING] Marriage between {} and {} is a child marriage!".format(p1.name, p2.name))
 
 		
+		#if (r1.):
+			#print("[ERROR] Impossible Birthdates/Deathdates")
 		self.relation_list.append((p1, r1, r2, p2))
 
 	def del_relation(self, p1: Person, r: Relation, r2: Relation, p2: Person): #TODO 
@@ -145,14 +147,14 @@ class FamilyGraph():
 		print("------\ndiagnosing {}".format(p.name))
 		for x in self.relation_list:
 			print(x[0].name, x[1].name, x[2].name, x[3].name)
-		father_rel = self.get_persons_relations_of_a_kind(p, Relation.FATHER)
-		mother_rel = self.get_persons_relations_of_a_kind(p, Relation.MOTHER)
+		father_rel = self.get_persons_relations_of_a_kind(p, Relation.PARENT)
+		mother_rel = self.get_persons_relations_of_a_kind(p, Relation.PARENT)
 		
-		print("FATHER REL LEN {}".format(len(father_rel)))
+		print("PARENT REL LEN {}".format(len(father_rel)))
 		for x in father_rel:
 			print(x[0].name, x[1].name, x[2].name, x[3].name)		
 		
-		print("MOTHER REL LEN {}".format(len(mother_rel)))
+		print("PARENT REL LEN {}".format(len(mother_rel)))
 		for x in mother_rel:
 			print(x[0].name, x[1].name, x[2].name, x[3].name)
 		
@@ -262,7 +264,7 @@ class FamilyGraph():
 	def get_relation_between(self, p1: Person, p2: Person):
 		path = self.mysearch2(p1, p2)
 		rel_path = self.node_path_to_edge_path(path)
-		complex_rel = translate_path_to_relation(self, rel_path, path)
+		complex_rel = self.translate_path_to_relation(rel_path, path)
 		
 		return complex_rel
 
@@ -292,15 +294,15 @@ def main():
 	G.person_list[Z.name+Z.surname] = Z
 	
 	G.new_relation(Ali, Relation.SPOUSE, Relation.SPOUSE, Huri)
-	G.new_relation(Ali, Relation.CHILD, Relation.FATHER, Veli)
-	G.new_relation(Ali, Relation.CHILD, Relation.FATHER, Deli)
-	G.new_relation(Huri, Relation.CHILD, Relation.MOTHER, Veli)
-	G.new_relation(Huri, Relation.CHILD, Relation.MOTHER, Deli)
+	G.new_relation(Ali, Relation.CHILD, Relation.PARENT, Veli)
+	G.new_relation(Ali, Relation.CHILD, Relation.PARENT, Deli)
+	G.new_relation(Huri, Relation.CHILD, Relation.PARENT, Veli)
+	G.new_relation(Huri, Relation.CHILD, Relation.PARENT, Deli)
 	G.new_relation(Veli, Relation.SIBLING, Relation.SIBLING, Deli)
-	G.new_relation(Rıza, Relation.CHILD, Relation.FATHER, Ali)
+	G.new_relation(Rıza, Relation.CHILD, Relation.PARENT, Ali)
 	
-	G.new_relation(Rıza, Relation.CHILD, Relation.FATHER, X)
-	G.new_relation(X, Relation.CHILD, Relation.FATHER, Y)
+	G.new_relation(Rıza, Relation.CHILD, Relation.PARENT, X)
+	G.new_relation(X, Relation.CHILD, Relation.PARENT, Y)
 	G.new_relation(Deli, Relation.SPOUSE, Relation.SPOUSE, Z)
 	
 
@@ -311,9 +313,9 @@ def main():
 	print(len(G.get_persons_relations(Huri)))
 	print(G.get_persons_relations_of_a_kind(Huri, Relation.CHILD))
 
-	#print("here {}".format(Relation.get_reverse(Relation.FATHER)))
+	#print("here {}".format(Relation.get_reverse(Relation.PARENT)))
 
-	print(Person.get_reverse_relation(Relation.FATHER))
+	print(Person.get_reverse_relation(Relation.PARENT))
 
 
 	print("----------")

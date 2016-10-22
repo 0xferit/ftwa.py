@@ -29,12 +29,12 @@ class HelloWorld(cmd.Cmd):
 	G.person_list[Fatmagul.name+Fatmagul.surname] = Fatmagul
 
 	G.new_relation(Ali, ftwa.Relation.SPOUSE, ftwa.Relation.SPOUSE, Huri)
-	G.new_relation(Ali, ftwa.Relation.CHILD, ftwa.Relation.FATHER, Veli)
-	G.new_relation(Ali, ftwa.Relation.CHILD, ftwa.Relation.FATHER, Deli)
-	G.new_relation(Huri, ftwa.Relation.CHILD, ftwa.Relation.MOTHER, Veli)
-	G.new_relation(Huri, ftwa.Relation.CHILD, ftwa.Relation.MOTHER, Deli)
+	G.new_relation(Ali, ftwa.Relation.CHILD, ftwa.Relation.PARENT, Veli)
+	G.new_relation(Ali, ftwa.Relation.CHILD, ftwa.Relation.PARENT, Deli)
+	G.new_relation(Huri, ftwa.Relation.CHILD, ftwa.Relation.PARENT, Veli)
+	G.new_relation(Huri, ftwa.Relation.CHILD, ftwa.Relation.PARENT, Deli)
 	G.new_relation(Veli, ftwa.Relation.SIBLING, ftwa.Relation.SIBLING, Deli)
-	G.new_relation(Riza, ftwa.Relation.CHILD, ftwa.Relation.FATHER, Ali)
+	G.new_relation(Riza, ftwa.Relation.CHILD, ftwa.Relation.PARENT, Ali)
 	G.new_relation(Deli, ftwa.Relation.SPOUSE, ftwa.Relation.SPOUSE, Fatmagul)
 
 	
