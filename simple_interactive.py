@@ -17,7 +17,17 @@ class HelloWorld(cmd.Cmd):
 	Huri 	= ftwa.Person("Huri", "Yanyatan", ftwa.Gender.FEMALE, date(1983, 12, 15), date(2075, 12, 15)) # Anne
 	Deli 	= ftwa.Person("Deli", "Yanyatan",   ftwa.Gender.MALE, date(2007, 12, 15), date(2075, 12, 15)) # Çocuk
 	Riza	= ftwa.Person("Riza", "Yanyatan",   ftwa.Gender.MALE, date(1970, 1, 1), date(2030, 12, 12)) # Dede, Ali'nin babası
-	Fatmagul= ftwa.Person("Fatmagul", "Yanyatan", ftwa.Gender.FEMALE, birthdate = date(2000, 1, 1))
+	Fatmagul= ftwa.Person("Fatmagül", "Yanyatan", ftwa.Gender.FEMALE, birthdate = date(2000, 1, 1))
+	Makbule = ftwa.Person("Makbule", "Yanyatan", ftwa.Gender.FEMALE)
+	Nuri	= ftwa.Person("Nuri", "Yanyatan", ftwa.Gender.MALE)
+	Nurbanu	= ftwa.Person("Nurbanu", "Yanyatan", ftwa.Gender.FEMALE)
+	Asli	= ftwa.Person("Asli",  "Yanyatan", ftwa.Gender.FEMALE)
+	Kerem	= ftwa.Person("Kerem", "Yanyatan", ftwa.Gender.MALE)
+	Mahmut	= ftwa.Person("Mahmut", "Devrik", ftwa.Gender.MALE)
+	Emre	= ftwa.Person("Emre", "Bitmez", ftwa.Gender.MALE)
+	Cimcime = ftwa.Person("Cimcime", "Yanyatan", ftwa.Gender.FEMALE)
+	Pala	= ftwa.Person("Pala", "Tosbağa", ftwa.Gender.MALE)
+	Duran	= ftwa.Person("Duran", "Yanyatan", ftwa.Gender.MALE)
 
 	G = ftwa.FamilyGraph()
 
@@ -27,6 +37,17 @@ class HelloWorld(cmd.Cmd):
 	G.person_list[Deli.name+Deli.surname] = Deli
 	G.person_list[Riza.name+Riza.surname] = Riza
 	G.person_list[Fatmagul.name+Fatmagul.surname] = Fatmagul
+	G.person_list[Makbule.name+Makbule.surname] = Makbule
+	G.person_list[Nuri.name+Nuri.surname] = Nuri
+	G.person_list[Nurbanu.name+Nurbanu.surname] = Nurbanu
+	G.person_list[Asli.name+Asli.surname] = Asli
+	G.person_list[Kerem.name+Kerem.surname] = Kerem
+	G.person_list[Mahmut.name+Mahmut.surname] = Mahmut
+	G.person_list[Emre.name+Emre.surname] = Emre
+	G.person_list[Cimcime.name+Cimcime.surname] = Cimcime
+	G.person_list[Pala.name+Pala.surname] = Pala
+	G.person_list[Duran.name+Duran.surname] = Duran
+
 
 	G.new_relation(Ali, ftwa.Relation.SPOUSE, ftwa.Relation.SPOUSE, Huri)
 	G.new_relation(Ali, ftwa.Relation.CHILD, ftwa.Relation.PARENT, Veli)
@@ -36,6 +57,17 @@ class HelloWorld(cmd.Cmd):
 	G.new_relation(Veli, ftwa.Relation.SIBLING, ftwa.Relation.SIBLING, Deli)
 	G.new_relation(Riza, ftwa.Relation.CHILD, ftwa.Relation.PARENT, Ali)
 	G.new_relation(Deli, ftwa.Relation.SPOUSE, ftwa.Relation.SPOUSE, Fatmagul)
+	G.new_relation(Nuri, ftwa.Relation.SIBLING, ftwa.Relation.SIBLING, Ali)
+	G.new_relation(Nurbanu, ftwa.Relation.SIBLING, ftwa.Relation.SIBLING, Ali)
+	G.new_relation(Asli, ftwa.Relation.SIBLING, ftwa.Relation.SIBLING, Huri)
+	G.new_relation(Kerem, ftwa.Relation.SIBLING, ftwa.Relation.SIBLING, Huri)
+	G.new_relation(Makbule, ftwa.Relation.CHILD, ftwa.Relation.PARENT, Ali)
+	G.new_relation(Mahmut, ftwa.Relation.CHILD, ftwa.Relation.PARENT, Huri)
+	G.new_relation(Emre, ftwa.Relation.SPOUSE, ftwa.Relation.SPOUSE, Asli)
+	G.new_relation(Cimcime, ftwa.Relation.PARENT, ftwa.Relation.CHILD, Asli)
+	G.new_relation(Pala, ftwa.Relation.CHILD, ftwa.Relation.PARENT, Huri)
+	G.new_relation(Duran, ftwa.Relation.SPOUSE, ftwa.Relation.SPOUSE, Asli)
+
 
 	
 	def greet(self, person):
@@ -50,10 +82,10 @@ class HelloWorld(cmd.Cmd):
 	
 	def greet(self, text, line, begidx, endidx):
 		if not text:
-			completions = self.FRIENDS[:]
+			completions = self.G.person_list[:]
 		else:
 			completions = [ f
-					for f in self.FRIENDS
+					for f in self.G.person_list
 					if f.startswith(text)
 					]
 		return completions
@@ -71,6 +103,16 @@ class HelloWorld(cmd.Cmd):
 		except:
 			print("Not Found!")
 
+	def complete_search(self, text, line, begidx, endidx):
+		if not text:
+			completions = self.G.person_list[:]
+		else:
+			completions = [ f
+					for f in self.G.person_list
+					if f.startswith(text)
+					]
+		return completions
+
 	def list(self, arg):
 		for key in self.G.person_list.keys():
 			print((self.G.person_list[key]).str())
@@ -82,7 +124,81 @@ class HelloWorld(cmd.Cmd):
 	def do_relation(self, arg):
 		"Prints relation between two persons"
 		print(self.G.get_relation_between(self.G.person_list[parse(arg)[0]], self.G.person_list[parse(arg)[1]]))
+
+	def complete_relation(self, text, line, begidx, endidx):
+		if not text:
+			completions = self.G.person_list[:]
+		else:
+			completions = [ f
+					for f in self.G.person_list
+					if f.startswith(text)
+					]
+		return completions
 	
+	def do_alive(self, arg):
+		try:
+			print(self.G.person_list[parse(arg)[0]].is_alive())
+		except:
+			print("Not Found!")
+
+	def complete_alive(self, text, line, begidx, endidx):
+		if not text:
+			completions = self.G.person_list[:]
+		else:
+			completions = [ f
+					for f in self.G.person_list
+					if f.startswith(text)
+					]
+		return completions	
+
+	def do_update(self, arg):
+		print("Not Implemented Yet")
+
+	def complete_update(self, text, line, begidx, endidx):
+		if not text:
+			completions = self.G.person_list[:]
+		else:
+			completions = [ f
+					for f in self.G.person_list
+					if f.startswith(text)
+					]
+		return completions
+
+	def do_age(self, arg):
+		"Get age of person\nUsage: age person"
+		try:
+			print(self.G.person_list[parse(arg)[0]].get_age())
+		except:
+			print("Not Found!")	
+
+	def complete_age(self, text, line, begidx, endidx):
+		if not text:
+			completions = self.G.person_list[:]
+		else:
+			completions = [ f
+					for f in self.G.person_list
+					if f.startswith(text)
+					]
+		return completions
+
+	def do_level(self, arg):
+		"Get level of person. Returns longest parental path distance\nUsage: level person"
+		try:
+			print(self.G.get_level(self.G.person_list[parse(arg)[0]]))
+		except:
+			print("Not Found!")	
+
+	def complete_level(self, text, line, begidx, endidx):
+		if not text:
+			completions = self.G.person_list[:]
+		else:
+			completions = [ f
+					for f in self.G.person_list
+					if f.startswith(text)
+					]
+		return completions
+
+
 	
 	def do_print(self, arg):
 
@@ -109,7 +225,7 @@ class HelloWorld(cmd.Cmd):
 		
 
 		
-		pos=nx.spring_layout(Y, iterations=500, scale=3.0)
+		pos=nx.spring_layout(Y)
 
 		print(Y.edges())
 

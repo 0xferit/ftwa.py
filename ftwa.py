@@ -27,7 +27,7 @@ class Gender(Enum):
 
 class ComplexRelation(Enum):
 
-	OGUL, KIZ, ERKEK_KARDES, KIZ_KARDES, ABLA, AGABEY, AMCA, HALA, DAYI, TEYZE, YEGEN, KUZEN, ENISTE, YENGE, KAYINVALIDE, KAYINPEDER, GELIN, DAMAT, BACANAK, BALDIZ, ELTI, KAYINBIRADER, BABA, ANNE, KARI, KOCA, DEDE, ANNEANNE, BABAANNE, TANIMSIZ = range(30)
+	OGUL, KIZ, ERKEK_KARDES, KIZ_KARDES, ABLA, AGABEY, AMCA, HALA, DAYI, TEYZE, YEGEN, KUZEN, ENISTE, YENGE, KAYINVALIDE, KAYINPEDER, GELIN, DAMAT, BACANAK, BALDIZ, ELTI, KAYINBIRADER, BABA, ANNE, KARI, KOCA, DEDE, ANNEANNE, BABAANNE, TANIMSIZ, GORUMCE, TORUN = range(32)
 	
 
 class Person(metaclass=MetaPerson): #This is our Person object which creates struct to keep information
@@ -240,19 +240,22 @@ class FamilyGraph():
 		print("relpathlen {}".format(len(relation_path))) 
 		for x in relation_path:
 			print(x)
+
+#------------------------1. DEGREE RELATIONS------------------------------------
+
 		if len(relation_path) == 1:
 
 			if relation_path[0] == Relation.SIBLING:
 				if nodes[1].gender == Gender.MALE:
-					if self.compare_ages(nodes[0], nodes[1]):
-						return ComplexRelation.AGABEY
-					else:
+					if  self.is_older_than(nodes[0], nodes[1]):
 						return ComplexRelation.ERKEK_KARDES
-				else:
-					if self.compare_ages(nodes[0], nodes[1]):
-						return ComplexRelation.ABLA
 					else:
+						return ComplexRelation.AGABEY
+				else:
+					if  self.is_older_than(nodes[0], nodes[1]):
 						return ComplexRelation.KIZ_KARDES
+					else:
+						return ComplexRelation.ABLA
 
 			if relation_path[0] == Relation.PARENT:
 				if nodes[1].gender == Gender.MALE:
@@ -273,48 +276,68 @@ class FamilyGraph():
 				else:
 					return ComplexRelation.KIZ
 
-		
+#------------------------2. DEGREE RELATIONS------------------------------------
+
 		if len(relation_path) == 2:
-
+			
+			
 			if relation_path[0] == Relation.SIBLING:
+				if nodes[0].gender == Gender.FEMALE:
+					if nodes[1].gender == Gender.MALE:
+						if relation_path[1] == Relation.SPOUSE:
+							if nodes[2].gender == Gender.FEMALE:
+								return ComplexRelation.ELTI
+					else:
+						if relation_path[1] == Relation.CHILD:
+							return ComplexRelation.YEGEN
+				else:
+					if nodes[1].gender == Gender.MALE:
 
-				if nodes[1].gender == Gender.MALE:
+						if relation_path[1] == Relation.SPOUSE:
+							if nodes[2].gender == Gender.MALE:
+								return ComplexRelation.TANIMSIZ
+							else:
+								return ComplexRelation.YENGE
 
-					if relation_path[1] == Relation.SPOUSE:
-						if nodes[2].gender == Gender.MALE:
-							return ComplexRelation.TANIMSIZ
-						else:
-							return ComplexRelation.YENGE
+						if relation_path[1] == Relation.PARENT:
 
-					if relation_path[1] == Relation.PARENT:
+							if nodes[2].gender == Gender.MALE:
 
-						if nodes[2].gender == Gender.MALE:
-							return ComplexRelation.TANIMSIZ
-						else:
-							return ComplexRelation.TANIMSIZ
+								return ComplexRelation.TANIMSIZ
+							else:
+								return ComplexRelation.TANIMSIZ
+
+						if relation_path[1] == Relation.CHILD:
+							return ComplexRelation.YEGEN
 						
-				if nodes[1].gender == Gender.FEMALE:
+					if nodes[1].gender == Gender.FEMALE:
 
-					if relation_path[1] == Relation.SPOUSE:
+						if relation_path[1] == Relation.SPOUSE:
 
-						if nodes[2].gender == Gender.MALE:
-							return ComplexRelation.ENISTE
-						else:
-							return ComplexRelation.TANIMSIZ
-					if relation_path[1] == Relation.PARENT:
-						if nodes[2].gender == Gender.MALE:
-							return ComplexRelation.DEDE
-						else:
-							return ComplexRelation.ANNEANNE
+							if nodes[2].gender == Gender.MALE:
+								return ComplexRelation.ENISTE
+							else:
+								return ComplexRelation.TANIMSIZ
+
+
+						if relation_path[1] == Relation.CHILD:
+							return ComplexRelation.YEGEN
+
+
+
 #----------------------------------------------------------------------------------------
 
 			if relation_path[0] == Relation.PARENT:
+
 				if nodes[1].gender == Gender.MALE:
+
 					if relation_path[1] == Relation.SIBLING:
 						if nodes[2].gender == Gender.MALE:
+
 							return ComplexRelation.AMCA
 						else:
 							return ComplexRelation.HALA
+
 					if relation_path[1] == Relation.PARENT:
 						if nodes[2].gender == Gender.MALE:
 							return ComplexRelation.DEDE
@@ -333,19 +356,75 @@ class FamilyGraph():
 						else:
 							return ComplexRelation.ANNEANNE
 
+#--------------------------------------------------------------------------------------
 
 			if relation_path[0] == Relation.SPOUSE:
+
 				if nodes[1].gender == Gender.MALE:
-					return ComplexRelation.KOCA
-				else:
-					return ComplexRelation.KARI
+
+					if relation_path[1] == Relation.PARENT:
+
+						if nodes[2].gender == Gender.MALE:
+
+							return ComplexRelation.KAYINPEDER
+						else:
+							return ComplexRelation.KAYINVALIDE
+
+					if relation_path[1] == Relation.SIBLING:
+
+						if nodes[2].gender == Gender.MALE:
+							return ComplexRelation.TANIMSIZ
+						else:
+							return ComplexRelation.GORUMCE
+						
+				if nodes[1].gender == Gender.FEMALE:
+
+					if relation_path[1] == Relation.SIBLING:
+
+						if nodes[2].gender == Gender.MALE:
+							return ComplexRelation.KAYINBIRADER
+						else:
+							return ComplexRelation.BALDIZ
+
+					if relation_path[1] == Relation.PARENT:
+
+						if nodes[2].gender == Gender.MALE:
+							return ComplexRelation.KAYINPEDER
+						else:
+							return ComplexRelation.KAYINVALIDE
+
+#--------------------------------------------------------------------------------------
 
 
-			if relation_path[0] == CHILD:
-				if nodes[1].gender == Gender.MALE:
-					return ComplexRelation.OGUL
-				else:
-					return ComplexRelation.KIZ
+			if relation_path[0] == Relation.CHILD:
+
+				if relation_path[1] == Relation.CHILD:
+					return ComplexRelation.TORUN
+				if relation_path[1] == Relation.SPOUSE:
+					if nodes[2].gender == Gender.MALE:
+						return ComplexRelation.DAMAT
+					else:
+						return ComplexRelation.GELIN
+
+#------------------------3. DEGREE RELATIONS-------------------------------------------
+
+		if len(relation_path) == 3:
+
+			if relation_path[0] == Relation.PARENT:
+
+				if relation_path[1] == Relation.SIBLING:
+
+					if relation_path[2] == Relation.CHILD:
+						return ComplexRelation.KUZEN
+
+			if nodes[0].gender == Gender.MALE:
+				if relation_path[0] == Relation.SPOUSE:
+					if nodes[1].gender == Gender.FEMALE:
+						if relation_path[1] == Relation.SIBLING:
+							if nodes[2].gender == Gender.FEMALE:
+								if relation_path[2] == Relation.SPOUSE:
+									return ComplexRelation.BACANAK	
+		
 			
 
 		else:
@@ -362,7 +441,12 @@ class FamilyGraph():
 		
 		return complex_rel
 
-	def compare_ages(self, p1, p2): 
+	def is_older_than(self, p1, p2): #TODO doğum günü olmayınca patlıyo
+		if(p1.birthdate == None):
+			return False
+		if(p2.birthdate == None):
+			return True
+		
 		bd1 = p1.birthdate
 		bd2 = p2.birthdate
 		return (0 > (bd1.year - bd2.year - ((bd1.month, bd1.day) < (bd2.month, bd2.day))))
