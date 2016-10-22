@@ -38,7 +38,7 @@ class HelloWorld(cmd.Cmd):
 	G.new_relation(Deli, ftwa.Relation.SPOUSE, ftwa.Relation.SPOUSE, Fatmagul)
 
 	
-	def do_greet(self, person):
+	def greet(self, person):
 		"Greet the person"
 		if person and person in self.FRIENDS:
 			greeting = 'hi, %s!' % person
@@ -48,7 +48,7 @@ class HelloWorld(cmd.Cmd):
 			greeting = 'hello'
 		print (greeting)
 	
-	def complete_greet(self, text, line, begidx, endidx):
+	def greet(self, text, line, begidx, endidx):
 		if not text:
 			completions = self.FRIENDS[:]
 		else:
@@ -66,13 +66,16 @@ class HelloWorld(cmd.Cmd):
 		self.G.person_list.append(temp)
 
 	def do_search(self, arg):
-		print()
+		try:
+			print(self.G.person_list[parse(arg)[0]].str())
+		except:
+			print("Not Found!")
 
-	def do_list(self, arg):
+	def list(self, arg):
 		for key in self.G.person_list.keys():
 			print((self.G.person_list[key]).str())
 
-	def do_list2(self, arg):
+	def do_list(self, arg):
 		for k, v in self.G.person_list.items():
 			print(k, v.str())
 	
