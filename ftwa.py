@@ -149,44 +149,18 @@ class FamilyGraph():
 					
 	def get_level(self, p: Person): #TODO
 
-		print("------\ndiagnosing {}".format(p.name))
-		for x in self.relation_list:
-			print(x[0].name, x[1].name, x[2].name, x[3].name)
-		father_rel = self.get_persons_relations_of_a_kind(p, Relation.PARENT)
-		mother_rel = self.get_persons_relations_of_a_kind(p, Relation.PARENT)
-		
-		print("PARENT REL LEN {}".format(len(father_rel)))
-		for x in father_rel:
-			print(x[0].name, x[1].name, x[2].name, x[3].name)		
-		
-		print("PARENT REL LEN {}".format(len(mother_rel)))
-		for x in mother_rel:
-			print(x[0].name, x[1].name, x[2].name, x[3].name)
+		father_rel = self.get_persons_relations_of_a_kind(p, Relation.PARENT)		
 		
 		father = None
-		mother = None
 
 		if father_rel:
 			for y in father_rel[0]:
 				if y != p and type(y) == type(p):
 					father = y
-		
-		if mother_rel:
-			for y in mother_rel[0]:
-				if y != p and type(y) == type(p):
-					mother = y
-
-
-
-		if not father and not mother:
-			print("öksüz {}".format(p.name))
+		if not father:
 			return 0
-		if father and  mother:
-			return 1 + max(self.get_level(father), self.get_level(mother))
-		if  father and not mother: 
-			return 1 + self.get_level(father)
 		else:
-			return 1 + self.get_level(mother)
+			return 1 + self.get_level(father)
 
 	def get_persons_relations(self, p: Person):
 		#for item in [rel for rel in self.relation_list if p in rel]: print("X {}".format(item))

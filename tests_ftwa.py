@@ -73,6 +73,7 @@ class Test(unittest.TestCase):
 		assert 2 == G.get_level(Deli)
 		assert 2 == G.get_level(Veli)
 		assert 0 == G.get_level(Riza)
+		assert 0 == G.get_level(Fatmagul)
 
 	def test_get_first_degree_relatives(self):
 		assert 4 == len(G.get_first_degree_relatives(Ali))
@@ -164,6 +165,10 @@ class Test(unittest.TestCase):
 		Deli.str()
 		Ali.str()
 		Huri.str()
+
+	def test_compare_ages(self):
+		assert 1 == G.compare_ages(Riza, Ali)
+		assert 0 == G.compare_ages(Ali, Riza)
 
 
 if __name__ == '__main__':
