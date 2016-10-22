@@ -22,7 +22,12 @@ class Relation(Enum):
 
 	SPOUSE, PARENT, CHILD, SIBLING = range(4)
 	
+class Gender(Enum):
+	MALE, FEMALE = range(2)
 
+class ComplexRelation(Enum):
+
+	OGUL, KIZ, ERKEK_KARDES, KIZ_KARDES, ABLA, ABI, AMCA, HALA, DAYI, TEYZE, YEGEN, KUZEN, ENISTE, YENGE, KAYINVALIDE, KAYINPEDER, GELIN, DAMAT, BACANAK, BALDIZ, ELTI, KAYINBIRADER = range(22)
 	
 
 class Person(metaclass=MetaPerson): #This is our Person object which creates struct to keep information
@@ -259,6 +264,10 @@ class FamilyGraph():
 	def translate_path_to_relation(self, relation_path, path):
 		if len(relation_path) == 0:
 			return None
+		if len(relation_path) == 1:
+			if relation_path[0] == Relation.SIBLING:
+				if path[1].gender == Gender.MALE:
+					return True
 
 
 	def get_relation_between(self, p1: Person, p2: Person):
@@ -267,6 +276,12 @@ class FamilyGraph():
 		complex_rel = self.translate_path_to_relation(rel_path, path)
 		
 		return complex_rel
+
+	def compare_ages(self, p1, p2): 
+		bd1 = p1.birthdate
+		bd2 = p2.birthdate
+		return (0 > (bd1.year - bd2.year - ((bd1.month, bd1.day) < (bd2.month, bd2.day))))
+		
 
 
 def main():
