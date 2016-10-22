@@ -27,7 +27,7 @@ class Gender(Enum):
 
 class ComplexRelation(Enum):
 
-	OGUL, KIZ, ERKEK_KARDES, KIZ_KARDES, ABLA, ABI, AMCA, HALA, DAYI, TEYZE, YEGEN, KUZEN, ENISTE, YENGE, KAYINVALIDE, KAYINPEDER, GELIN, DAMAT, BACANAK, BALDIZ, ELTI, KAYINBIRADER = range(22)
+	OGUL, KIZ, ERKEK_KARDES, KIZ_KARDES, ABLA, ABI, AMCA, HALA, DAYI, TEYZE, YEGEN, KUZEN, ENISTE, YENGE, KAYINVALIDE, KAYINPEDER, GELIN, DAMAT, BACANAK, BALDIZ, ELTI, KAYINBIRADER, BABA, ANNE, KARI, KOCA = range(26)
 	
 
 class Person(metaclass=MetaPerson): #This is our Person object which creates struct to keep information
@@ -147,7 +147,7 @@ class FamilyGraph():
 		for relation in self.relation_list:
 			print(relation)
 					
-	def get_level(self, p: Person): #TODO
+	def get_level(self, p: Person):
 
 		father_rel = self.get_persons_relations_of_a_kind(p, Relation.PARENT)		
 		
@@ -235,13 +235,48 @@ class FamilyGraph():
 		return relation_path
 	
 	
-	def translate_path_to_relation(self, relation_path, path):
-		if len(relation_path) == 0:
-			return None
+	def translate_path_to_relation(self, relation_path, nodes):
+		
+		print("relpathlen {}".format(len(relation_path))) 
+		for x in relation_path:
+			print(x)
 		if len(relation_path) == 1:
+
 			if relation_path[0] == Relation.SIBLING:
-				if path[1].gender == Gender.MALE:
-					return True
+				if nodes[1].gender == Gender.MALE:
+					if self.compare_ages(nodes[0], nodes[1]):
+						return ComplexRelation.ABI
+					else:
+						return ComplexRelation.ERKEK_KARDES
+				else:
+					if self.compare_ages(nodes[0], nodes[1]):
+						return ComplexRelation.ABLA
+					else:
+						return ComplexRelation.KIZ_KARDES
+
+			if relation_path[0] == Relation.PARENT:
+				if nodes[1].gender == Gender.MALE:
+					return ComplexRelation.BABA
+				else:
+					return ComplexRelation.ANNE
+
+			if relation_path[0] == Relation.SPOUSE:
+				if nodes[1].gender == Gender.MALE:
+					return ComplexRelation.KOCA
+				else:
+					return ComplexRelation.KARI
+
+
+			if relation_path[0] == CHILD:
+				if nodes[1].gender == Gender.MALE:
+					return ComplexRelation.OGUL
+				else:
+					return ComplexRelation.KIZ
+		else:
+			return None
+		
+
+
 
 
 	def get_relation_between(self, p1: Person, p2: Person):
@@ -260,11 +295,11 @@ class FamilyGraph():
 
 def main():
 	print ("test")
-	Veli 	= Person("Veli", "Yanyatan",   "male", date(2005, 12, 15), date(2075, 12, 15))	#Çocuk	
-	Ali 	= Person("Ali", "Yanyatan",    "male", date(1980, 12, 15), date(2055, 12, 15)) # Baba
-	Huri 	= Person("Huri", "Yanyatan", "female", date(1983, 12, 15), date(2075, 12, 15)) # Anne
-	Deli 	= Person("Deli", "Yanyatan",   "male", date(2007, 12, 15), date(2075, 12, 15)) # Çocuk
-	Rıza	= Person("Rıza", "Yanyatan",   "male", date(1970, 1, 1), date(2030, 12, 12)) # Dede, Ali'nin babası
+	Veli 	= Person("Veli", "Yanyatan",   Gender.MALE, date(2005, 12, 15), date(2075, 12, 15))	#Çocuk	
+	Ali 	= Person("Ali", "Yanyatan",    Gender.MALE, date(1980, 12, 15), date(2055, 12, 15)) # Baba
+	Huri 	= Person("Huri", "Yanyatan", Gender.FEMALE, date(1983, 12, 15), date(2075, 12, 15)) # Anne
+	Deli 	= Person("Deli", "Yanyatan",   Gender.MALE, date(2007, 12, 15), date(2075, 12, 15)) # Çocuk
+	Rıza	= Person("Rıza", "Yanyatan",   Gender.MALE, date(1970, 1, 1), date(2030, 12, 12)) # Dede, Ali'nin babası
 
 	X 	= Person(name="X", surname="X")
 	Y	= Person(name="Y", surname="Y")
@@ -315,7 +350,7 @@ def main():
 	path = G.mysearch2(Rıza, Z)
 	print(G.node_path_to_edge_path(path))
 
-	print(G.get_relation_between(Rıza, Z))
+	print(G.get_relation_between(Veli, Deli))
 
 if __name__ == '__main__':
 	main()

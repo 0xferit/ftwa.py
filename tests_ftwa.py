@@ -7,12 +7,12 @@ import re
 import time
 from datetime import date
 
-Veli 	= ftwa.Person("Veli", "Yanyatan",   "male", date(2005, 12, 15), date(2075, 12, 15)) #Çocuk	
-Ali 	= ftwa.Person("Ali", "Yanyatan",    "male", date(1980, 12, 15), date(2055, 12, 15)) # Baba
-Huri 	= ftwa.Person("Huri", "Yanyatan", "female", date(1983, 12, 15), date(2075, 12, 15)) # Anne
-Deli 	= ftwa.Person("Deli", "Yanyatan",   "male", date(2007, 12, 15), date(2075, 12, 15)) # Çocuk
-Riza	= ftwa.Person("Riza", "Yanyatan",   "male", date(1970, 1, 1), date(2030, 12, 12)) # Dede, Ali'nin babası
-Fatmagul= ftwa.Person("Fatmagül", "Yanyatan", "female", birthdate = date(2000, 1, 1))
+Veli 	= ftwa.Person("Veli", "Yanyatan",   ftwa.Gender.FEMALE, date(2005, 12, 15), date(2075, 12, 15)) #Çocuk	
+Ali 	= ftwa.Person("Ali", "Yanyatan",    ftwa.Gender.FEMALE, date(1980, 12, 15), date(2055, 12, 15)) # Baba
+Huri 	= ftwa.Person("Huri", "Yanyatan", ftwa.Gender.FEMALE, date(1983, 12, 15), date(2075, 12, 15)) # Anne
+Deli 	= ftwa.Person("Deli", "Yanyatan",   ftwa.Gender.FEMALE, date(2007, 12, 15), date(2075, 12, 15)) # Çocuk
+Riza	= ftwa.Person("Riza", "Yanyatan",   ftwa.Gender.FEMALE, date(1970, 1, 1), date(2030, 12, 12)) # Dede, Ali'nin babası
+Fatmagul= ftwa.Person("Fatmagül", "Yanyatan", ftwa.Gender.FEMALE, birthdate = date(2000, 1, 1))
 
 G = ftwa.FamilyGraph()
 
