@@ -8,7 +8,8 @@ import re
 import locale
 from enum import Enum
 from datetime import date
-from collections import deque
+import collections
+import copy
 	
 
 class MetaPerson(type):
@@ -232,15 +233,79 @@ class FamilyGraph():
 		unvisited = []
 		visited = []
 		next = start
+		
+		queue = deque()
+		stack = []
+		stack.append(next)
 
 		while next != goal:
 			visited.append(next)
-			successors = [x for x in self.get_first_degree_relations(next) if x not in closed]
+			successors = [x for x in self.get_first_degree_relatives(next) if x not in visited]
 			unvisited.extend(successors)
+			stack.pop()
 			next = unvisited.pop()
-		return next
-				
+			stack.append(next)
 		
+		for x in stack:
+			print(x.name)
+
+		print("-----")
+		for y in visited:
+			print(y.name)
+		print("------")
+		return next
+
+	def mysearch2(self, start, goal): # finds and returns goal
+		#unvisited = []
+
+		path = []
+		visited = []
+
+		predecessor = {}
+
+		visit_queue = collections.deque()
+		visit_queue.appendleft(start)
+		next = visit_queue.pop()
+
+		stack = []
+		#stack.append(next)
+
+
+		while next != goal:
+			
+			print("\n")
+			print(next.name)
+			for item in visit_queue:
+				print ("q item {}".format(item.name))
+			
+			
+			visited.append(next)
+			
+
+			successors = [x for x in self.get_first_degree_relatives(next) if x not in visited+list(collections.deque(visit_queue))]
+
+			for s in successors:
+				print("successor {}".format(s.name))
+
+			visit_queue.extendleft(successors)
+			print("q len {}".format(len(visit_queue)))
+
+			for s in successors:
+				predecessor[s] = next
+			next = visit_queue.pop()
+
+			for v in visited:
+				print("visited {}".format(v.name))
+		
+		path.append(next)
+		found = copy.deepcopy(next)
+		while next in predecessor:
+			print("pred {}".format(predecessor[next].name))
+			path.append(predecessor[next])			
+			next = predecessor[next]
+			
+				
+		return path
 		
 
 def main():
@@ -250,6 +315,10 @@ def main():
 	Huri 	= Person("Huri", "Yanyatan", "female", date(1983, 12, 15), date(2075, 12, 15)) # Anne
 	Deli 	= Person("Deli", "Yanyatan",   "male", date(2007, 12, 15), date(2075, 12, 15)) # Çocuk
 	Rıza	= Person("Rıza", "Yanyatan",   "male", date(1970, 1, 1), date(2030, 12, 12)) # Dede, Ali'nin babası
+
+	X 	= Person(name="X", surname="X")
+	Y	= Person(name="Y", surname="Y")
+	Z	= Person(name="Z", surname="Z")
 	
 	G = FamilyGraph()
 	G.person_list.append(Veli)
@@ -257,6 +326,11 @@ def main():
 	G.person_list.append(Deli)
 	G.person_list.append(Ali)
 	G.person_list.append(Rıza)
+
+	
+	G.person_list.append(X)
+	G.person_list.append(Y)
+	G.person_list.append(Z)
 	
 	G.new_relation(Ali, Relation.SPOUSE, Relation.SPOUSE, Huri)
 	G.new_relation(Ali, Relation.CHILD, Relation.FATHER, Veli)
@@ -265,6 +339,12 @@ def main():
 	G.new_relation(Huri, Relation.CHILD, Relation.MOTHER, Deli)
 	G.new_relation(Veli, Relation.SIBLING, Relation.SIBLING, Deli)
 	G.new_relation(Rıza, Relation.CHILD, Relation.FATHER, Ali)
+	
+	G.new_relation(Rıza, Relation.CHILD, Relation.FATHER, X)
+	G.new_relation(X, Relation.CHILD, Relation.FATHER, Y)
+	G.new_relation(Deli, Relation.CHILD, Relation.FATHER, Z)
+	
+
 
 	print("FDR:{}".format(G.get_first_degree_relatives(Veli)))
 
@@ -276,7 +356,11 @@ def main():
 
 	print(Person.get_reverse_relation(Relation.FATHER))
 
-	print(G.shortest_path(G, Rıza, Veli))
+
+	print("----------")
+	#print (G.mysearch2(Rıza, Z).name)
+	for x in G.mysearch2(Rıza, Z):
+		print(x.name)
 
 if __name__ == '__main__':
 	main()
