@@ -27,7 +27,7 @@ class Gender(Enum):
 
 class ComplexRelation(Enum):
 
-	OGUL, KIZ, ERKEK_KARDES, KIZ_KARDES, ABLA, AGABEY, AMCA, HALA, DAYI, TEYZE, YEGEN, KUZEN, ENISTE, YENGE, KAYINVALIDE, KAYINPEDER, GELIN, DAMAT, BACANAK, BALDIZ, ELTI, KAYINBIRADER, BABA, ANNE, KARI, KOCA, DEDE, ANNEANNE, TANIMSIZ = range(29)
+	OGUL, KIZ, ERKEK_KARDES, KIZ_KARDES, ABLA, AGABEY, AMCA, HALA, DAYI, TEYZE, YEGEN, KUZEN, ENISTE, YENGE, KAYINVALIDE, KAYINPEDER, GELIN, DAMAT, BACANAK, BALDIZ, ELTI, KAYINBIRADER, BABA, ANNE, KARI, KOCA, DEDE, ANNEANNE, BABAANNE, TANIMSIZ = range(30)
 	
 
 class Person(metaclass=MetaPerson): #This is our Person object which creates struct to keep information
@@ -267,7 +267,7 @@ class FamilyGraph():
 					return ComplexRelation.KARI
 
 
-			if relation_path[0] == CHILD:
+			if relation_path[0] == Relation.CHILD:
 				if nodes[1].gender == Gender.MALE:
 					return ComplexRelation.OGUL
 				else:
@@ -277,22 +277,62 @@ class FamilyGraph():
 		if len(relation_path) == 2:
 
 			if relation_path[0] == Relation.SIBLING:
+
 				if nodes[1].gender == Gender.MALE:
-					if self.compare_ages(nodes[0], nodes[1]):
-						return ComplexRelation.AGABEY
-					else:
-						return ComplexRelation.ERKEK_KARDES
-				else:
-					if self.compare_ages(nodes[0], nodes[1]):
-						return ComplexRelation.ABLA
-					else:
-						return ComplexRelation.KIZ_KARDES
+
+					if relation_path[1] == Relation.SPOUSE:
+						if nodes[2].gender == Gender.MALE:
+							return ComplexRelation.TANIMSIZ
+						else:
+							return ComplexRelation.YENGE
+
+					if relation_path[1] == Relation.PARENT:
+
+						if nodes[2].gender == Gender.MALE:
+							return ComplexRelation.TANIMSIZ
+						else:
+							return ComplexRelation.TANIMSIZ
+						
+				if nodes[1].gender == Gender.FEMALE:
+
+					if relation_path[1] == Relation.SPOUSE:
+
+						if nodes[2].gender == Gender.MALE:
+							return ComplexRelation.ENISTE
+						else:
+							return ComplexRelation.TANIMSIZ
+					if relation_path[1] == Relation.PARENT:
+						if nodes[2].gender == Gender.MALE:
+							return ComplexRelation.DEDE
+						else:
+							return ComplexRelation.ANNEANNE
+#----------------------------------------------------------------------------------------
 
 			if relation_path[0] == Relation.PARENT:
 				if nodes[1].gender == Gender.MALE:
-					return ComplexRelation.BABA
-				else:
-					return ComplexRelation.ANNE
+					if relation_path[1] == Relation.SIBLING:
+						if nodes[2].gender == Gender.MALE:
+							return ComplexRelation.AMCA
+						else:
+							return ComplexRelation.HALA
+					if relation_path[1] == Relation.PARENT:
+						if nodes[2].gender == Gender.MALE:
+							return ComplexRelation.DEDE
+						else:
+							return ComplexRelation.BABAANNE
+						
+				if nodes[1].gender == Gender.FEMALE:
+					if relation_path[1] == Relation.SIBLING:
+						if nodes[2].gender == Gender.MALE:
+							return ComplexRelation.DAYI
+						else:
+							return ComplexRelation.TEYZE
+					if relation_path[1] == Relation.PARENT:
+						if nodes[2].gender == Gender.MALE:
+							return ComplexRelation.DEDE
+						else:
+							return ComplexRelation.ANNEANNE
+
 
 			if relation_path[0] == Relation.SPOUSE:
 				if nodes[1].gender == Gender.MALE:
@@ -309,7 +349,7 @@ class FamilyGraph():
 			
 
 		else:
-			return None
+			return ComplexRelation.TANIMSIZ
 		
 
 
