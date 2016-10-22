@@ -63,7 +63,7 @@ class HelloWorld(cmd.Cmd):
 		print(*parse(arg))
 		temp = ftwa.Person(*parse(arg))
 		print(temp.str())
-		self.G.person_list.append(temp)
+		self.G.person_list[temp.name+temp.surname] = temp
 
 	def do_search(self, arg):
 		try:

@@ -27,7 +27,7 @@ class Gender(Enum):
 
 class ComplexRelation(Enum):
 
-	OGUL, KIZ, ERKEK_KARDES, KIZ_KARDES, ABLA, ABI, AMCA, HALA, DAYI, TEYZE, YEGEN, KUZEN, ENISTE, YENGE, KAYINVALIDE, KAYINPEDER, GELIN, DAMAT, BACANAK, BALDIZ, ELTI, KAYINBIRADER, BABA, ANNE, KARI, KOCA = range(26)
+	OGUL, KIZ, ERKEK_KARDES, KIZ_KARDES, ABLA, AGABEY, AMCA, HALA, DAYI, TEYZE, YEGEN, KUZEN, ENISTE, YENGE, KAYINVALIDE, KAYINPEDER, GELIN, DAMAT, BACANAK, BALDIZ, ELTI, KAYINBIRADER, BABA, ANNE, KARI, KOCA, DEDE, ANNEANNE, TANIMSIZ = range(29)
 	
 
 class Person(metaclass=MetaPerson): #This is our Person object which creates struct to keep information
@@ -181,7 +181,7 @@ class FamilyGraph():
 
 
 
-	def mysearch2(self, start, goal): # finds and returns goal
+	def mysearch2(self, start, goal): # finds shortest path between nodes
 
 		path = []
 		visited = []
@@ -245,7 +245,7 @@ class FamilyGraph():
 			if relation_path[0] == Relation.SIBLING:
 				if nodes[1].gender == Gender.MALE:
 					if self.compare_ages(nodes[0], nodes[1]):
-						return ComplexRelation.ABI
+						return ComplexRelation.AGABEY
 					else:
 						return ComplexRelation.ERKEK_KARDES
 				else:
@@ -272,6 +272,42 @@ class FamilyGraph():
 					return ComplexRelation.OGUL
 				else:
 					return ComplexRelation.KIZ
+
+		
+		if len(relation_path) == 2:
+
+			if relation_path[0] == Relation.SIBLING:
+				if nodes[1].gender == Gender.MALE:
+					if self.compare_ages(nodes[0], nodes[1]):
+						return ComplexRelation.AGABEY
+					else:
+						return ComplexRelation.ERKEK_KARDES
+				else:
+					if self.compare_ages(nodes[0], nodes[1]):
+						return ComplexRelation.ABLA
+					else:
+						return ComplexRelation.KIZ_KARDES
+
+			if relation_path[0] == Relation.PARENT:
+				if nodes[1].gender == Gender.MALE:
+					return ComplexRelation.BABA
+				else:
+					return ComplexRelation.ANNE
+
+			if relation_path[0] == Relation.SPOUSE:
+				if nodes[1].gender == Gender.MALE:
+					return ComplexRelation.KOCA
+				else:
+					return ComplexRelation.KARI
+
+
+			if relation_path[0] == CHILD:
+				if nodes[1].gender == Gender.MALE:
+					return ComplexRelation.OGUL
+				else:
+					return ComplexRelation.KIZ
+			
+
 		else:
 			return None
 		
