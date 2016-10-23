@@ -50,16 +50,11 @@ class Person(metaclass=MetaPerson): #This is our Person object which creates str
 
 	def __init__(self, name=None, surname=None, gender: Gender=None, birthdate: date=None, deathdate: date=None):
 
-		#if not isinstance(deathdate, date) or not isinstance(birthdate, date):
-		#	raise TypeError
-		
-		#if not Person.is_date(deathdate, birthdate) and not None in(birthdate, deathdate):
-  		#	raise TypeError
-
-		#if not Person.is_person(father, mother, *children):
-  		#	raise TypeError
-	
-		#print("any:{}".format(all(isinstance(var, date) for var in [birthdate, deathdate]))) 
+		self.name = None
+		self.surname = None
+		self.gender = None
+		self.birthdate = None
+		self.deathdate = None
 
 		self.set_gender(gender)
 		self.name = name
@@ -70,36 +65,50 @@ class Person(metaclass=MetaPerson): #This is our Person object which creates str
 	def set_birthdate(self, d: date):
 		
 		if not isinstance(d, date):
+			print("is not instance")
 			if not d == None:
 				try:
 					date_str = re.split("\.|-",d)
 					results = list(map(int, date_str))
 					d = date(results[0], results[1], results[2])
-					self.birthdate = d
 				except:
 					raise TypeError
 			else:
 				self.birthdate = None
+				return
+
+		if not self.deathdate == None:
+			if (self.deathdate -d).days < 0:
+				self.birthdate = d
+			else:
+				print("[ERROR] Deathdate < Birthdate!")
 		else:
 			self.birthdate = d
+			
 
 	def set_deathdate(self, d: date):
 		if not isinstance(d, date):
+			print("is not instance")
 			if not d == None:
 				try:
 					date_str = re.split("\.|-",d)
 					results = list(map(int, date_str))
 					d = date(results[0], results[1], results[2])
-					self.deathdate = d
 				except:
 					raise TypeError
 			else:
 				self.deathdate = None
+				return
+
+		if not self.birthdate == None:
+			if (self.birthdate -d).days < 0:
+				self.deathdate = d
+			else:
+				print("[ERROR] Deathdate < Birthdate!")
 		else:
 			self.deathdate = d
-
+	
 	def set_gender(self, g: Gender):
-		print(type(g))
 		if not isinstance(g, Gender):
 			try:
 				g = Gender[g.upper()]
@@ -119,7 +128,7 @@ class Person(metaclass=MetaPerson): #This is our Person object which creates str
 
 
 
-	def is_placeholder(self): #We agreed that the missing information as placeholder
+	def is_placeholder(self): 
 		if self.name and self.surname and self.gender and self.birthdate:
 			return False
 		else:
@@ -158,7 +167,6 @@ class Person(metaclass=MetaPerson): #This is our Person object which creates str
 
 	def str(self):
 		temp = "name={}, surn={}, g={}, bd={}, dd={}, p={}".format(self.name, self.surname, self.gender, self.birthdate, self.deathdate, self.is_placeholder())
-		#temp2 = " - children %s" % ', '.join(str(e.name) for e in self.children)
 		return temp
 
 	def get_reverse_relation(r: Relation):
@@ -233,8 +241,7 @@ class FamilyGraph():
 			return 1 + self.get_level(father)
 
 	def get_persons_relations(self, p: Person):
-		#for item in [rel for rel in self.relation_list if p in rel]: print("X {}".format(item))
-		#print("exit")
+
 		return [rel for rel in self.relation_list if p in rel]	
 
 	def get_persons_relations_of_a_kind(self, p: Person, r: Relation):
@@ -261,8 +268,7 @@ class FamilyGraph():
 		visit_queue = collections.deque()
 		visit_queue.appendleft(start)
 		length+=1
-		for x in visit_queue:
-			print(x.name)
+
 		next = visit_queue.pop()
 		length-=1
 		while next != goal and length > -1:
@@ -317,10 +323,7 @@ class FamilyGraph():
 	
 	
 	def translate_path_to_relation(self, relation_path, nodes):
-		
-		print("relpathlen {}".format(len(relation_path))) 
-		for x in relation_path:
-			print(x)
+
 
 #------------------------1. DEGREE RELATIONS------------------------------------
 

@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+
 import cmd
 import networkx as nx
 import tkinter
@@ -207,7 +209,7 @@ class HelloWorld(cmd.Cmd):
 
 		if parse(arg)[1] == "deathdate":
 
-			self.G.person_list[parse(arg)[0]].set_birthdate(parse(arg)[2])
+			self.G.person_list[parse(arg)[0]].set_deathdate(parse(arg)[2])
 
 
 	def complete_update(self, text, line, begidx, endidx):
