@@ -82,7 +82,7 @@ class HelloWorld(cmd.Cmd):
 
 
 	def do_create(self, arg):
-		"Creates person"
+		"Creates person\nUsage: create <name> <surname> <gender> <birthdate> <deathdate> name and surname mandatory\nExamples: create Ali Durmaz\ncreate name=Ali surname=Durmaz birthdate=1999.1.1"
 		print(*parse(arg))
 		temp = ftwa.Person(*parse(arg))
 		print(temp.str())
