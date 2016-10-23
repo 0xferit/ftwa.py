@@ -66,6 +66,25 @@ class Person(metaclass=MetaPerson): #This is our Person object which creates str
 		self.birthdate = birthdate
 		self.deathdate = deathdate
 
+	def set_birthdate(self, d: date):
+		if not isinstance(d, date):
+			raise TypeError
+		self.birthdate = d
+
+	def set_deathdate(self, d: date):
+		if not isinstance(d, date):
+			raise TypeError
+		self.deathdate = d
+
+	def set_gender(self, gender: Gender):
+		self.gender = gender
+
+	def set_name(self, name: str):
+		self.name = name
+
+	def set_surname(self, surname: str):
+		self.surname = surname
+
 
 
 	def is_placeholder(self): #We agreed that the missing information as placeholder
@@ -125,7 +144,7 @@ class FamilyGraph():
 			print("[WARNING] Marriage between {} and {} is a child marriage!".format(p1.name, p2.name))
 
 		
-		#if (r1.):
+		#if (r1 == Relation.CHILD):
 			#print("[ERROR] Impossible Birthdates/Deathdates")
 		self.relation_list.append((p1, r1, r2, p2))
 
