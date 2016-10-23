@@ -617,11 +617,7 @@ def main():
 	G.new_relation(Pamela, Relation.CHILD, Relation.PARENT, Huri)
 	G.new_relation(Duran, Relation.SPOUSE, Relation.SPOUSE, Asli)
 
-	print("AA")
-	print("ggggg {}".format(G.get_relation_between(Huri, Deli)))
-	print("ggggg {}".format(G.get_relation_between(Huri, Fatmagul)))
-	print("ggggg {}".format(G.get_relation_between(Deli, Fatmagul)))
-	print("ggggg {}".format(G.get_relation_between(Fatmagul, Deli)))
+
 
 if __name__ == '__main__':
 	main()
