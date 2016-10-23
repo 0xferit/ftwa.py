@@ -14,15 +14,13 @@ import logging
 class HelloWorld(cmd.Cmd):
 		
 	intro = """Family Tree Warehouse Application 0.1\nWelcome to ftwa shell! Type help or ? to list commands."""
-	misc_header = """asda"""
 	prompt = "(ftwa) "
 
 	G = ftwa.FamilyGraph()
 
 	def do_load_test_data(self, arg):
 		"Loads an hardcoded family graph for testing"
-		FRIENDS = [ 'Alice', 'Adam', 'Barbara', 'Bob' ]
-		PERSONS = []
+
 		ATTRIBUTE_NAMES = ["name", "surname", "gender", "birthdate", "deathdate"] 
 	
 		Veli 	= ftwa.Person("Veli", "Yanyatan",   ftwa.Gender.MALE, date(2005, 12, 15), date(2075, 12, 15)) #Çocuk	
@@ -91,7 +89,7 @@ class HelloWorld(cmd.Cmd):
 		self.G.person_list[temp.name+temp.surname] = temp
 
 	def do_search(self, arg):
-		"Search and retrieve information of a person\nUsage: search person"
+		"Search and retrieve information of a person\nUsage: search <person>"
 		try:
 			print(self.G.person_list[parse(arg)[0]].str())
 		except:
@@ -109,13 +107,13 @@ class HelloWorld(cmd.Cmd):
 
 
 	def do_list(self, arg):
-		"Lists persons and their informations\nUsage: list"
+		"Lists persons and their informations\nUsage: <list>"
 		for k, v in self.G.person_list.items():
 			print(k, v.str())
 		print("{} record".format(len(self.G.person_list)))
 	
 	def do_relation(self, arg):
-		"Prints relation between two persons"
+		"Prints relation between two persons\nUsage: relation <person1> <person2>"
 		print(self.G.get_relation_between(self.G.person_list[parse(arg)[0]], self.G.person_list[parse(arg)[1]]))
 
 	def complete_relation(self, text, line, begidx, endidx):
@@ -129,7 +127,7 @@ class HelloWorld(cmd.Cmd):
 		return completions
 
 	def do_relate(self, arg):
-		"Adds new relation\nUsage: relate person1 person2 relation1"
+		"Adds new primitive relation (CHILD, PARENT, SIBLING, SPOUSE)\nUsage: relate <person1> <person2> <relation1>"
 		person1str = parse(arg)[0]
 		person2str = parse(arg)[1]
 		relationstr = parse(arg)[2].upper()
@@ -139,8 +137,6 @@ class HelloWorld(cmd.Cmd):
 
 		except:
 			print("[ERROR] Failed To Add Relation!")
-
-		
 
 
 
@@ -156,11 +152,12 @@ class HelloWorld(cmd.Cmd):
 		
 	
 	def do_alive(self, arg):
-		"Lets you know where the person is dead or alive\nUsage: alive person"
+		"Lets you know where the person is dead or alive\nUsage: alive <person>"
 		
 		print(self.G.person_list[parse(arg)[0]].is_alive())
 
 	def do_list_relations(self, arg):
+		"Lists relations"
 		for relation in self.G.relation_list:
 			print(relation[0].name, relation[1], relation[2], relation[3].name)
 
@@ -188,12 +185,10 @@ class HelloWorld(cmd.Cmd):
 		return completions	
 
 	def do_delete(self, arg):
-		"Search and delete person and it's relations\nUsage: delete person"
-	#try:
+		"Search and delete person and it's relations\nUsage: delete <person>"
+
 		del self.G.person_list[parse(arg)[0]]
 		self.G.fix_relation_table()
-	#except:
-		#print("Not Found!")
 
 	def complete_delete(self, text, line, begidx, endidx):
 		if not text:
@@ -206,7 +201,7 @@ class HelloWorld(cmd.Cmd):
 		return completions
 
 	def do_update(self, arg):
-		"Updates name, surname, gender, birthdate or deathdate.\nUsage: update person field new_value\nExample: update AliYanyatan gender female"
+		"Updates name, surname, gender, birthdate or deathdate.\nUsage: update <person> <field> <new_value>\nExample: update AliYanyatan gender female"
 		if parse(arg)[1] == "name":
 			self.G.person_list[parse(arg)[0]].set_name(parse(arg)[1])
 
@@ -238,7 +233,7 @@ class HelloWorld(cmd.Cmd):
 		return completions		
 
 	def do_age(self, arg):
-		"Get age of person\nUsage: age person"
+		"Get age of person\nUsage: age <person>"
 		try:
 			print(self.G.person_list[parse(arg)[0]].get_age())
 		except:
@@ -255,7 +250,7 @@ class HelloWorld(cmd.Cmd):
 		return completions
 
 	def do_level(self, arg):
-		"Get level of person. Returns longest parental path distance\nUsage: level person"
+		"Get level of person. Returns longest parental path distance\nUsage: level <person>"
 		try:
 			print(self.G.get_level(self.G.person_list[parse(arg)[0]]))
 		except:
@@ -310,7 +305,12 @@ class HelloWorld(cmd.Cmd):
 		plt.savefig("simple_path.png") # save as png
 		plt.show() # display
 	
-	def do_EOF(self, line):
+	def do_exit(self, line):
+		"Exits from ftwa shell"
+		return True
+
+	def do_EOF(self, arg):
+		"CTRL+D  interrupt"
 		return True
 
 def parse(arg):
