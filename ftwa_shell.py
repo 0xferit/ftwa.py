@@ -217,10 +217,10 @@ class HelloWorld(cmd.Cmd):
 	def do_update(self, arg):
 		"Updates name, surname, gender, birthdate or deathdate.\nUsage: update <person> <field> <new_value>\nExample: update AliYanyatan gender female"
 		if parse(arg)[1] == "name":
-			self.G.person_list[parse(arg)[0]].set_name(parse(arg)[1])
+			self.G.person_list[parse(arg)[0]].set_name(parse(arg)[2])
 
 		if parse(arg)[1] == "surname":
-			self.G.person_list[parse(arg)[0]].set_surname(parse(arg)[1])
+			self.G.person_list[parse(arg)[0]].set_surname(parse(arg)[2])
 
 		if parse(arg)[1] == "gender":
 
