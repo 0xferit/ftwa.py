@@ -174,10 +174,9 @@ class HelloWorld(cmd.Cmd):
 	
 	def do_alive(self, arg):
 		"Lets you know where the person is dead or alive\nUsage: alive person"
-		try:
-			print(self.G.person_list[parse(arg)[0]].is_alive())
-		except:
-			print("Not Found!")
+		
+		print(self.G.person_list[parse(arg)[0]].is_alive())
+
 
 	def complete_alive(self, text, line, begidx, endidx):
 		if not text:

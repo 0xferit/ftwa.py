@@ -135,6 +135,8 @@ class Person(metaclass=MetaPerson): #This is our Person object which creates str
 	def is_alive(self): 
 		today = date.today()
 		deathdate = self.deathdate
+		if not self.deathdate:
+			return "N/A - Deathdate Record Missing!"
 		return (0 > (today.year - deathdate.year - ((today.month, today.day) < (deathdate.month, deathdate.day))))
 
 
@@ -192,7 +194,7 @@ class FamilyGraph():
 
 		if r1 == Relation.SPOUSE or r2 == Relation.SPOUSE:
 			if self.get_relation_between(p1, p2) in ILLEGAL_MARRIAGE_RULES:
-				print("[ERROR] Illegal Marriage! {} can't be spouse of {} because {}".format(p1.name, p2.name, self.get_relation_between(p1, p2)))
+				print("[ERROR] Illegal Marriage! {} can't be spouse of {} because their relation is {}".format(p1.name, p2.name, self.get_relation_between(p1, p2)))
 				return
 
 		self.relation_list.append((p1, r1, r2, p2))
