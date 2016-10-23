@@ -1,5 +1,4 @@
-# ftwa
-Family Tree Warehouse Application
+# Family Tree Warehouse Application
 
 A toy application for managing family trees
 
