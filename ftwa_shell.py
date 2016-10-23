@@ -82,7 +82,7 @@ class HelloWorld(cmd.Cmd):
 
 
 	def do_create(self, arg):
-		"Creates person\nUsage: create <name> <surname> <gender> <birthdate> <deathdate> name and surname mandatory\nExamples: create Ali Durmaz\ncreate name=Ali surname=Durmaz birthdate=1999.1.1"
+		"Creates person\nUsage: create <name> <surname> <gender> <birthdate> <deathdate>\nName and surname mandatory\nExamples: create Ali Durmaz\n\tcreate name=Ali surname=Durmaz birthdate=1999.1.1"
 		print(*parse(arg))
 		temp = ftwa.Person(*parse(arg))
 		print(temp.str())
@@ -96,6 +96,20 @@ class HelloWorld(cmd.Cmd):
 			print("Not Found!")
 
 	def complete_search(self, text, line, begidx, endidx):
+		if not text:
+			completions = self.G.person_list[:]
+		else:
+			completions = [ f
+					for f in self.G.person_list
+					if f.startswith(text)
+					]
+		return completions
+
+	def do_placeholder(self, arg):
+		"Queries if a person is a placeholder\nUsage: placeholder <person>"
+		print(self.G.person_list[parse(arg)[0]].is_placeholder())
+
+	def complete_placeholder(self, text, line, begidx, endidx):
 		if not text:
 			completions = self.G.person_list[:]
 		else:
