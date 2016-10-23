@@ -48,7 +48,7 @@ class Person(metaclass=MetaPerson): #This is our Person object which creates str
 		for each in self.__dict__.keys():
 			yield self.__getattribute__(each)
 
-	def __init__(self, name=None, surname=None, gender=None, birthdate: date=None, deathdate: date=None):
+	def __init__(self, name=None, surname=None, gender: Gender=None, birthdate: date=None, deathdate: date=None):
 
 		#if not isinstance(deathdate, date) or not isinstance(birthdate, date):
 		#	raise TypeError
@@ -61,24 +61,55 @@ class Person(metaclass=MetaPerson): #This is our Person object which creates str
 	
 		#print("any:{}".format(all(isinstance(var, date) for var in [birthdate, deathdate]))) 
 
-		self.gender = gender
+		self.set_gender(gender)
 		self.name = name
 		self.surname = surname
-		self.birthdate = birthdate
-		self.deathdate = deathdate
+		self.set_birthdate(birthdate)
+		self.set_deathdate(deathdate)
 
 	def set_birthdate(self, d: date):
+		
 		if not isinstance(d, date):
-			raise TypeError
-		self.birthdate = d
+			if not d == None:
+				try:
+					date_str = re.split("\.|-",d)
+					results = list(map(int, date_str))
+					d = date(results[0], results[1], results[2])
+					self.birthdate = d
+				except:
+					raise TypeError
+			else:
+				self.birthdate = None
+		else:
+			self.birthdate = d
 
 	def set_deathdate(self, d: date):
 		if not isinstance(d, date):
-			raise TypeError
-		self.deathdate = d
+			if not d == None:
+				try:
+					date_str = re.split("\.|-",d)
+					results = list(map(int, date_str))
+					d = date(results[0], results[1], results[2])
+					self.deathdate = d
+				except:
+					raise TypeError
+			else:
+				self.deathdate = None
+		else:
+			self.deathdate = d
 
-	def set_gender(self, gender: Gender):
-		self.gender = gender
+	def set_gender(self, g: Gender):
+		print(type(g))
+		if not isinstance(g, Gender):
+			try:
+				g = Gender[g.upper()]
+				self.gender = g
+			except:
+				self.gender = None
+		else:
+
+			self.gender = g
+
 
 	def set_name(self, name: str):
 		self.name = name
@@ -131,8 +162,12 @@ class Person(metaclass=MetaPerson): #This is our Person object which creates str
 	def get_reverse_relation(r: Relation):
 		if r == Relation.PARENT:
 			return Relation.CHILD
-		if r == Relation.PARENT:
-			return Relation.CHILD
+
+		if r == Relation.CHILD:
+			return Relation.PARENT
+
+		else:
+			return r
 
 
 

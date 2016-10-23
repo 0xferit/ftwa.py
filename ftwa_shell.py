@@ -6,6 +6,7 @@ import ftwa
 from datetime import date
 import collections
 import re
+import sys
 
 class HelloWorld(cmd.Cmd):
 		
@@ -150,10 +151,12 @@ class HelloWorld(cmd.Cmd):
 		relationstr = parse(arg)[2].upper()
 
 		try:
-			self.G.new_relation(self.G.person_list[person1str], ftwa.Relation[relationstr], ftwa.Relation[relationstr], self.G.person_list[person2str])
+			self.G.new_relation(self.G.person_list[person1str], ftwa.Relation[relationstr], ftwa.Person.get_reverse_relation(ftwa.Relation[relationstr]), self.G.person_list[person2str])
 
 		except:
-			print("[ERROR] Person Not Found!")
+			print(sys.exc_info()[0])
+			print(sys.exc_info()[1])
+
 		
 
 
@@ -195,28 +198,17 @@ class HelloWorld(cmd.Cmd):
 			self.G.person_list[parse(arg)[0]].set_surname(parse(arg)[1])
 
 		if parse(arg)[1] == "gender":
-			if re.match('^male$', parse(arg)[2], re.IGNORECASE):
-				self.G.person_list[parse(arg)[0]].set_gender(ftwa.Gender.MALE)
-			elif re.match('^female$', parse(arg)[2], re.IGNORECASE):
-				self.G.person_list[parse(arg)[0]].set_gender(ftwa.Gender.FEMALE)
-			else:
-				print("Invalid Gender: {}".format(parse(arg)[2]))
+
+				self.G.person_list[parse(arg)[0]].set_gender(parse(arg)[2])
+
 
 		if parse(arg)[1] == "birthdate":
-			date_str = re.split("\.|-",parse(arg)[2])
-			for x in date_str:
-				print(x)
-			results = list(map(int, date_str))
-			bd = date(results[0], results[1], results[2])
-			self.G.person_list[parse(arg)[0]].set_birthdate(bd)
+
+			self.G.person_list[parse(arg)[0]].set_birthdate(parse(arg)[2])
 
 		if parse(arg)[1] == "deathdate":
-			date_str = re.split("\.|-",parse(arg)[2])
-			for x in date_str:
-				print(x)
-			results = list(map(int, date_str))
-			dd = date(results[0], results[1], results[2])
-			self.G.person_list[parse(arg)[0]].set_birthdate(dd)
+
+			self.G.person_list[parse(arg)[0]].set_birthdate(parse(arg)[2])
 
 
 	def complete_update(self, text, line, begidx, endidx):
