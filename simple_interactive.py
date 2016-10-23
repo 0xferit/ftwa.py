@@ -7,7 +7,8 @@ from datetime import date
 import collections
 
 class HelloWorld(cmd.Cmd):
-	"""Simple command processor example."""
+	intro = """Family Tree Warehouse Application 0.1"""
+	misc_header = """asda"""
 	
 	FRIENDS = [ 'Alice', 'Adam', 'Barbara', 'Bob' ]
 	PERSONS = []
@@ -98,6 +99,7 @@ class HelloWorld(cmd.Cmd):
 		self.G.person_list[temp.name+temp.surname] = temp
 
 	def do_search(self, arg):
+		"Search and retrieve information of a person\nUsage: search person"
 		try:
 			print(self.G.person_list[parse(arg)[0]].str())
 		except:
@@ -113,11 +115,9 @@ class HelloWorld(cmd.Cmd):
 					]
 		return completions
 
-	def list(self, arg):
-		for key in self.G.person_list.keys():
-			print((self.G.person_list[key]).str())
 
 	def do_list(self, arg):
+		"Lists persons and their informations\nUsage: list"
 		for k, v in self.G.person_list.items():
 			print(k, v.str())
 	
@@ -136,6 +136,7 @@ class HelloWorld(cmd.Cmd):
 		return completions
 	
 	def do_alive(self, arg):
+		"Lets you know where the person is dead or alive\nUsage: alive person"
 		try:
 			print(self.G.person_list[parse(arg)[0]].is_alive())
 		except:
@@ -201,6 +202,7 @@ class HelloWorld(cmd.Cmd):
 
 	
 	def do_print(self, arg):
+		"Visualizes the family graph\nUsage: print"
 
 		labels2 = {}
 		
@@ -244,4 +246,5 @@ def parse(arg):
 
 
 if __name__ == '__main__':
+
 	HelloWorld().cmdloop()
