@@ -10,18 +10,18 @@ from datetime import date
 Veli 	= ftwa.Person("Veli", "Yanyatan",   ftwa.Gender.MALE, date(2005, 12, 15), date(2075, 12, 15)) #Çocuk	
 Ali 	= ftwa.Person("Ali", "Yanyatan",    ftwa.Gender.MALE, date(1980, 12, 15), date(2055, 12, 15)) # Baba
 Huri 	= ftwa.Person("Huri", "Yanyatan", ftwa.Gender.FEMALE, date(1983, 12, 15), date(2075, 12, 15)) # Anne
-Deli 	= ftwa.Person("Deli", "Yanyatan",   ftwa.Gender.MALE, date(2007, 12, 15), date(2075, 12, 15)) # Çocuk
+Deli 	= ftwa.Person("Deli", "Yanyatan",   ftwa.Gender.MALE, date(1999, 12, 15), date(2075, 12, 15)) # Çocuk
 Riza	= ftwa.Person("Riza", "Yanyatan",   ftwa.Gender.MALE, date(1970, 1, 1), date(2030, 12, 12)) # Dede, Ali'nin babası
-Fatmagul= ftwa.Person("Fatmagül", "Yanyatan", ftwa.Gender.FEMALE, birthdate = date(2000, 1, 1))
-Makbule = ftwa.Person("Makbule", "Yanyatan", ftwa.Gender.FEMALE)
+Fatmagul= ftwa.Person("Fatmagül", "Yanyatan", ftwa.Gender.FEMALE, birthdate = date(1999, 1, 1))
+Makbule = ftwa.Person("Makbule", "Yanyatan", ftwa.Gender.FEMALE, date(1945,1,1))
 Nuri	= ftwa.Person("Nuri", "Yanyatan", ftwa.Gender.MALE)
 Nurbanu	= ftwa.Person("Nurbanu", "Yanyatan", ftwa.Gender.FEMALE)
-Asli	= ftwa.Person("Asli",  "Yanyatan", ftwa.Gender.FEMALE)
+Asli	= ftwa.Person("Asli",  "Yanyatan", ftwa.Gender.FEMALE, date(1966,1,1))
 Kerem	= ftwa.Person("Kerem", "Yanyatan", ftwa.Gender.MALE)
-Mahmut	= ftwa.Person("Mahmut", "Devrik", ftwa.Gender.MALE)
+Mahmut	= ftwa.Person("Mahmut", "Devrik", ftwa.Gender.MALE, date(1950,1,1))
 Emre	= ftwa.Person("Emre", "Bitmez", ftwa.Gender.MALE)
-Cimcime = ftwa.Person("Cimcime", "Yanyatan", ftwa.Gender.FEMALE)
-Pala	= ftwa.Person("Pala", "Tosbağa", ftwa.Gender.MALE)
+Cimcime = ftwa.Person("Cimcime", "Yanyatan", ftwa.Gender.FEMALE, date(1999,1,1))
+Pamela	= ftwa.Person("Pamela", "Canisi", ftwa.Gender.FEMALE, date(1950,1,1))
 Duran	= ftwa.Person("Duran", "Yanyatan", ftwa.Gender.MALE)
 
 G = ftwa.FamilyGraph()
@@ -40,7 +40,7 @@ G.person_list[Kerem.name+Kerem.surname] = Kerem
 G.person_list[Mahmut.name+Mahmut.surname] = Mahmut
 G.person_list[Emre.name+Emre.surname] = Emre
 G.person_list[Cimcime.name+Cimcime.surname] = Cimcime
-G.person_list[Pala.name+Pala.surname] = Pala
+G.person_list[Pamela.name+Pamela.surname] = Pamela
 G.person_list[Duran.name+Duran.surname] = Duran
 
 
@@ -60,7 +60,7 @@ G.new_relation(Makbule, ftwa.Relation.CHILD, ftwa.Relation.PARENT, Ali)
 G.new_relation(Mahmut, ftwa.Relation.CHILD, ftwa.Relation.PARENT, Huri)
 G.new_relation(Emre, ftwa.Relation.SPOUSE, ftwa.Relation.SPOUSE, Asli)
 G.new_relation(Cimcime, ftwa.Relation.PARENT, ftwa.Relation.CHILD, Asli)
-G.new_relation(Pala, ftwa.Relation.CHILD, ftwa.Relation.PARENT, Huri)
+G.new_relation(Pamela, ftwa.Relation.CHILD, ftwa.Relation.PARENT, Huri)
 G.new_relation(Duran, ftwa.Relation.SPOUSE, ftwa.Relation.SPOUSE, Asli)
 
 
@@ -194,13 +194,17 @@ class Test(unittest.TestCase):
 		assert True == G.is_older_than(Riza, Ali)
 		assert False == G.is_older_than(Ali, Riza)
 
-	def test_relation(self):
+	def est_relation(self):
+		for x in G.relation_list:
+			print(x[0].name, x[1], x[2], x[3].name)
 		print("dbg {}".format(G.get_relation_between(Huri, Riza)))
+		print("ggggg {}".format(G.get_relation_between(Huri, Fatmagul)))
 		assert ftwa.ComplexRelation.GELIN == 		G.get_relation_between(Riza, Huri)
 		assert ftwa.ComplexRelation.TORUN == 		G.get_relation_between(Riza, Veli)
 		assert ftwa.ComplexRelation.TORUN == 		G.get_relation_between(Riza, Deli)
 		assert ftwa.ComplexRelation.KAYINPEDER == 	G.get_relation_between(Huri, Riza)
 		assert ftwa.ComplexRelation.GELIN == 		G.get_relation_between(Huri, Fatmagul)
+
 		assert ftwa.ComplexRelation.GELIN == 		G.get_relation_between(Makbule, Huri)
 		assert ftwa.ComplexRelation.ANNE == 		G.get_relation_between(Ali, Makbule)
 		assert ftwa.ComplexRelation.BABA == 		G.get_relation_between(Ali, Riza)
@@ -226,8 +230,9 @@ class Test(unittest.TestCase):
 		assert ftwa.ComplexRelation.KAYINBIRADER == 	G.get_relation_between(Ali, Kerem)
 
 
-
-
+	def test_relation_exception(self):
+		
+		assert ftwa.ComplexRelation.GELIN == 		G.get_relation_between(Huri, Fatmagul)
 
 
 

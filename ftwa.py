@@ -29,6 +29,7 @@ class ComplexRelation(Enum):
 
 	OGUL, KIZ, ERKEK_KARDES, KIZ_KARDES, ABLA, AGABEY, AMCA, HALA, DAYI, TEYZE, YEGEN, KUZEN, ENISTE, YENGE, KAYINVALIDE, KAYINPEDER, GELIN, DAMAT, BACANAK, BALDIZ, ELTI, KAYINBIRADER, BABA, ANNE, KARI, KOCA, DEDE, ANNEANNE, BABAANNE, TANIMSIZ, GORUMCE, TORUN = range(32)
 	
+ILLEGAL_MARRIAGE_RULES =  [ComplexRelation.TEYZE, ComplexRelation.HALA, ComplexRelation.AMCA, ComplexRelation.DAYI, ComplexRelation.DEDE, ComplexRelation.ANNEANNE, ComplexRelation.BABAANNE]
 
 class Person(metaclass=MetaPerson): #This is our Person object which creates struct to keep information
 	@staticmethod
@@ -144,8 +145,21 @@ class FamilyGraph():
 			print("[WARNING] Marriage between {} and {} is a child marriage!".format(p1.name, p2.name))
 
 		
-		#if (r1 == Relation.CHILD):
-			#print("[ERROR] Impossible Birthdates/Deathdates")
+		if r1 == Relation.CHILD:
+			if not self.is_older_than(p1, p2):
+				print("[ERROR] Impossible Birthdates/Deathdates! {} can't be parent of {}".format(p1.name, p2.name))
+				return
+
+		if r2 == Relation.CHILD:
+			if not self.is_older_than(p2, p1):
+				print("[ERROR] Impossible Birthdates/Deathdates! {} can't be parent of {}".format(p2.name, p1.name))
+				return
+
+		if r1 == Relation.SPOUSE or r2 == Relation.SPOUSE:
+			if self.get_relation_between(p1, p2) in ILLEGAL_MARRIAGE_RULES:
+				print("[ERROR] Illegal Marriage! {} can't be spouse of {} because {}".format(p1.name, p2.name, self.get_relation_between(p1, p2)))
+				return
+
 		self.relation_list.append((p1, r1, r2, p2))
 
 	def del_relation(self, p1: Person, r: Relation, r2: Relation, p2: Person): #TODO 
@@ -206,22 +220,33 @@ class FamilyGraph():
 		visited = []
 
 		predecessor = {}
-
+		length = 0
 		visit_queue = collections.deque()
 		visit_queue.appendleft(start)
+		length+=1
+		for x in visit_queue:
+			print(x.name)
 		next = visit_queue.pop()
-
-		while next != goal:
+		length-=1
+		while next != goal and length > -1:
 					
 			visited.append(next)
 		
 			successors = [x for x in self.get_first_degree_relatives(next) if x not in visited+list(collections.deque(visit_queue))]
 
 			visit_queue.extendleft(successors)
-
+			length += len(successors)
 			for s in successors:
 				predecessor[s] = next
-			next = visit_queue.pop()
+
+			if length > 0:
+				next = visit_queue.pop()
+			
+			else:
+				return []
+			length-=1
+
+			
 
 		
 		path.append(next)
@@ -473,63 +498,67 @@ class FamilyGraph():
 
 
 def main():
-	print ("test")
-	Veli 	= Person("Veli", "Yanyatan",   Gender.MALE, date(2005, 12, 15), date(2075, 12, 15))	#Çocuk	
+	Veli 	= Person("Veli", "Yanyatan",   Gender.MALE, date(2005, 12, 15), date(2075, 12, 15)) #Çocuk	
 	Ali 	= Person("Ali", "Yanyatan",    Gender.MALE, date(1980, 12, 15), date(2055, 12, 15)) # Baba
 	Huri 	= Person("Huri", "Yanyatan", Gender.FEMALE, date(1983, 12, 15), date(2075, 12, 15)) # Anne
-	Deli 	= Person("Deli", "Yanyatan",   Gender.MALE, date(2007, 12, 15), date(2075, 12, 15)) # Çocuk
-	Rıza	= Person("Rıza", "Yanyatan",   Gender.MALE, date(1970, 1, 1), date(2030, 12, 12)) # Dede, Ali'nin babası
+	Deli 	= Person("Deli", "Yanyatan",   Gender.MALE, date(1999, 12, 15), date(2075, 12, 15)) # Çocuk
+	Riza	= Person("Riza", "Yanyatan",   Gender.MALE, date(1970, 1, 1), date(2030, 12, 12)) # Dede, Ali'nin babası
+	Fatmagul= Person("Fatmagül", "Yanyatan", Gender.FEMALE, birthdate = date(1999, 1, 1))
+	Makbule = Person("Makbule", "Yanyatan", Gender.FEMALE, date(1945,1,1))
+	Nuri	= Person("Nuri", "Yanyatan", Gender.MALE)
+	Nurbanu	= Person("Nurbanu", "Yanyatan", Gender.FEMALE)
+	Asli	= Person("Asli",  "Yanyatan", Gender.FEMALE, date(1966,1,1))
+	Kerem	= Person("Kerem", "Yanyatan", Gender.MALE)
+	Mahmut	= Person("Mahmut", "Devrik", Gender.MALE, date(1950,1,1))
+	Emre	= Person("Emre", "Bitmez", Gender.MALE)
+	Cimcime = Person("Cimcime", "Yanyatan", Gender.FEMALE, date(1999,1,1))
+	Pamela	= Person("Pamela", "Canisi", Gender.FEMALE, date(1950,1,1))
+	Duran	= Person("Duran", "Yanyatan", Gender.MALE)
 
-	X 	= Person(name="X", surname="X")
-	Y	= Person(name="Y", surname="Y")
-	Z	= Person(name="Z", surname="Z")
-	
 	G = FamilyGraph()
+
 	G.person_list[Veli.name+Veli.surname] = Veli
 	G.person_list[Ali.name+Ali.surname] = Ali
 	G.person_list[Huri.name+Huri.surname] = Huri
 	G.person_list[Deli.name+Deli.surname] = Deli
-	G.person_list[Rıza.name+Rıza.surname] = Rıza
+	G.person_list[Riza.name+Riza.surname] = Riza
+	G.person_list[Fatmagul.name+Fatmagul.surname] = Fatmagul
+	G.person_list[Makbule.name+Makbule.surname] = Makbule
+	G.person_list[Nuri.name+Nuri.surname] = Nuri
+	G.person_list[Nurbanu.name+Nurbanu.surname] = Nurbanu
+	G.person_list[Asli.name+Asli.surname] = Asli
+	G.person_list[Kerem.name+Kerem.surname] = Kerem
+	G.person_list[Mahmut.name+Mahmut.surname] = Mahmut
+	G.person_list[Emre.name+Emre.surname] = Emre
+	G.person_list[Cimcime.name+Cimcime.surname] = Cimcime
+	G.person_list[Pamela.name+Pamela.surname] = Pamela
+	G.person_list[Duran.name+Duran.surname] = Duran
 
-	
-	G.person_list[X.name+X.surname] = X
-	G.person_list[Y.name+Y.surname] = Y
-	G.person_list[Z.name+Z.surname] = Z
-	
+
 	G.new_relation(Ali, Relation.SPOUSE, Relation.SPOUSE, Huri)
 	G.new_relation(Ali, Relation.CHILD, Relation.PARENT, Veli)
 	G.new_relation(Ali, Relation.CHILD, Relation.PARENT, Deli)
 	G.new_relation(Huri, Relation.CHILD, Relation.PARENT, Veli)
 	G.new_relation(Huri, Relation.CHILD, Relation.PARENT, Deli)
 	G.new_relation(Veli, Relation.SIBLING, Relation.SIBLING, Deli)
-	G.new_relation(Rıza, Relation.CHILD, Relation.PARENT, Ali)
-	
-	G.new_relation(Rıza, Relation.CHILD, Relation.PARENT, X)
-	G.new_relation(X, Relation.CHILD, Relation.PARENT, Y)
-	G.new_relation(Deli, Relation.SPOUSE, Relation.SPOUSE, Z)
-	
+	G.new_relation(Riza, Relation.CHILD, Relation.PARENT, Ali)
+	G.new_relation(Deli, Relation.SPOUSE, Relation.SPOUSE, Fatmagul)
+	G.new_relation(Nuri, Relation.SIBLING, Relation.SIBLING, Ali)
+	G.new_relation(Nurbanu, Relation.SIBLING, Relation.SIBLING, Ali)
+	G.new_relation(Asli, Relation.SIBLING, Relation.SIBLING, Huri)
+	G.new_relation(Kerem, Relation.SIBLING, Relation.SIBLING, Huri)
+	G.new_relation(Makbule, Relation.CHILD, Relation.PARENT, Ali)
+	G.new_relation(Mahmut, Relation.CHILD, Relation.PARENT, Huri)
+	G.new_relation(Emre, Relation.SPOUSE, Relation.SPOUSE, Asli)
+	G.new_relation(Cimcime, Relation.PARENT, Relation.CHILD, Asli)
+	G.new_relation(Pamela, Relation.CHILD, Relation.PARENT, Huri)
+	G.new_relation(Duran, Relation.SPOUSE, Relation.SPOUSE, Asli)
 
-
-	print("FDR:{}".format(G.get_first_degree_relatives(Veli)))
-
-	G.list_relations()
-	print(len(G.get_persons_relations(Huri)))
-	print(G.get_persons_relations_of_a_kind(Huri, Relation.CHILD))
-
-	#print("here {}".format(Relation.get_reverse(Relation.PARENT)))
-
-	print(Person.get_reverse_relation(Relation.PARENT))
-
-
-	print("----------")
-	#print (G.mysearch2(Rıza, Z).name)
-	for x in G.mysearch2(Rıza, Rıza):
-		print(x.name)
-
-	path = G.mysearch2(Rıza, Z)
-	print(G.node_path_to_edge_path(path))
-
-	print(G.get_relation_between(Veli, Deli))
+	print("AA")
+	print("ggggg {}".format(G.get_relation_between(Huri, Deli)))
+	print("ggggg {}".format(G.get_relation_between(Huri, Fatmagul)))
+	print("ggggg {}".format(G.get_relation_between(Deli, Fatmagul)))
+	print("ggggg {}".format(G.get_relation_between(Fatmagul, Deli)))
 
 if __name__ == '__main__':
 	main()

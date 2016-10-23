@@ -27,16 +27,17 @@ class HelloWorld(cmd.Cmd):
 		Deli 	= ftwa.Person("Deli", "Yanyatan",   ftwa.Gender.MALE, date(2007, 12, 15), date(2075, 12, 15)) # Çocuk
 		Riza	= ftwa.Person("Riza", "Yanyatan",   ftwa.Gender.MALE, date(1970, 1, 1), date(2030, 12, 12)) # Dede, Ali'nin babası
 		Fatmagul= ftwa.Person("Fatmagül", "Yanyatan", ftwa.Gender.FEMALE, birthdate = date(2000, 1, 1))
-		Makbule = ftwa.Person("Makbule", "Yanyatan", ftwa.Gender.FEMALE)
+		Makbule = ftwa.Person("Makbule", "Yanyatan", ftwa.Gender.FEMALE, date(1945,1,1))
 		Nuri	= ftwa.Person("Nuri", "Yanyatan", ftwa.Gender.MALE)
 		Nurbanu	= ftwa.Person("Nurbanu", "Yanyatan", ftwa.Gender.FEMALE)
-		Asli	= ftwa.Person("Asli",  "Yanyatan", ftwa.Gender.FEMALE)
+		Asli	= ftwa.Person("Asli",  "Yanyatan", ftwa.Gender.FEMALE, date(1966,1,1))
 		Kerem	= ftwa.Person("Kerem", "Yanyatan", ftwa.Gender.MALE)
-		Mahmut	= ftwa.Person("Mahmut", "Devrik", ftwa.Gender.MALE)
+		Mahmut	= ftwa.Person("Mahmut", "Devrik", ftwa.Gender.MALE, date(1950,1,1))
 		Emre	= ftwa.Person("Emre", "Bitmez", ftwa.Gender.MALE)
-		Cimcime = ftwa.Person("Cimcime", "Yanyatan", ftwa.Gender.FEMALE)
-		Pala	= ftwa.Person("Pala", "Tosbağa", ftwa.Gender.MALE)
+		Cimcime = ftwa.Person("Cimcime", "Yanyatan", ftwa.Gender.FEMALE, date(1999,1,1))
+		Pamela	= ftwa.Person("Pamela", "Canisi", ftwa.Gender.FEMALE, date(1950,1,1))
 		Duran	= ftwa.Person("Duran", "Yanyatan", ftwa.Gender.MALE)
+
 
 
 		self.G.person_list[Veli.name+Veli.surname] = Veli
@@ -53,7 +54,7 @@ class HelloWorld(cmd.Cmd):
 		self.G.person_list[Mahmut.name+Mahmut.surname] = Mahmut
 		self.G.person_list[Emre.name+Emre.surname] = Emre
 		self.G.person_list[Cimcime.name+Cimcime.surname] = Cimcime
-		self.G.person_list[Pala.name+Pala.surname] = Pala
+		self.G.person_list[Pamela.name+Pamela.surname] = Pamela
 		self.G.person_list[Duran.name+Duran.surname] = Duran
 
 
@@ -73,7 +74,7 @@ class HelloWorld(cmd.Cmd):
 		self.G.new_relation(Mahmut, ftwa.Relation.CHILD, ftwa.Relation.PARENT, Huri)
 		self.G.new_relation(Emre, ftwa.Relation.SPOUSE, ftwa.Relation.SPOUSE, Asli)
 		self.G.new_relation(Cimcime, ftwa.Relation.PARENT, ftwa.Relation.CHILD, Asli)
-		self.G.new_relation(Pala, ftwa.Relation.CHILD, ftwa.Relation.PARENT, Huri)
+		self.G.new_relation(Pamela, ftwa.Relation.CHILD, ftwa.Relation.PARENT, Huri)
 		self.G.new_relation(Duran, ftwa.Relation.SPOUSE, ftwa.Relation.SPOUSE, Asli)
 
 
@@ -141,6 +142,32 @@ class HelloWorld(cmd.Cmd):
 					if f.startswith(text)
 					]
 		return completions
+
+	def do_relate(self, arg):
+		"Adds new relation\nUsage: relate person1 person2 relation1"
+		person1str = parse(arg)[0]
+		person2str = parse(arg)[1]
+		relationstr = parse(arg)[2].upper()
+
+		try:
+			self.G.new_relation(self.G.person_list[person1str], ftwa.Relation[relationstr], ftwa.Relation[relationstr], self.G.person_list[person2str])
+
+		except:
+			print("[ERROR] Person Not Found!")
+		
+
+
+
+	def complete_relate(self, text, line, begidx, endidx):
+		if not text:
+			completions = self.G.person_list[:]
+		else:
+			completions = [ f
+					for f in self.G.person_list
+					if f.startswith(text)
+					]
+		return completions
+		
 	
 	def do_alive(self, arg):
 		"Lets you know where the person is dead or alive\nUsage: alive person"
@@ -160,6 +187,7 @@ class HelloWorld(cmd.Cmd):
 		return completions	
 
 	def do_update(self, arg):
+		"Updates name, surname, gender, birthdate or deathdate.\nUsage: update person field new_value\nExample: update AliYanyatan gender female"
 		if parse(arg)[1] == "name":
 			self.G.person_list[parse(arg)[0]].set_name(parse(arg)[1])
 
