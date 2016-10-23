@@ -167,8 +167,12 @@ class HelloWorld(cmd.Cmd):
 			self.G.person_list[parse(arg)[0]].set_surname(parse(arg)[1])
 
 		if parse(arg)[1] == "gender":
-			g = ftwa.Gender(parse(arg)[2])
-			self.G.person_list[parse(arg)[0]].set_gender(parse(arg)[1])
+			if re.match('^male$', parse(arg)[2], re.IGNORECASE):
+				self.G.person_list[parse(arg)[0]].set_gender(ftwa.Gender.MALE)
+			elif re.match('^female$', parse(arg)[2], re.IGNORECASE):
+				self.G.person_list[parse(arg)[0]].set_gender(ftwa.Gender.FEMALE)
+			else:
+				print("Invalid Gender: {}".format(parse(arg)[2]))
 
 		if parse(arg)[1] == "birthdate":
 			date_str = re.split("\.|-",parse(arg)[2])
