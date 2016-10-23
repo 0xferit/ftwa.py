@@ -9,6 +9,7 @@ from datetime import date
 import collections
 import re
 import sys
+import logging
 
 class HelloWorld(cmd.Cmd):
 		
@@ -81,26 +82,6 @@ class HelloWorld(cmd.Cmd):
 		self.G.new_relation(Duran, ftwa.Relation.SPOUSE, ftwa.Relation.SPOUSE, Asli)
 
 
-	
-	def greet(self, person):
-		"Greet the person"
-		if person and person in self.FRIENDS:
-			greeting = 'hi, %s!' % person
-		elif person:
-			greeting = "hello, " + person
-		else:
-			greeting = 'hello'
-		print (greeting)
-	
-	def greet(self, text, line, begidx, endidx):
-		if not text:
-			completions = self.G.person_list[:]
-		else:
-			completions = [ f
-					for f in self.G.person_list
-					if f.startswith(text)
-					]
-		return completions
 
 	def do_create(self, arg):
 		"Creates person"
@@ -131,6 +112,7 @@ class HelloWorld(cmd.Cmd):
 		"Lists persons and their informations\nUsage: list"
 		for k, v in self.G.person_list.items():
 			print(k, v.str())
+		print("{} record".format(len(self.G.person_list)))
 	
 	def do_relation(self, arg):
 		"Prints relation between two persons"
@@ -156,8 +138,7 @@ class HelloWorld(cmd.Cmd):
 			self.G.new_relation(self.G.person_list[person1str], ftwa.Relation[relationstr], ftwa.Person.get_reverse_relation(ftwa.Relation[relationstr]), self.G.person_list[person2str])
 
 		except:
-			print(sys.exc_info()[0])
-			print(sys.exc_info()[1])
+			print("[ERROR] Failed To Add Relation!")
 
 		
 
@@ -179,6 +160,22 @@ class HelloWorld(cmd.Cmd):
 		
 		print(self.G.person_list[parse(arg)[0]].is_alive())
 
+	def do_list_relations(self, arg):
+		for relation in self.G.relation_list:
+			print(relation[0].name, relation[1], relation[2], relation[3].name)
+
+		print("{} record".format(len(self.G.relation_list)))
+
+	def complete_list_relations(self, text, line, begidx, endidx):
+		if not text:
+			completions = self.G.person_list[:]
+		else:
+			completions = [ f
+					for f in self.G.person_list
+					if f.startswith(text)
+					]
+		return completions
+
 
 	def complete_alive(self, text, line, begidx, endidx):
 		if not text:
@@ -189,6 +186,24 @@ class HelloWorld(cmd.Cmd):
 					if f.startswith(text)
 					]
 		return completions	
+
+	def do_delete(self, arg):
+		"Search and delete person and it's relations\nUsage: delete person"
+	#try:
+		del self.G.person_list[parse(arg)[0]]
+		self.G.fix_relation_table()
+	#except:
+		#print("Not Found!")
+
+	def complete_delete(self, text, line, begidx, endidx):
+		if not text:
+			completions = self.G.person_list[:]
+		else:
+			completions = [ f
+					for f in self.G.person_list
+					if f.startswith(text)
+					]
+		return completions
 
 	def do_update(self, arg):
 		"Updates name, surname, gender, birthdate or deathdate.\nUsage: update person field new_value\nExample: update AliYanyatan gender female"
@@ -286,12 +301,12 @@ class HelloWorld(cmd.Cmd):
 		
 		pos=nx.spring_layout(Y)
 
-		print(Y.edges())
 
 
-		nx.draw(Y, pos, labels=labels2) # FONT SIZE BURAYA OLMUYO
+		nx.draw_networkx(G=Y, pos=pos, labels=labels2, font_size=16) # FONT SIZE BURAYA OLMUYO
 		nx.draw_networkx_edge_labels(Y,pos, edgelabels2)
-	
+		
+		#plt.axis("off")
 		plt.savefig("simple_path.png") # save as png
 		plt.show() # display
 	

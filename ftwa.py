@@ -65,7 +65,6 @@ class Person(metaclass=MetaPerson): #This is our Person object which creates str
 	def set_birthdate(self, d: date):
 		
 		if not isinstance(d, date):
-			print("is not instance")
 			if not d == None:
 				try:
 					date_str = re.split("\.|-",d)
@@ -88,7 +87,6 @@ class Person(metaclass=MetaPerson): #This is our Person object which creates str
 
 	def set_deathdate(self, d: date):
 		if not isinstance(d, date):
-			print("is not instance")
 			if not d == None:
 				try:
 					date_str = re.split("\.|-",d)
@@ -185,6 +183,29 @@ class FamilyGraph():
 	relation_list = []
 	person_list = {}
 
+	def fix_relation_table(self):
+
+		keys = self.person_list.keys()
+		items = self.person_list.items()
+		pool = []
+		todelete = []
+		for k, v in self.person_list.items():
+			pool.append(v)
+
+		for x in pool:
+			print(x.name)
+
+		for rel in self.relation_list:
+			if rel[0] not in pool:
+				print("0 not in pool {}".format(rel[0].name))
+				todelete.append(rel)
+			elif rel[3] not in pool:
+				print("3 not in pool {}".format(rel[3].name))
+				todelete.append(rel)
+
+		self.relation_list = [x for x in self.relation_list if x not in todelete]
+				
+
 	def new_relation(self, p1: Person, r1: Relation, r2: Relation, p2: Person):
 		if ((not p1.is_placeholder() and p1.get_age() < 18) or (not p2.is_placeholder() and p2.get_age() < 18)) and r1 == Relation.SPOUSE:
 			print("[WARNING] Marriage between {} and {} is a child marriage!".format(p1.name, p2.name))
@@ -224,6 +245,8 @@ class FamilyGraph():
 	def list_relations(self):
 		for relation in self.relation_list:
 			print(relation)
+
+		
 					
 	def get_level(self, p: Person):
 
@@ -525,7 +548,7 @@ class FamilyGraph():
 		
 		return complex_rel
 
-	def is_older_than(self, p1, p2): #TODO doğum günü olmayınca patlıyo
+	def is_older_than(self, p1, p2): 
 		if(p1.birthdate == None):
 			return False
 		if(p2.birthdate == None):
