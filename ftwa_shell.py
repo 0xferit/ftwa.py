@@ -82,8 +82,10 @@ class HelloWorld(cmd.Cmd):
 		self.G.new_relation(Cimcime, ftwa.Relation.PARENT, ftwa.Relation.CHILD, Emre)
 		self.G.new_relation(Nuri, ftwa.Relation.PARENT, ftwa.Relation.CHILD, Makbule)
 		self.G.new_relation(Nurbanu, ftwa.Relation.PARENT, ftwa.Relation.CHILD, Riza)
+
 		self.G.new_relation(Kerem, ftwa.Relation.PARENT, ftwa.Relation.CHILD, Aynur)
 		self.G.new_relation(Asli, ftwa.Relation.PARENT, ftwa.Relation.CHILD, Mahmut)
+
 
 
 
@@ -335,7 +337,10 @@ class HelloWorld(cmd.Cmd):
 				Y.add_edge(rel[0].name+rel[0].surname, rel[3].name+rel[3].surname)
 				edgelabels2[rel[0].name+rel[0].surname, rel[3].name+rel[3].surname] = r'${}$'.format(rel[1].name)
 		
+
 		pos=nx.spring_layout(Y, iterations= 3000)
+
+
 		if len(parse(arg)) > 0:
 			if parse(arg)[0] == "circular":
 				pos=nx.circular_layout(Y)
