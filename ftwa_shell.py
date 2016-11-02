@@ -86,16 +86,37 @@ class HelloWorld(cmd.Cmd):
 		self.G.new_relation(Kerem, ftwa.Relation.PARENT, ftwa.Relation.CHILD, Aynur)
 		self.G.new_relation(Asli, ftwa.Relation.PARENT, ftwa.Relation.CHILD, Mahmut)
 
+	def do_load_test_data2(self, arg):
+		
+
+		Ayşe 	= ftwa.Person("Veli", "Sensoy",   ftwa.Gender.MALE, date(2005, 12, 15), date(2075, 12, 15)) 
+		Erdem 	= ftwa.Person("Veli", "Sensoy",   ftwa.Gender.MALE, date(2005, 12, 15), date(2075, 12, 15)) 
+		Erdi 	= ftwa.Person("Veli", "Sensoy",   ftwa.Gender.MALE, date(2005, 12, 15), date(2075, 12, 15)) 
+		Sibel 	= ftwa.Person("Veli", "Sensoy",   ftwa.Gender.MALE, date(2005, 12, 15), date(2075, 12, 15)) 
+		Seda	= ftwa.Person("Veli", "Sensoy",   ftwa.Gender.MALE, date(2005, 12, 15), date(2075, 12, 15)) 
+		Ali 	= ftwa.Person("Veli", "Sensoy",   ftwa.Gender.MALE, date(2005, 12, 15), date(2075, 12, 15)) 
+		Ali 	= ftwa.Person("Veli", "Sensoy",   ftwa.Gender.MALE, date(2005, 12, 15), date(2075, 12, 15)) 
+		Deniz 	= ftwa.Person("Veli", "Sensoy",   ftwa.Gender.MALE, date(2005, 12, 15), date(2075, 12, 15)) 
+		Melis 	= ftwa.Person("Veli", "Sensoy",   ftwa.Gender.MALE, date(2005, 12, 15), date(2075, 12, 15)) 
+		Ahmet	= ftwa.Person("Veli", "Sensoy",   ftwa.Gender.MALE, date(2005, 12, 15), date(2075, 12, 15)) 
+		Güneş 	= ftwa.Person("Veli", "Sensoy",   ftwa.Gender.MALE, date(2005, 12, 15), date(2075, 12, 15)) 
+		Seçil 	= ftwa.Person("Veli", "Sensoy",   ftwa.Gender.MALE, date(2005, 12, 15), date(2075, 12, 15)) 
+		Orhan 	= ftwa.Person("Veli", "Sensoy",   ftwa.Gender.MALE, date(2005, 12, 15), date(2075, 12, 15)) 
+		Derya 	= ftwa.Person("Veli", "Sensoy",   ftwa.Gender.MALE, date(2005, 12, 15), date(2075, 12, 15)) 
+		Tolga 	= ftwa.Person("Veli", "Sensoy",   ftwa.Gender.MALE, date(2005, 12, 15), date(2075, 12, 15)) 
+
 
 
 
 
 	def do_create(self, arg):
 		"Creates person\nUsage: create <name> <surname> <gender> <birthdate> <deathdate>\nName and surname mandatory\nExamples: create Ali Durmaz\n\tcreate name=Ali surname=Durmaz birthdate=1999.1.1"
-
-		temp = ftwa.Person(*parse(arg))
-		print(temp.str())
-		self.G.person_list[temp.name+temp.surname] = temp
+		try:
+			self.G.person_list[parse(arg)[0]+parse(arg)[1]].str()
+		except:
+			temp = ftwa.Person(*parse(arg))
+			print("Created {}".format(temp.str()))
+			self.G.person_list[temp.name+temp.surname] = temp
 
 	def do_search(self, arg):
 		"Search and retrieve information of a person\nUsage: search <person>"
