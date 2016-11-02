@@ -10,6 +10,7 @@ from enum import Enum
 from datetime import date
 import collections
 import copy
+import numpy
 	
 
 class MetaPerson(type):
@@ -48,6 +49,19 @@ class Person(metaclass=MetaPerson): #This is our Person object which creates str
 		for each in self.__dict__.keys():
 			yield self.__getattribute__(each)
 
+	
+
+	uids = numpy.full((5000), False, dtype=bool)
+
+	def get_uid(self):
+		for idx, val in enumerate(Person.uids):
+			if val == False:
+				Person.uids[idx] = True
+				return idx
+	@staticmethod
+	def release_uid(self, u):
+		self.uids[u] = False
+	
 	def __init__(self, name=None, surname=None, gender: Gender=None, birthdate: date=None, deathdate: date=None):
 
 		self.name = None
@@ -61,6 +75,8 @@ class Person(metaclass=MetaPerson): #This is our Person object which creates str
 		self.surname = surname
 		self.set_birthdate(birthdate)
 		self.set_deathdate(deathdate)
+
+		self.uid = self.get_uid()
 
 	def set_birthdate(self, d: date):
 		
@@ -188,7 +204,7 @@ class Person(metaclass=MetaPerson): #This is our Person object which creates str
 		
 
 	def str(self):
-		temp = "name={}, surn={}, g={}, bd={}, dd={}, p={}".format(self.name, self.surname, self.gender, self.birthdate, self.deathdate, self.is_placeholder())
+		temp = "uid={}	name={}, surn={}, g={}, bd={}, dd={}, p={}".format(self.uid, self.name, self.surname, self.gender, self.birthdate, self.deathdate, self.is_placeholder())
 		return temp
 
 	def get_reverse_relation(r: Relation):
@@ -250,19 +266,20 @@ class FamilyGraph():
 				print("[ERROR] Illegal Marriage! {} can't be spouse of {} because their relation is {}".format(p1.name, p2.name, self.get_relation_between(p1, p2)))
 				return
 
-		self.relation_list.append((p1, r1, r2, p2))
+		self.relation_list.append((p1.uid, r1, r2, p2.uid))
 
 	def del_relation(self, p1: Person, r: Relation, r2: Relation, p2: Person): #TODO 
 		return	
 
 	def get_first_degree_relatives(self, p: Person):
+		print("here {}".format(type(p)))
 		temp = []
 		for relation in self.relation_list:
-			if p in relation:
-				if relation[0] == p:
-					temp.append(relation[3])
+			if p.uid in relation:
+				if relation[0] == p.uid:
+					temp.append(self.person_list[relation[3]])
 				else:
-					temp.append(relation[0])
+					temp.append(self.person_list[relation[0]])
 
 		return temp
 
@@ -289,7 +306,7 @@ class FamilyGraph():
 
 	def get_persons_relations(self, p: Person):
 
-		return [rel for rel in self.relation_list if p in rel]	
+		return [rel for rel in self.relation_list if p.uid in rel]	
 
 	def get_persons_relations_of_a_kind(self, p: Person, r: Relation):
 		
@@ -318,8 +335,9 @@ class FamilyGraph():
 
 		next = visit_queue.pop()
 		length-=1
+		print("mysearch next={} goal={} length={}".format(next, goal, length))
 		while next != goal and length > -1:
-					
+			print("while")
 			visited.append(next)
 		
 			successors = [x for x in self.get_first_degree_relatives(next) if x not in visited+list(collections.deque(visit_queue))]
@@ -566,6 +584,7 @@ class FamilyGraph():
 
 
 	def get_relation_between(self, p1: Person, p2: Person):
+		print(type(p1))		
 		path = self.mysearch2(p1, p2)
 		rel_path = self.node_path_to_edge_path(path)
 		complex_rel = self.translate_path_to_relation(rel_path, path)

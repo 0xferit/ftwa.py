@@ -41,25 +41,26 @@ class HelloWorld(cmd.Cmd):
 		Cimcime = ftwa.Person("Cimcime", "Durdiyen", ftwa.Gender.FEMALE, date(1999,1,1))
 		Aynur	= ftwa.Person("Aynur", "Kosasimyok", ftwa.Gender.FEMALE, date(1950,1,1))
 
+		Aynur2= ftwa.Person("Aynur", "Kosasimyok")
 
 
-
-		self.G.person_list[Veli.name+Veli.surname] = Veli
-		self.G.person_list[Ferhan.name+Ferhan.surname] = Ferhan
-		self.G.person_list[Huri.name+Huri.surname] = Huri
-		self.G.person_list[Deli.name+Deli.surname] = Deli
-		self.G.person_list[Riza.name+Riza.surname] = Riza
-		self.G.person_list[Fatmagul.name+Fatmagul.surname] = Fatmagul
-		self.G.person_list[Makbule.name+Makbule.surname] = Makbule
-		self.G.person_list[Nuri.name+Nuri.surname] = Nuri
-		self.G.person_list[Nurbanu.name+Nurbanu.surname] = Nurbanu
-		self.G.person_list[Asli.name+Asli.surname] = Asli
-		self.G.person_list[Kerem.name+Kerem.surname] = Kerem
-		self.G.person_list[Mahmut.name+Mahmut.surname] = Mahmut
-		self.G.person_list[Emre.name+Emre.surname] = Emre
-		self.G.person_list[Cimcime.name+Cimcime.surname] = Cimcime
-		self.G.person_list[Aynur.name+Aynur.surname] = Aynur
-
+		self.G.person_list[Veli.uid] = Veli
+		self.G.person_list[Ferhan.uid] = Ferhan
+		self.G.person_list[Huri.uid] = Huri
+		self.G.person_list[Deli.uid] = Deli
+		self.G.person_list[Riza.uid] = Riza
+		self.G.person_list[Fatmagul.uid] = Fatmagul
+		self.G.person_list[Makbule.uid] = Makbule
+		self.G.person_list[Nuri.uid] = Nuri
+		self.G.person_list[Nurbanu.uid] = Nurbanu
+		self.G.person_list[Asli.uid] = Asli
+		self.G.person_list[Kerem.uid] = Kerem
+		self.G.person_list[Mahmut.uid] = Mahmut
+		self.G.person_list[Emre.uid] = Emre
+		self.G.person_list[Cimcime.uid] = Cimcime
+		self.G.person_list[Aynur.uid] = Aynur
+		
+		self.G.person_list[Aynur2.uid] = Aynur2
 
 
 		self.G.new_relation(Ferhan, ftwa.Relation.SPOUSE, ftwa.Relation.SPOUSE, Huri)
@@ -86,24 +87,26 @@ class HelloWorld(cmd.Cmd):
 		self.G.new_relation(Kerem, ftwa.Relation.PARENT, ftwa.Relation.CHILD, Aynur)
 		self.G.new_relation(Asli, ftwa.Relation.PARENT, ftwa.Relation.CHILD, Mahmut)
 
+		self.G.new_relation(Kerem, ftwa.Relation.SIBLING, ftwa.Relation.SIBLING, Aynur2	)
+
 	def do_load_test_data2(self, arg):
 		
 
-		Ayşe 	= ftwa.Person("Veli", "Sensoy",   ftwa.Gender.MALE, date(2005, 12, 15), date(2075, 12, 15)) 
-		Erdem 	= ftwa.Person("Veli", "Sensoy",   ftwa.Gender.MALE, date(2005, 12, 15), date(2075, 12, 15)) 
-		Erdi 	= ftwa.Person("Veli", "Sensoy",   ftwa.Gender.MALE, date(2005, 12, 15), date(2075, 12, 15)) 
-		Sibel 	= ftwa.Person("Veli", "Sensoy",   ftwa.Gender.MALE, date(2005, 12, 15), date(2075, 12, 15)) 
-		Seda	= ftwa.Person("Veli", "Sensoy",   ftwa.Gender.MALE, date(2005, 12, 15), date(2075, 12, 15)) 
-		Ali 	= ftwa.Person("Veli", "Sensoy",   ftwa.Gender.MALE, date(2005, 12, 15), date(2075, 12, 15)) 
-		Ali 	= ftwa.Person("Veli", "Sensoy",   ftwa.Gender.MALE, date(2005, 12, 15), date(2075, 12, 15)) 
-		Deniz 	= ftwa.Person("Veli", "Sensoy",   ftwa.Gender.MALE, date(2005, 12, 15), date(2075, 12, 15)) 
-		Melis 	= ftwa.Person("Veli", "Sensoy",   ftwa.Gender.MALE, date(2005, 12, 15), date(2075, 12, 15)) 
-		Ahmet	= ftwa.Person("Veli", "Sensoy",   ftwa.Gender.MALE, date(2005, 12, 15), date(2075, 12, 15)) 
-		Güneş 	= ftwa.Person("Veli", "Sensoy",   ftwa.Gender.MALE, date(2005, 12, 15), date(2075, 12, 15)) 
-		Seçil 	= ftwa.Person("Veli", "Sensoy",   ftwa.Gender.MALE, date(2005, 12, 15), date(2075, 12, 15)) 
-		Orhan 	= ftwa.Person("Veli", "Sensoy",   ftwa.Gender.MALE, date(2005, 12, 15), date(2075, 12, 15)) 
-		Derya 	= ftwa.Person("Veli", "Sensoy",   ftwa.Gender.MALE, date(2005, 12, 15), date(2075, 12, 15)) 
-		Tolga 	= ftwa.Person("Veli", "Sensoy",   ftwa.Gender.MALE, date(2005, 12, 15), date(2075, 12, 15)) 
+		Ayse 	= ftwa.Person("Ayşe", 	gender=ftwa.Gender.FEMALE,	birthdate =date(1925, 1, 1)) 
+		Erdem 	= ftwa.Person("Erdem", 	gender=ftwa.Gender.MALE, 	birthdate =date(1920, 1, 1)) 
+		Erdi 	= ftwa.Person("Erdi", 	gender=ftwa.Gender.MALE, 	birthdate =date(1950, 1, 1)) 
+		Sibel 	= ftwa.Person("Sibel", 	gender=ftwa.Gender.FEMALE, 	birthdate =date(1949, 1, 1)) 
+		Seda	= ftwa.Person("Seda", 	gender=ftwa.Gender.FEMALE, 	birthdate =date(1952, 1, 1)) 
+		Ali 	= ftwa.Person("Ali", 	gender=ftwa.Gender.MALE, 	birthdate =date(1948, 1, 1)) 
+		Alican 	= ftwa.Person("Alican", gender=ftwa.Gender.MALE, 	birthdate =date(1960, 1, 1)) 
+		Deniz	= ftwa.Person("Deniz", 	gender=ftwa.Gender.FEMALE, 	birthdate =date(1960, 1, 1)) 
+		Melis 	= ftwa.Person("Melis", 	gender=ftwa.Gender.FEMALE, 	birthdate =date(1961, 1, 1)) 
+		Ahmet 	= ftwa.Person("Ahmet", 	gender=ftwa.Gender.MALE, 	birthdate =date(1960, 1, 1)) 
+		Güneş 	= ftwa.Person("Güneş", 	gender=ftwa.Gender.MALE, 	birthdate =date(1980, 1, 1)) 
+		Seçil 	= ftwa.Person("Seçil", 	gender=ftwa.Gender.FEMALE, 	birthdate =date(1975, 1, 1)) 
+		Orhan	= ftwa.Person("Orhan", 	gender=ftwa.Gender.MALE, 	birthdate =date(1978, 1, 1)) 
+		Derya 	= ftwa.Person("Derya", 	gender=ftwa.Gender.FEMALE, 	birthdate =date(1982, 1, 1))  
+		Tolga 	= ftwa.Person("Tolga", 	gender=ftwa.Gender.MALE, 	birthdate =date(1982, 1, 1))  
 
 
 
@@ -111,19 +114,18 @@ class HelloWorld(cmd.Cmd):
 
 	def do_create(self, arg):
 		"Creates person\nUsage: create <name> <surname> <gender> <birthdate> <deathdate>\nName and surname mandatory\nExamples: create Ali Durmaz\n\tcreate name=Ali surname=Durmaz birthdate=1999.1.1"
-		try:
-			self.G.person_list[parse(arg)[0]+parse(arg)[1]].str()
-		except:
-			temp = ftwa.Person(*parse(arg))
-			print("Created {}".format(temp.str()))
-			self.G.person_list[temp.name+temp.surname] = temp
+
+		temp = ftwa.Person(*parse(arg))
+		print("Created {}".format(temp.str()))
+		self.G.person_list[temp.name+temp.surname] = temp
 
 	def do_search(self, arg):
 		"Search and retrieve information of a person\nUsage: search <person>"
 		try:
-			print(self.G.person_list[parse(arg)[0]].str())
+			print(self.G.person_list[int(arg[0])].str())
 		except:
 			print("[ERROR] Not Found!")
+			print(self.G.person_list.keys())
 
 	def complete_search(self, text, line, begidx, endidx):
 		if not text:
@@ -135,10 +137,10 @@ class HelloWorld(cmd.Cmd):
 					]
 		return completions
 
-	def do_placeholder(self, arg):
+	def do_placeholder(self, arg):#TODO 
 		"Queries if a person is a placeholder\nUsage: placeholder <person>"
 		try:
-			print(self.G.person_list[parse(arg)[0]].is_placeholder())
+			print(self.G.person_list[int(arg[0])].is_placeholder())
 		except:
 			print("[ERROR] Not Found!")
 	def complete_placeholder(self, text, line, begidx, endidx):
@@ -160,7 +162,9 @@ class HelloWorld(cmd.Cmd):
 	
 	def do_relation(self, arg):
 		"Prints relation between two persons\nUsage: relation <person1> <person2>"
-		print(self.G.get_relation_between(self.G.person_list[parse(arg)[0]], self.G.person_list[parse(arg)[1]]).name)
+		
+		 #p1 = self.G.person_lis		
+		print(self.G.get_relation_between(self.G.person_list[int(parse(arg)[0])], self.G.person_list[int(parse(arg)[1])]).name)
 
 	def complete_relation(self, text, line, begidx, endidx):
 		if not text:
@@ -205,7 +209,7 @@ class HelloWorld(cmd.Cmd):
 	def do_list_relations(self, arg):
 		"Lists relations"
 		for relation in self.G.relation_list:
-			print(relation[0].name, relation[1], relation[2], relation[3].name)
+			print(relation[0], relation[1], relation[2], relation[3])
 
 		print("{} record".format(len(self.G.relation_list)))
 
@@ -252,6 +256,7 @@ class HelloWorld(cmd.Cmd):
 		"Updates name, surname, gender, birthdate or deathdate.\nUsage: update <person> <field> <new_value>\nExample: update AliYanyatan gender female"
 
 		try:
+			print(parse(arg)[0])
 			self.G.person_list[parse(arg)[0]]
 		except:
 			print("[ERROR] Not Found!")
@@ -361,17 +366,17 @@ class HelloWorld(cmd.Cmd):
 
 		for k, v in self.G.person_list.items():
 			try:
-				Y.nodes().index(v.name + v.surname)
+				Y.nodes().index(v.uid)
 			except:
-				Y.add_node(v.name + v.surname)
-				labels2[v.name + v.surname] = v.name + v.surname
+				Y.add_node(v.uid)
+				labels2[v.uid] = v.name + v.surname
 
 		for rel in self.G.relation_list:
 			try:
-				Y.edges().index(rel[0].name+rel[0].surname, rel[3].name+rel[3].surname)
+				Y.edges().index(rel[0], rel[3])
 			except:
-				Y.add_edge(rel[0].name+rel[0].surname, rel[3].name+rel[3].surname)
-				edgelabels2[rel[0].name+rel[0].surname, rel[3].name+rel[3].surname] = r'${}$'.format(rel[1].name)
+				Y.add_edge(rel[0], rel[3])
+				edgelabels2[rel[0], rel[3]] = r'${}$'.format(rel[1].name)
 		
 
 		pos=nx.spring_layout(Y, iterations= 3000)
