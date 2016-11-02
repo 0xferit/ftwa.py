@@ -10,6 +10,7 @@ import collections
 import re
 import sys
 import logging
+import copy
 
 class HelloWorld(cmd.Cmd):
 		
@@ -19,26 +20,27 @@ class HelloWorld(cmd.Cmd):
 	G = ftwa.FamilyGraph()
 
 	def do_load_test_data(self, arg):
-		"Loads an hardcoded family graph for testing"
+		"Loads the test graph"
 
 		ATTRIBUTE_NAMES = ["name", "surname", "gender", "birthdate", "deathdate"] 
 	
-		Veli 	= ftwa.Person("Veli", "Yanyatan",   ftwa.Gender.MALE, date(2005, 12, 15), date(2075, 12, 15)) #Çocuk	
-		Ali 	= ftwa.Person("Ali", "Yanyatan",    ftwa.Gender.MALE, date(1980, 12, 15), date(2055, 12, 15)) # Baba
-		Huri 	= ftwa.Person("Huri", "Yanyatan", ftwa.Gender.FEMALE, date(1983, 12, 15), date(2075, 12, 15)) # Anne
-		Deli 	= ftwa.Person("Deli", "Yanyatan",   ftwa.Gender.MALE, date(2007, 12, 15), date(2075, 12, 15)) # Çocuk
-		Riza	= ftwa.Person("Riza", "Yanyatan",   ftwa.Gender.MALE, date(1970, 1, 1), date(2030, 12, 12)) # Dede, Ali'nin babası
-		Fatmagul= ftwa.Person("Fatmagül", "Yanyatan", ftwa.Gender.FEMALE, birthdate = date(2000, 1, 1))
-		Makbule = ftwa.Person("Makbule", "Yanyatan", ftwa.Gender.FEMALE, date(1945,1,1))
-		Nuri	= ftwa.Person("Nuri", "Yanyatan", ftwa.Gender.MALE)
-		Nurbanu	= ftwa.Person("Nurbanu", "Yanyatan", ftwa.Gender.FEMALE)
-		Asli	= ftwa.Person("Asli",  "Yanyatan", ftwa.Gender.FEMALE, date(1966,1,1))
-		Kerem	= ftwa.Person("Kerem", "Yanyatan", ftwa.Gender.MALE)
-		Mahmut	= ftwa.Person("Mahmut", "Devrik", ftwa.Gender.MALE, date(1950,1,1))
-		Emre	= ftwa.Person("Emre", "Bitmez", ftwa.Gender.MALE)
-		Cimcime = ftwa.Person("Cimcime", "Yanyatan", ftwa.Gender.FEMALE, date(1999,1,1))
-		Pamela	= ftwa.Person("Pamela", "Canisi", ftwa.Gender.FEMALE, date(1950,1,1))
-		Duran	= ftwa.Person("Duran", "Yanyatan", ftwa.Gender.MALE)
+		Veli 	= ftwa.Person("Veli", "Sensoy",   ftwa.Gender.MALE, date(2005, 12, 15), date(2075, 12, 15)) #Çocuk	
+		Ali 	= ftwa.Person("Ferhan", "Sensoy",    ftwa.Gender.MALE, date(1980, 12, 15), date(2055, 12, 15)) # Baba
+		Huri 	= ftwa.Person("Huri", "Sensoy", ftwa.Gender.FEMALE, date(1983, 12, 15), date(2075, 12, 15)) # Anne
+		Deli 	= ftwa.Person("Deli", "Sensoy",   ftwa.Gender.MALE, date(2007, 12, 15), date(2075, 12, 15)) # Çocuk
+		Riza	= ftwa.Person("Riza", "Sensoy",   ftwa.Gender.MALE, date(1950, 1, 1), date(2030, 12, 12)) # Dede, Ali'nin babası
+		Fatmagul= ftwa.Person("Fatmagül", "Sensoy", ftwa.Gender.FEMALE, birthdate = date(2000, 1, 1))
+		Makbule = ftwa.Person("Makbule", "Sensoy", ftwa.Gender.FEMALE, date(1945,1,1))
+		Nuri	= ftwa.Person("Nuri", "Camurabatti", ftwa.Gender.MALE)
+		Nurbanu	= ftwa.Person("Nurbanu", "Camurabatti", ftwa.Gender.FEMALE)
+
+		Asli	= ftwa.Person("Asli",  "Durdiyen", ftwa.Gender.FEMALE, date(1966,1,1))
+		Kerem	= ftwa.Person("Kerem", "Durdiyen", ftwa.Gender.MALE)
+		Mahmut	= ftwa.Person("Mahmut", "Kosasimyok", ftwa.Gender.MALE, date(1950,1,1))
+		Emre	= ftwa.Person("Emre", "Durdiyen", ftwa.Gender.MALE, date(1966,1,1))
+		Cimcime = ftwa.Person("Cimcime", "Durdiyen", ftwa.Gender.FEMALE, date(1999,1,1))
+		Pamela	= ftwa.Person("Aynur", "Kosasimyok", ftwa.Gender.FEMALE, date(1950,1,1))
+
 
 
 
@@ -57,7 +59,7 @@ class HelloWorld(cmd.Cmd):
 		self.G.person_list[Emre.name+Emre.surname] = Emre
 		self.G.person_list[Cimcime.name+Cimcime.surname] = Cimcime
 		self.G.person_list[Pamela.name+Pamela.surname] = Pamela
-		self.G.person_list[Duran.name+Duran.surname] = Duran
+
 
 
 		self.G.new_relation(Ali, ftwa.Relation.SPOUSE, ftwa.Relation.SPOUSE, Huri)
@@ -74,15 +76,17 @@ class HelloWorld(cmd.Cmd):
 		self.G.new_relation(Kerem, ftwa.Relation.SIBLING, ftwa.Relation.SIBLING, Huri)
 		self.G.new_relation(Makbule, ftwa.Relation.CHILD, ftwa.Relation.PARENT, Ali)
 		self.G.new_relation(Mahmut, ftwa.Relation.CHILD, ftwa.Relation.PARENT, Huri)
-		self.G.new_relation(Emre, ftwa.Relation.SPOUSE, ftwa.Relation.SPOUSE, Asli)
+		#self.G.new_relation(Emre, ftwa.Relation.SPOUSE, ftwa.Relation.SPOUSE, Asli)
 		self.G.new_relation(Cimcime, ftwa.Relation.PARENT, ftwa.Relation.CHILD, Asli)
 		self.G.new_relation(Pamela, ftwa.Relation.CHILD, ftwa.Relation.PARENT, Huri)
-		self.G.new_relation(Duran, ftwa.Relation.SPOUSE, ftwa.Relation.SPOUSE, Asli)
+		self.G.new_relation(Cimcime, ftwa.Relation.PARENT, ftwa.Relation.CHILD, Emre)
+
 
 
 
 	def do_create(self, arg):
 		"Creates person\nUsage: create <name> <surname> <gender> <birthdate> <deathdate>\nName and surname mandatory\nExamples: create Ali Durmaz\n\tcreate name=Ali surname=Durmaz birthdate=1999.1.1"
+		print(type(arg))		
 		print(*parse(arg))
 		temp = ftwa.Person(*parse(arg))
 		print(temp.str())
@@ -218,16 +222,37 @@ class HelloWorld(cmd.Cmd):
 		"Updates name, surname, gender, birthdate or deathdate.\nUsage: update <person> <field> <new_value>\nExample: update AliYanyatan gender female"
 		if parse(arg)[1] == "name":
 			self.G.person_list[parse(arg)[0]].set_name(parse(arg)[2])
+			self.G.person_list[self.G.person_list[parse(arg)[0]].name+self.G.person_list[parse(arg)[0]].surname] = self.G.person_list[parse(arg)[0]]
+			del self.G.person_list[parse(arg)[0]]
+
 
 		if parse(arg)[1] == "surname":
 			self.G.person_list[parse(arg)[0]].set_surname(parse(arg)[2])
+			self.G.person_list[self.G.person_list[parse(arg)[0]].name+self.G.person_list[parse(arg)[0]].surname] = self.G.person_list[parse(arg)[0]]
+			del self.G.person_list[parse(arg)[0]]
 
 		if parse(arg)[1] == "gender":
 
-				self.G.person_list[parse(arg)[0]].set_gender(parse(arg)[2])
+			self.G.person_list[parse(arg)[0]].set_gender(parse(arg)[2])
 
 
 		if parse(arg)[1] == "birthdate":
+
+			temp_person = copy.deepcopy(self.G.person_list[parse(arg)[0]])
+			temp_person.set_birthdate(parse(arg)[2])
+
+
+			for relation in self.G.get_persons_relations_of_a_kind(self.G.person_list[parse(arg)[0]], ftwa.Relation.PARENT):
+				if (relation[3].birthdate - temp_person.birthdate).days > 0:
+					print ("You can't set birthdate older than parents birthdate")
+					return
+
+
+			for relation in self.G.get_persons_relations_of_a_kind(self.G.person_list[parse(arg)[0]], ftwa.Relation.CHILD):
+				if (relation[3].birthdate - temp_person.birthdate).days < 0:
+					print ("You can't set birthdate younger than children birthdate")
+					return
+
 
 			self.G.person_list[parse(arg)[0]].set_birthdate(parse(arg)[2])
 

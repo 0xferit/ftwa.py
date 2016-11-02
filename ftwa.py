@@ -77,10 +77,12 @@ class Person(metaclass=MetaPerson): #This is our Person object which creates str
 				return
 
 		if not self.deathdate == None:
-			if (self.deathdate -d).days < 0:
+			if (self.deathdate -d).days >= 0:
 				self.birthdate = d
+				
 			else:
 				print("[ERROR] Deathdate < Birthdate!")
+				print(self.deathdate-d)
 		else:
 			self.birthdate = d
 			
@@ -99,12 +101,34 @@ class Person(metaclass=MetaPerson): #This is our Person object which creates str
 				return
 
 		if not self.birthdate == None:
-			if (self.birthdate -d).days < 0:
+			if (self.birthdate -d).days <= 0:
 				self.deathdate = d
 			else:
 				print("[ERROR] Deathdate < Birthdate!")
 		else:
 			self.deathdate = d
+
+	def set_date_if_legal(self, d: date): #TODO
+		
+		if ((not p1.is_placeholder() and p1.get_age() < 18) or (not p2.is_placeholder() and p2.get_age() < 18)) and r1 == Relation.SPOUSE:
+			print("[WARNING] Marriage between {} and {} is a child marriage!".format(p1.name, p2.name))
+
+		
+		if r1 == Relation.CHILD:
+			if not self.is_older_than(p1, p2):
+				print("[ERROR] Impossible Birthdates/Deathdates! {} can't be parent of {}".format(p1.name, p2.name))
+				return
+
+		if r2 == Relation.CHILD:
+			if not self.is_older_than(p2, p1):
+				print("[ERROR] Impossible Birthdates/Deathdates! {} can't be parent of {}".format(p2.name, p1.name))
+				return
+
+		if r1 == Relation.SPOUSE or r2 == Relation.SPOUSE:
+			if self.get_relation_between(p1, p2) in ILLEGAL_MARRIAGE_RULES:
+				print("[ERROR] Illegal Marriage! {} can't be spouse of {} because their relation is {}".format(p1.name, p2.name, self.get_relation_between(p1, p2)))
+				return
+		
 	
 	def set_gender(self, g: Gender):
 		if not isinstance(g, Gender):
