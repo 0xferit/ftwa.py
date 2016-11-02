@@ -24,28 +24,28 @@ class HelloWorld(cmd.Cmd):
 
 		ATTRIBUTE_NAMES = ["name", "surname", "gender", "birthdate", "deathdate"] 
 	
-		Veli 	= ftwa.Person("Veli", "Sensoy",   ftwa.Gender.MALE, date(2005, 12, 15), date(2075, 12, 15)) #Çocuk	
-		Ali 	= ftwa.Person("Ferhan", "Sensoy",    ftwa.Gender.MALE, date(1980, 12, 15), date(2055, 12, 15)) # Baba
-		Huri 	= ftwa.Person("Huri", "Sensoy", ftwa.Gender.FEMALE, date(1983, 12, 15), date(2075, 12, 15)) # Anne
-		Deli 	= ftwa.Person("Deli", "Sensoy",   ftwa.Gender.MALE, date(2007, 12, 15), date(2075, 12, 15)) # Çocuk
-		Riza	= ftwa.Person("Riza", "Sensoy",   ftwa.Gender.MALE, date(1950, 1, 1), date(2030, 12, 12)) # Dede, Ali'nin babası
+		Veli 	= ftwa.Person("Veli", "Sensoy",   ftwa.Gender.MALE, date(2005, 12, 15), date(2075, 12, 15)) 	
+		Ferhan 	= ftwa.Person("Ferhan", "Sensoy",    ftwa.Gender.MALE, date(1980, 12, 15), date(2055, 12, 15)) 
+		Huri 	= ftwa.Person("Huri", "Sensoy", ftwa.Gender.FEMALE, date(1983, 12, 15), date(2075, 12, 15)) 
+		Deli 	= ftwa.Person("Deli", "Sensoy",   ftwa.Gender.MALE, date(2007, 12, 15), date(2075, 12, 15)) 
+		Riza	= ftwa.Person("Riza", "Sensoy",   ftwa.Gender.MALE, date(1950, 1, 1), date(2030, 12, 12)) 
 		Fatmagul= ftwa.Person("Fatmagül", "Sensoy", ftwa.Gender.FEMALE, birthdate = date(2000, 1, 1))
 		Makbule = ftwa.Person("Makbule", "Sensoy", ftwa.Gender.FEMALE, date(1945,1,1))
-		Nuri	= ftwa.Person("Nuri", "Camurabatti", ftwa.Gender.MALE)
-		Nurbanu	= ftwa.Person("Nurbanu", "Camurabatti", ftwa.Gender.FEMALE)
+		Nuri	= ftwa.Person("Nuri", "Camurabatti", ftwa.Gender.MALE, date(1981,1,1))
+		Nurbanu	= ftwa.Person("Nurbanu", "Camurabatti", ftwa.Gender.FEMALE, date(1982,1,1))
 
 		Asli	= ftwa.Person("Asli",  "Durdiyen", ftwa.Gender.FEMALE, date(1966,1,1))
 		Kerem	= ftwa.Person("Kerem", "Durdiyen", ftwa.Gender.MALE)
 		Mahmut	= ftwa.Person("Mahmut", "Kosasimyok", ftwa.Gender.MALE, date(1950,1,1))
 		Emre	= ftwa.Person("Emre", "Durdiyen", ftwa.Gender.MALE, date(1966,1,1))
 		Cimcime = ftwa.Person("Cimcime", "Durdiyen", ftwa.Gender.FEMALE, date(1999,1,1))
-		Pamela	= ftwa.Person("Aynur", "Kosasimyok", ftwa.Gender.FEMALE, date(1950,1,1))
+		Aynur	= ftwa.Person("Aynur", "Kosasimyok", ftwa.Gender.FEMALE, date(1950,1,1))
 
 
 
 
 		self.G.person_list[Veli.name+Veli.surname] = Veli
-		self.G.person_list[Ali.name+Ali.surname] = Ali
+		self.G.person_list[Ferhan.name+Ferhan.surname] = Ferhan
 		self.G.person_list[Huri.name+Huri.surname] = Huri
 		self.G.person_list[Deli.name+Deli.surname] = Deli
 		self.G.person_list[Riza.name+Riza.surname] = Riza
@@ -58,28 +58,30 @@ class HelloWorld(cmd.Cmd):
 		self.G.person_list[Mahmut.name+Mahmut.surname] = Mahmut
 		self.G.person_list[Emre.name+Emre.surname] = Emre
 		self.G.person_list[Cimcime.name+Cimcime.surname] = Cimcime
-		self.G.person_list[Pamela.name+Pamela.surname] = Pamela
+		self.G.person_list[Aynur.name+Aynur.surname] = Aynur
 
 
 
-		self.G.new_relation(Ali, ftwa.Relation.SPOUSE, ftwa.Relation.SPOUSE, Huri)
-		self.G.new_relation(Ali, ftwa.Relation.CHILD, ftwa.Relation.PARENT, Veli)
-		self.G.new_relation(Ali, ftwa.Relation.CHILD, ftwa.Relation.PARENT, Deli)
+		self.G.new_relation(Ferhan, ftwa.Relation.SPOUSE, ftwa.Relation.SPOUSE, Huri)
+		self.G.new_relation(Ferhan, ftwa.Relation.CHILD, ftwa.Relation.PARENT, Veli)
+		self.G.new_relation(Ferhan, ftwa.Relation.CHILD, ftwa.Relation.PARENT, Deli)
 		self.G.new_relation(Huri, ftwa.Relation.CHILD, ftwa.Relation.PARENT, Veli)
 		self.G.new_relation(Huri, ftwa.Relation.CHILD, ftwa.Relation.PARENT, Deli)
 		self.G.new_relation(Veli, ftwa.Relation.SIBLING, ftwa.Relation.SIBLING, Deli)
-		self.G.new_relation(Riza, ftwa.Relation.CHILD, ftwa.Relation.PARENT, Ali)
+		self.G.new_relation(Riza, ftwa.Relation.CHILD, ftwa.Relation.PARENT, Ferhan)
 		self.G.new_relation(Deli, ftwa.Relation.SPOUSE, ftwa.Relation.SPOUSE, Fatmagul)
-		self.G.new_relation(Nuri, ftwa.Relation.SIBLING, ftwa.Relation.SIBLING, Ali)
-		self.G.new_relation(Nurbanu, ftwa.Relation.SIBLING, ftwa.Relation.SIBLING, Ali)
+		self.G.new_relation(Nuri, ftwa.Relation.SIBLING, ftwa.Relation.SIBLING, Ferhan)
+		self.G.new_relation(Nurbanu, ftwa.Relation.SIBLING, ftwa.Relation.SIBLING, Ferhan)
 		self.G.new_relation(Asli, ftwa.Relation.SIBLING, ftwa.Relation.SIBLING, Huri)
 		self.G.new_relation(Kerem, ftwa.Relation.SIBLING, ftwa.Relation.SIBLING, Huri)
-		self.G.new_relation(Makbule, ftwa.Relation.CHILD, ftwa.Relation.PARENT, Ali)
+		self.G.new_relation(Makbule, ftwa.Relation.CHILD, ftwa.Relation.PARENT, Ferhan)
 		self.G.new_relation(Mahmut, ftwa.Relation.CHILD, ftwa.Relation.PARENT, Huri)
 		#self.G.new_relation(Emre, ftwa.Relation.SPOUSE, ftwa.Relation.SPOUSE, Asli)
 		self.G.new_relation(Cimcime, ftwa.Relation.PARENT, ftwa.Relation.CHILD, Asli)
-		self.G.new_relation(Pamela, ftwa.Relation.CHILD, ftwa.Relation.PARENT, Huri)
+		self.G.new_relation(Aynur, ftwa.Relation.CHILD, ftwa.Relation.PARENT, Huri)
 		self.G.new_relation(Cimcime, ftwa.Relation.PARENT, ftwa.Relation.CHILD, Emre)
+		self.G.new_relation(Nuri, ftwa.Relation.PARENT, ftwa.Relation.CHILD, Makbule)
+		self.G.new_relation(Nurbanu, ftwa.Relation.PARENT, ftwa.Relation.CHILD, Riza)
 
 
 
@@ -331,19 +333,28 @@ class HelloWorld(cmd.Cmd):
 				Y.add_edge(rel[0].name+rel[0].surname, rel[3].name+rel[3].surname)
 				edgelabels2[rel[0].name+rel[0].surname, rel[3].name+rel[3].surname] = r'${}$'.format(rel[1].name)
 		
-
-		
 		pos=nx.spring_layout(Y)
+		if len(parse(arg)) > 0:
+			if parse(arg)[0] == "circular":
+				pos=nx.circular_layout(Y)
+			if parse(arg)[0] == "spectral":
+				pos = nx.spectral_layout(Y)
+			if parse(arg)[0] == "random":
+				pos = nx.random_layout(Y)
 
 
 
-		nx.draw_networkx(G=Y, pos=pos, labels=labels2, font_size=16) # FONT SIZE BURAYA OLMUYO
+		plt.title("Family Graph")
+		nx.draw_networkx(G=Y, pos=pos, labels=labels2, font_size=14)
 		nx.draw_networkx_edge_labels(Y,pos, edgelabels2)
+		#nx.draw_circular(Y)
 		
 		#plt.axis("off")
-		plt.savefig("simple_path.png") # save as png
+		#plt.savefig("family_graph.png") # save as png
+		mng = plt.get_current_fig_manager()
+		mng.resize(*mng.window.maxsize())
 		plt.show() # display
-	
+		
 	def do_exit(self, line):
 		"Exits from ftwa shell"
 		return True
