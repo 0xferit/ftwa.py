@@ -29,13 +29,13 @@ class HelloWorld(cmd.Cmd):
 		Huri 	= ftwa.Person("Huri", "Sensoy", ftwa.Gender.FEMALE, date(1983, 12, 15), date(2075, 12, 15)) 
 		Deli 	= ftwa.Person("Deli", "Sensoy",   ftwa.Gender.MALE, date(2007, 12, 15), date(2075, 12, 15)) 
 		Riza	= ftwa.Person("Riza", "Sensoy",   ftwa.Gender.MALE, date(1950, 1, 1), date(2030, 12, 12)) 
-		Fatmagul= ftwa.Person("Fatmagül", "Sensoy", ftwa.Gender.FEMALE, birthdate = date(2000, 1, 1))
-		Makbule = ftwa.Person("Makbule", "Sensoy", ftwa.Gender.FEMALE, date(1945,1,1))
+		Fatmagul= ftwa.Person("Fatmagul", "Sensoy", ftwa.Gender.FEMALE, birthdate = date(2000, 1, 1))
+		Makbule = ftwa.Person("Makbule", "Huyuguzel", ftwa.Gender.FEMALE, date(1945,1,1))
 		Nuri	= ftwa.Person("Nuri", "Camurabatti", ftwa.Gender.MALE, date(1981,1,1))
-		Nurbanu	= ftwa.Person("Nurbanu", "Camurabatti", ftwa.Gender.FEMALE, date(1982,1,1))
+		Nurbanu	= ftwa.Person("Nurbanu", "Sensoy", ftwa.Gender.FEMALE, date(1982,1,1))
 
-		Asli	= ftwa.Person("Asli",  "Durdiyen", ftwa.Gender.FEMALE, date(1966,1,1))
-		Kerem	= ftwa.Person("Kerem", "Durdiyen", ftwa.Gender.MALE)
+		Asli	= ftwa.Person("Asli",  "Kosasimyok", ftwa.Gender.FEMALE, date(1966,1,1))
+		Kerem	= ftwa.Person("Kerem", "Kalkmayan", ftwa.Gender.MALE, date(1978,1,1))
 		Mahmut	= ftwa.Person("Mahmut", "Kosasimyok", ftwa.Gender.MALE, date(1950,1,1))
 		Emre	= ftwa.Person("Emre", "Durdiyen", ftwa.Gender.MALE, date(1966,1,1))
 		Cimcime = ftwa.Person("Cimcime", "Durdiyen", ftwa.Gender.FEMALE, date(1999,1,1))
@@ -76,7 +76,7 @@ class HelloWorld(cmd.Cmd):
 		self.G.new_relation(Kerem, ftwa.Relation.SIBLING, ftwa.Relation.SIBLING, Huri)
 		self.G.new_relation(Makbule, ftwa.Relation.CHILD, ftwa.Relation.PARENT, Ferhan)
 		self.G.new_relation(Mahmut, ftwa.Relation.CHILD, ftwa.Relation.PARENT, Huri)
-		#self.G.new_relation(Emre, ftwa.Relation.SPOUSE, ftwa.Relation.SPOUSE, Asli)
+
 		self.G.new_relation(Cimcime, ftwa.Relation.PARENT, ftwa.Relation.CHILD, Asli)
 		self.G.new_relation(Aynur, ftwa.Relation.CHILD, ftwa.Relation.PARENT, Huri)
 		self.G.new_relation(Cimcime, ftwa.Relation.PARENT, ftwa.Relation.CHILD, Emre)
@@ -92,8 +92,7 @@ class HelloWorld(cmd.Cmd):
 
 	def do_create(self, arg):
 		"Creates person\nUsage: create <name> <surname> <gender> <birthdate> <deathdate>\nName and surname mandatory\nExamples: create Ali Durmaz\n\tcreate name=Ali surname=Durmaz birthdate=1999.1.1"
-		print(type(arg))		
-		print(*parse(arg))
+
 		temp = ftwa.Person(*parse(arg))
 		print(temp.str())
 		self.G.person_list[temp.name+temp.surname] = temp
@@ -103,7 +102,7 @@ class HelloWorld(cmd.Cmd):
 		try:
 			print(self.G.person_list[parse(arg)[0]].str())
 		except:
-			print("Not Found!")
+			print("[ERROR] Not Found!")
 
 	def complete_search(self, text, line, begidx, endidx):
 		if not text:
@@ -117,8 +116,10 @@ class HelloWorld(cmd.Cmd):
 
 	def do_placeholder(self, arg):
 		"Queries if a person is a placeholder\nUsage: placeholder <person>"
-		print(self.G.person_list[parse(arg)[0]].is_placeholder())
-
+		try:
+			print(self.G.person_list[parse(arg)[0]].is_placeholder())
+		except:
+			print("[ERROR] Not Found!")
 	def complete_placeholder(self, text, line, begidx, endidx):
 		if not text:
 			completions = self.G.person_list[:]
@@ -138,7 +139,7 @@ class HelloWorld(cmd.Cmd):
 	
 	def do_relation(self, arg):
 		"Prints relation between two persons\nUsage: relation <person1> <person2>"
-		print(self.G.get_relation_between(self.G.person_list[parse(arg)[0]], self.G.person_list[parse(arg)[1]]))
+		print(self.G.get_relation_between(self.G.person_list[parse(arg)[0]], self.G.person_list[parse(arg)[1]]).name)
 
 	def complete_relation(self, text, line, begidx, endidx):
 		if not text:
@@ -210,10 +211,12 @@ class HelloWorld(cmd.Cmd):
 
 	def do_delete(self, arg):
 		"Search and delete person and it's relations\nUsage: delete <person>"
-
-		del self.G.person_list[parse(arg)[0]]
-		self.G.fix_relation_table()
-
+		try:
+			del self.G.person_list[parse(arg)[0]]
+			self.G.fix_relation_table()
+			print("Deleted successfully!")
+		except:
+			print("Not Found!")
 	def complete_delete(self, text, line, begidx, endidx):
 		if not text:
 			completions = self.G.person_list[:]
@@ -226,21 +229,28 @@ class HelloWorld(cmd.Cmd):
 
 	def do_update(self, arg):
 		"Updates name, surname, gender, birthdate or deathdate.\nUsage: update <person> <field> <new_value>\nExample: update AliYanyatan gender female"
+
+		try:
+			self.G.person_list[parse(arg)[0]]
+		except:
+			print("[ERROR] Not Found!")
+			return
 		if parse(arg)[1] == "name":
 			self.G.person_list[parse(arg)[0]].set_name(parse(arg)[2])
 			self.G.person_list[self.G.person_list[parse(arg)[0]].name+self.G.person_list[parse(arg)[0]].surname] = self.G.person_list[parse(arg)[0]]
 			del self.G.person_list[parse(arg)[0]]
+			print("Successfully updated!")
 
 
 		if parse(arg)[1] == "surname":
 			self.G.person_list[parse(arg)[0]].set_surname(parse(arg)[2])
 			self.G.person_list[self.G.person_list[parse(arg)[0]].name+self.G.person_list[parse(arg)[0]].surname] = self.G.person_list[parse(arg)[0]]
 			del self.G.person_list[parse(arg)[0]]
-
+			print("Successfully updated!")
 		if parse(arg)[1] == "gender":
 
 			self.G.person_list[parse(arg)[0]].set_gender(parse(arg)[2])
-
+			print("Successfully updated!")
 
 		if parse(arg)[1] == "birthdate":
 
@@ -261,12 +271,17 @@ class HelloWorld(cmd.Cmd):
 
 
 			self.G.person_list[parse(arg)[0]].set_birthdate(parse(arg)[2])
-
+			print("Successfully updated!")
 		if parse(arg)[1] == "deathdate":
 
 			self.G.person_list[parse(arg)[0]].set_deathdate(parse(arg)[2])
+			print("Successfully updated!")
 
+		else:
+			print("[ERROR] Invalid field: {}".format(parse(arg)[1]))
+			self.do_help("update")
 
+			
 	def complete_update(self, text, line, begidx, endidx):
 		if not text:
 			completions = self.G.person_list[:]
@@ -282,7 +297,7 @@ class HelloWorld(cmd.Cmd):
 		try:
 			print(self.G.person_list[parse(arg)[0]].get_age())
 		except:
-			print("Not Found!")	
+			print("[ERROR] Not Found!")	
 
 	def complete_age(self, text, line, begidx, endidx):
 		if not text:
@@ -299,7 +314,7 @@ class HelloWorld(cmd.Cmd):
 		try:
 			print(self.G.get_level(self.G.person_list[parse(arg)[0]]))
 		except:
-			print("Not Found!")	
+			print("[ERROR] Not Found!")	
 
 	def complete_level(self, text, line, begidx, endidx):
 		if not text:
