@@ -111,7 +111,7 @@ class Person(metaclass=MetaPerson): #This is our Person object which creates str
 	def set_date_if_legal(self, d: date): #TODO
 		
 		if ((not p1.is_placeholder() and p1.get_age() < 18) or (not p2.is_placeholder() and p2.get_age() < 18)) and r1 == Relation.SPOUSE:
-			print("[WARNING] Marriage between {} and {} is a child marriage!".format(p1.name, p2.name))
+			print("[WARNING] Marriage between {} and {} is a child marriage!".format(p1.name+p1.surname, p2.name+p2.surname))
 
 		
 		if r1 == Relation.CHILD:
@@ -232,7 +232,7 @@ class FamilyGraph():
 
 	def new_relation(self, p1: Person, r1: Relation, r2: Relation, p2: Person):
 		if ((not p1.is_placeholder() and p1.get_age() < 18) or (not p2.is_placeholder() and p2.get_age() < 18)) and r1 == Relation.SPOUSE:
-			print("[WARNING] Marriage between {} and {} is a child marriage!".format(p1.name, p2.name))
+			print("[WARNING] Marriage between {} and {} is a child marriage!".format(p1.name+p1.surname, p2.name+p2.surname))
 
 		
 		if r1 == Relation.CHILD:
