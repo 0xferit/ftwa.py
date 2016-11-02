@@ -310,8 +310,8 @@ class FamilyGraph():
 
 	def get_persons_relations_of_a_kind(self, p: Person, r: Relation):
 		
-		direct = [rel for rel in self.get_persons_relations(p) if rel[1] == r and rel[0] == p]
-		reverse = [rel for rel in self.get_persons_relations(p) if rel[2] == r and rel[3] == p]	
+		direct = [rel for rel in self.get_persons_relations(p) if rel[1] == r and rel[0] == p.uid]
+		reverse = [rel for rel in self.get_persons_relations(p) if rel[2] == r and rel[3] == p.uid]	
 
 	
 		if direct:
@@ -380,7 +380,7 @@ class FamilyGraph():
 
 			c3 = list(set(relations1).intersection(relations2))
 			
-			if path[x-1] == c3[0][0]:
+			if path[x-1].uid == c3[0][0]:
 				relation_path.append(c3[0][1])
 			else:
 				relation_path.append(c3[0][2])
