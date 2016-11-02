@@ -12,7 +12,7 @@ import sys
 import logging
 import copy
 
-class HelloWorld(cmd.Cmd):
+class FTWA(cmd.Cmd):
 		
 	intro = """Family Tree Warehouse Application 0.1\nWelcome to ftwa shell! Type help or ? to list commands."""
 	prompt = "(ftwa) "
@@ -89,16 +89,16 @@ class HelloWorld(cmd.Cmd):
 
 		self.G.new_relation(Kerem, ftwa.Relation.SIBLING, ftwa.Relation.SIBLING, Aynur2	)
 
-	def do_load_test_data2(self, arg):
-		
+	def do_load_demo_data(self, arg):
+		"For DEMO"
 
-		Ayse 	= ftwa.Person("Ayşe", 	gender=ftwa.Gender.FEMALE,	birthdate =date(1925, 1, 1)) 
+		Ayşe 	= ftwa.Person("Ayşe", 	gender=ftwa.Gender.FEMALE,	birthdate =date(1925, 1, 1)) 
 		Erdem 	= ftwa.Person("Erdem", 	gender=ftwa.Gender.MALE, 	birthdate =date(1920, 1, 1)) 
 		Erdi 	= ftwa.Person("Erdi", 	gender=ftwa.Gender.MALE, 	birthdate =date(1950, 1, 1)) 
 		Sibel 	= ftwa.Person("Sibel", 	gender=ftwa.Gender.FEMALE, 	birthdate =date(1949, 1, 1)) 
 		Seda	= ftwa.Person("Seda", 	gender=ftwa.Gender.FEMALE, 	birthdate =date(1952, 1, 1)) 
 		Ali 	= ftwa.Person("Ali", 	gender=ftwa.Gender.MALE, 	birthdate =date(1948, 1, 1)) 
-		Alican 	= ftwa.Person("Alican", gender=ftwa.Gender.MALE, 	birthdate =date(1960, 1, 1)) 
+		Ali2 	= ftwa.Person("Ali", 	gender=ftwa.Gender.MALE, 	birthdate =date(1960, 1, 1)) 
 		Deniz	= ftwa.Person("Deniz", 	gender=ftwa.Gender.FEMALE, 	birthdate =date(1960, 1, 1)) 
 		Melis 	= ftwa.Person("Melis", 	gender=ftwa.Gender.FEMALE, 	birthdate =date(1961, 1, 1)) 
 		Ahmet 	= ftwa.Person("Ahmet", 	gender=ftwa.Gender.MALE, 	birthdate =date(1960, 1, 1)) 
@@ -106,7 +106,64 @@ class HelloWorld(cmd.Cmd):
 		Seçil 	= ftwa.Person("Seçil", 	gender=ftwa.Gender.FEMALE, 	birthdate =date(1975, 1, 1)) 
 		Orhan	= ftwa.Person("Orhan", 	gender=ftwa.Gender.MALE, 	birthdate =date(1978, 1, 1)) 
 		Derya 	= ftwa.Person("Derya", 	gender=ftwa.Gender.FEMALE, 	birthdate =date(1982, 1, 1))  
-		Tolga 	= ftwa.Person("Tolga", 	gender=ftwa.Gender.MALE, 	birthdate =date(1982, 1, 1))  
+		Tolga 	= ftwa.Person("Tolga", 	gender=ftwa.Gender.MALE, 	birthdate =date(1982, 1, 1)) 
+
+
+		self.G.person_list[Ayşe.uid] = Ayşe
+		self.G.person_list[Erdem.uid] = Erdem
+		self.G.person_list[Erdi.uid] = Erdi
+		self.G.person_list[Sibel.uid] = Sibel
+
+		self.G.person_list[Seda.uid] = Seda
+		self.G.person_list[Ali.uid] = Ali
+		self.G.person_list[Ali2.uid] = Ali2
+		self.G.person_list[Deniz.uid] = Deniz
+		self.G.person_list[Melis.uid] = Melis
+		self.G.person_list[Ahmet.uid] = Ahmet
+		self.G.person_list[Güneş.uid] = Güneş
+		self.G.person_list[Seçil.uid] = Seçil
+		self.G.person_list[Orhan.uid] = Orhan
+		self.G.person_list[Derya.uid] = Derya
+		self.G.person_list[Tolga.uid] = Tolga
+
+
+ 
+		self.G.new_relation(Ayşe, ftwa.Relation.SPOUSE, ftwa.Relation.SPOUSE, Erdem)
+		self.G.new_relation(Erdi, ftwa.Relation.SPOUSE, ftwa.Relation.SPOUSE, Sibel)
+		self.G.new_relation(Seda, ftwa.Relation.SPOUSE, ftwa.Relation.SPOUSE, Ali)
+		self.G.new_relation(Ali2, ftwa.Relation.SPOUSE, ftwa.Relation.SPOUSE, Deniz)
+		self.G.new_relation(Melis, ftwa.Relation.SPOUSE, ftwa.Relation.SPOUSE, Ahmet)
+
+		self.G.new_relation(Ayşe, ftwa.Relation.CHILD, ftwa.Relation.PARENT, Erdi)
+		self.G.new_relation(Ayşe, ftwa.Relation.CHILD, ftwa.Relation.PARENT, Seda)
+		self.G.new_relation(Ayşe, ftwa.Relation.CHILD, ftwa.Relation.PARENT, Ali2)
+		self.G.new_relation(Ayşe, ftwa.Relation.CHILD, ftwa.Relation.PARENT, Melis)
+
+		self.G.new_relation(Erdem, ftwa.Relation.CHILD, ftwa.Relation.PARENT, Erdi)
+		self.G.new_relation(Erdem, ftwa.Relation.CHILD, ftwa.Relation.PARENT, Seda)
+		self.G.new_relation(Erdem, ftwa.Relation.CHILD, ftwa.Relation.PARENT, Ali2)
+		self.G.new_relation(Erdem, ftwa.Relation.CHILD, ftwa.Relation.PARENT, Melis)
+
+
+		self.G.new_relation(Erdi, ftwa.Relation.CHILD, ftwa.Relation.PARENT, Güneş)
+		self.G.new_relation(Sibel, ftwa.Relation.CHILD, ftwa.Relation.PARENT, Güneş)
+		self.G.new_relation(Seda, ftwa.Relation.CHILD, ftwa.Relation.PARENT, Seçil)
+		self.G.new_relation(Ali, ftwa.Relation.CHILD, ftwa.Relation.PARENT, Seçil)
+		self.G.new_relation(Seda, ftwa.Relation.CHILD, ftwa.Relation.PARENT, Orhan)
+		self.G.new_relation(Ali, ftwa.Relation.CHILD, ftwa.Relation.PARENT, Orhan)
+		self.G.new_relation(Ali2, ftwa.Relation.CHILD, ftwa.Relation.PARENT, Derya)
+		self.G.new_relation(Deniz, ftwa.Relation.CHILD, ftwa.Relation.PARENT, Derya)
+		self.G.new_relation(Melis, ftwa.Relation.CHILD, ftwa.Relation.PARENT, Tolga)
+		self.G.new_relation(Ahmet, ftwa.Relation.CHILD, ftwa.Relation.PARENT, Tolga)
+
+		self.G.new_relation(Erdi, ftwa.Relation.SIBLING, ftwa.Relation.SIBLING, Seda)
+		self.G.new_relation(Erdi, ftwa.Relation.SIBLING, ftwa.Relation.SIBLING, Ali2)
+		self.G.new_relation(Erdi, ftwa.Relation.SIBLING, ftwa.Relation.SIBLING, Melis)
+		self.G.new_relation(Seda, ftwa.Relation.SIBLING, ftwa.Relation.SIBLING, Ali2)
+		self.G.new_relation(Seda, ftwa.Relation.SIBLING, ftwa.Relation.SIBLING, Melis)
+		self.G.new_relation(Ali2, ftwa.Relation.SIBLING, ftwa.Relation.SIBLING, Melis)
+		self.G.new_relation(Seçil, ftwa.Relation.SIBLING, ftwa.Relation.SIBLING, Orhan)
+
 
 
 
@@ -117,7 +174,7 @@ class HelloWorld(cmd.Cmd):
 
 		temp = ftwa.Person(*parse(arg))
 		print("Created {}".format(temp.str()))
-		self.G.person_list[temp.name+temp.surname] = temp
+		self.G.person_list[temp.uid] = temp
 
 	def do_search(self, arg):
 		"Search and retrieve information of a person\nUsage: search <person>"
@@ -178,15 +235,14 @@ class HelloWorld(cmd.Cmd):
 
 	def do_relate(self, arg):
 		"Adds new primitive relation (CHILD, PARENT, SIBLING, SPOUSE)\nUsage: relate <person1> <person2> <relation1>"
-		person1str = parse(arg)[0]
-		person2str = parse(arg)[1]
+
 		relationstr = parse(arg)[2].upper()
 
 		try:
-			self.G.new_relation(self.G.person_list[person1str], ftwa.Relation[relationstr], ftwa.Person.get_reverse_relation(ftwa.Relation[relationstr]), self.G.person_list[person2str])
+			self.G.new_relation(self.G.person_list[int(parse(arg)[0])], ftwa.Relation[relationstr], ftwa.Person.get_reverse_relation(ftwa.Relation[relationstr]), self.G.person_list[int(parse(arg)[1])])
 
 		except:
-			print("[ERROR] Failed To Add Relation!")
+			print("[ERROR] Failed To Add Relation!\n{}".format(sys.exc_info()))
 
 
 
@@ -237,11 +293,11 @@ class HelloWorld(cmd.Cmd):
 	def do_delete(self, arg):
 		"Search and delete person and it's relations\nUsage: delete <person>"
 		try:
-			del self.G.person_list[parse(arg)[0]]
+			del self.G.person_list[int(parse(arg)[0])]
 			self.G.fix_relation_table()
 			print("Deleted successfully!")
 		except:
-			print("Not Found!")
+			print("Not Found! {}".format(sys.exc_info()))
 	def complete_delete(self, text, line, begidx, endidx):
 		if not text:
 			completions = self.G.person_list[:]
@@ -256,51 +312,53 @@ class HelloWorld(cmd.Cmd):
 		"Updates name, surname, gender, birthdate or deathdate.\nUsage: update <person> <field> <new_value>\nExample: update AliYanyatan gender female"
 
 		try:
-			print(parse(arg)[0])
-			self.G.person_list[parse(arg)[0]]
+			print(int(parse(arg)[0]))
+			self.G.person_list[int(parse(arg)[0])]
 		except:
 			print("[ERROR] Not Found!")
 			return
 		if parse(arg)[1] == "name":
-			self.G.person_list[parse(arg)[0]].set_name(parse(arg)[2])
-			self.G.person_list[self.G.person_list[parse(arg)[0]].name+self.G.person_list[parse(arg)[0]].surname] = self.G.person_list[parse(arg)[0]]
-			del self.G.person_list[parse(arg)[0]]
+			self.G.person_list[int(parse(arg)[0])].set_name(parse(arg)[2])
+			self.G.person_list[self.G.person_list[int(parse(arg)[0])].name+self.G.person_list[int(parse(arg)[0])].surname] = self.G.person_list[int(parse(arg)[0])]
+			del self.G.person_list[int(parse(arg)[0])]
 			print("Successfully updated!")
+
 
 
 		if parse(arg)[1] == "surname":
-			self.G.person_list[parse(arg)[0]].set_surname(parse(arg)[2])
-			self.G.person_list[self.G.person_list[parse(arg)[0]].name+self.G.person_list[parse(arg)[0]].surname] = self.G.person_list[parse(arg)[0]]
-			del self.G.person_list[parse(arg)[0]]
+			self.G.person_list[int(parse(arg)[0])].set_surname(parse(arg)[2])
+			self.G.person_list[self.G.person_list[int(parse(arg)[0])].name+self.G.person_list[int(parse(arg)[0])].surname] = self.G.person_list[int(parse(arg)[0])]
+			del self.G.person_list[int(parse(arg)[0])]
 			print("Successfully updated!")
+			return
 		if parse(arg)[1] == "gender":
 
-			self.G.person_list[parse(arg)[0]].set_gender(parse(arg)[2])
+			self.G.person_list[int(parse(arg)[0])].set_gender(parse(arg)[2])
 			print("Successfully updated!")
 
 		if parse(arg)[1] == "birthdate":
 
-			temp_person = copy.deepcopy(self.G.person_list[parse(arg)[0]])
+			temp_person = copy.deepcopy(self.G.person_list[int(parse(arg)[0])])
 			temp_person.set_birthdate(parse(arg)[2])
 
 
-			for relation in self.G.get_persons_relations_of_a_kind(self.G.person_list[parse(arg)[0]], ftwa.Relation.PARENT):
+			for relation in self.G.get_persons_relations_of_a_kind(self.G.person_list[int(parse(arg)[0])], ftwa.Relation.PARENT):
 				if (relation[3].birthdate - temp_person.birthdate).days > 0:
 					print ("You can't set birthdate older than parents birthdate")
 					return
 
 
-			for relation in self.G.get_persons_relations_of_a_kind(self.G.person_list[parse(arg)[0]], ftwa.Relation.CHILD):
+			for relation in self.G.get_persons_relations_of_a_kind(self.G.person_list[int(parse(arg)[0])], ftwa.Relation.CHILD):
 				if (relation[3].birthdate - temp_person.birthdate).days < 0:
 					print ("You can't set birthdate younger than children birthdate")
 					return
 
 
-			self.G.person_list[parse(arg)[0]].set_birthdate(parse(arg)[2])
+			self.G.person_list[int(parse(arg)[0])].set_birthdate(parse(arg)[2])
 			print("Successfully updated!")
 		if parse(arg)[1] == "deathdate":
 
-			self.G.person_list[parse(arg)[0]].set_deathdate(parse(arg)[2])
+			self.G.person_list[int(parse(arg)[0])].set_deathdate(parse(arg)[2])
 			print("Successfully updated!")
 
 		else:
@@ -321,7 +379,7 @@ class HelloWorld(cmd.Cmd):
 	def do_age(self, arg):
 		"Get age of person\nUsage: age <person>"
 		try:
-			print(self.G.person_list[parse(arg)[0]].get_age())
+			print(self.G.person_list[int(parse(arg)[0])].get_age())
 		except:
 			print("[ERROR] Not Found!")	
 
@@ -338,7 +396,7 @@ class HelloWorld(cmd.Cmd):
 	def do_level(self, arg):
 		"Get level of person. Returns longest parental path distance\nUsage: level <person>"
 		try:
-			print(self.G.get_level(self.G.person_list[parse(arg)[0]]))
+			print(self.G.get_level(self.G.person_list[int(parse(arg)[0])]))
 		except:
 			print("[ERROR] Not Found!")	
 
@@ -369,7 +427,7 @@ class HelloWorld(cmd.Cmd):
 				Y.nodes().index(v.uid)
 			except:
 				Y.add_node(v.uid)
-				labels2[v.uid] = v.name + v.surname
+				labels2[v.uid] = v.str_short()
 
 		for rel in self.G.relation_list:
 			try:
@@ -389,12 +447,16 @@ class HelloWorld(cmd.Cmd):
 				pos = nx.spectral_layout(Y)
 			if parse(arg)[0] == "random":
 				pos = nx.random_layout(Y)
+			if parse(arg)[0] == "shell":
+				pos = nx.shell_layout(Y)
+			if parse(arg)[0] == "graphviz":
+				pos = nx.graphviz_layout(Y)
 
 
 
 		plt.title("Family Graph")
-		nx.draw_networkx(G=Y, pos=pos, labels=labels2, font_size=14)
-		nx.draw_networkx_edge_labels(Y,pos, edgelabels2)
+		nx.draw_networkx(G=Y, pos=pos, labels=labels2, font_size=14, style="dashed")
+		nx.draw_networkx_edge_labels(Y,pos, edgelabels2, style="dashed")
 		#nx.draw_circular(Y)
 		
 		#plt.axis("off")
@@ -403,6 +465,63 @@ class HelloWorld(cmd.Cmd):
 		mng.resize(*mng.window.maxsize())
 		plt.show() # display
 		
+
+	def do_sub_print(self, arg):
+		"Visualizes first-degree relations relations of a node\nUsage: subprint <person>"
+
+		labels2 = {}
+		
+		edgelabels2 = collections.OrderedDict()
+
+		Y=nx.DiGraph()
+
+
+		for v in self.G.get_first_degree_relatives(self.G.person_list[int(parse(arg)[0])]):
+			try:
+				Y.nodes().index(v.uid)
+			except:
+				Y.add_node(v.uid)
+				labels2[v.uid] = v.str_short()
+
+		labels2[int(parse(arg)[0])] = self.G.person_list[int(parse(arg)[0])].str_short()
+
+		for rel in self.G.get_persons_relations(self.G.person_list[int(parse(arg)[0])]):
+			try:
+				Y.edges().index(rel[0], rel[3])
+			except:
+				Y.add_edge(rel[0], rel[3])
+				edgelabels2[rel[0], rel[3]] = r'${}$'.format(rel[1].name)
+		
+
+		pos=nx.spring_layout(Y, iterations= 3000)
+
+
+		if len(parse(arg)) > 0:
+			if parse(arg)[0] == "circular":
+				pos=nx.circular_layout(Y)
+			if parse(arg)[0] == "spectral":
+				pos = nx.spectral_layout(Y)
+			if parse(arg)[0] == "random":
+				pos = nx.random_layout(Y)
+			if parse(arg)[0] == "shell":
+				pos = nx.shell_layout(Y)
+			if parse(arg)[0] == "graphviz":
+				pos = nx.graphviz_layout(Y)
+
+
+
+		plt.title("First-Degree Relatives of {}".format(self.G.person_list[int(parse(arg)[0])].str_short()))
+		nx.draw_networkx(G=Y, pos=pos, labels=labels2, font_size=14, style="dashed")
+		nx.draw_networkx_edge_labels(Y,pos, edgelabels2, style="dashed")
+		#nx.draw_circular(Y)
+		
+		#plt.axis("off")
+		#plt.savefig("family_graph.png") # save as png
+		mng = plt.get_current_fig_manager()
+		mng.resize(*mng.window.maxsize())
+		plt.show() # display
+
+	
 	def do_exit(self, line):
 		"Exits from ftwa shell"
 		return True
@@ -417,4 +536,4 @@ def parse(arg):
 
 if __name__ == '__main__':
 
-	HelloWorld().cmdloop()
+	FTWA().cmdloop()

@@ -64,8 +64,8 @@ class Person(metaclass=MetaPerson): #This is our Person object which creates str
 	
 	def __init__(self, name=None, surname=None, gender: Gender=None, birthdate: date=None, deathdate: date=None):
 
-		self.name = None
-		self.surname = None
+		self.name = " "
+		self.surname = " "
 		self.gender = None
 		self.birthdate = None
 		self.deathdate = None
@@ -207,6 +207,10 @@ class Person(metaclass=MetaPerson): #This is our Person object which creates str
 		temp = "uid={}	name={}, surn={}, g={}, bd={}, dd={}, p={}".format(self.uid, self.name, self.surname, self.gender, self.birthdate, self.deathdate, self.is_placeholder())
 		return temp
 
+	def str_short(self):
+		temp = "{} {}".format(self.name, self.surname)
+		return temp
+
 	def get_reverse_relation(r: Relation):
 		if r == Relation.PARENT:
 			return Relation.CHILD
@@ -230,17 +234,17 @@ class FamilyGraph():
 		pool = []
 		todelete = []
 		for k, v in self.person_list.items():
-			pool.append(v)
+			pool.append(v.uid)
 
 		for x in pool:
-			print(x.name)
+			print(x)
 
 		for rel in self.relation_list:
 			if rel[0] not in pool:
-				print("0 not in pool {}".format(rel[0].name))
+				print("0 not in pool {}".format(rel[0]))
 				todelete.append(rel)
 			elif rel[3] not in pool:
-				print("3 not in pool {}".format(rel[3].name))
+				print("3 not in pool {}".format(rel[3]))
 				todelete.append(rel)
 
 		self.relation_list = [x for x in self.relation_list if x not in todelete]
@@ -291,18 +295,18 @@ class FamilyGraph():
 					
 	def get_level(self, p: Person):
 
-		father_rel = self.get_persons_relations_of_a_kind(p, Relation.PARENT)		
+		parent_rel = self.get_persons_relations_of_a_kind(p, Relation.PARENT)		
 		
-		father = None
+		parent = None
 
-		if father_rel:
-			for y in father_rel[0]:
-				if y != p and type(y) == type(p):
-					father = y
-		if not father:
+		if parent_rel:
+			for y in parent_rel[0]:
+				if y != p.uid and type(y) == type(p.uid):
+					parent = y
+		if not parent:
 			return 0
 		else:
-			return 1 + self.get_level(father)
+			return 1 + self.get_level(self.person_list[parent])
 
 	def get_persons_relations(self, p: Person):
 
