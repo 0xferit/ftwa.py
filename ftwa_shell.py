@@ -244,11 +244,11 @@ class FTWA(cmd.Cmd):
 
 		relationstr = parse(arg)[2].upper()
 
-		try:
-			self.G.new_relation(self.G.person_list[int(parse(arg)[0])], ftwa.Relation[relationstr], ftwa.Person.get_reverse_relation(ftwa.Relation[relationstr]), self.G.person_list[int(parse(arg)[1])])
+		#try:
+		self.G.new_relation(self.G.person_list[int(parse(arg)[0])], ftwa.Relation[relationstr], ftwa.Person.get_reverse_relation(ftwa.Relation[relationstr]), self.G.person_list[int(parse(arg)[1])])
 
-		except:
-			print("[ERROR] Failed To Add Relation!\n{}".format(sys.exc_info()))
+		#except:
+		#	print("[ERROR] Failed To Add Relation!\n{}".format(sys.exc_info()))
 
 
 
