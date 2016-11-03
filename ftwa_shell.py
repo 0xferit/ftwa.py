@@ -313,31 +313,28 @@ class FTWA(cmd.Cmd):
 		"Updates name, surname, gender, birthdate or deathdate.\nUsage: update <person> <field> <new_value>\nExample: update AliYanyatan gender female"
 
 		try:
-			print(int(parse(arg)[0]))
 			self.G.person_list[int(parse(arg)[0])]
 		except:
 			print("[ERROR] Not Found!")
 			return
 		if parse(arg)[1] == "name":
 			self.G.person_list[int(parse(arg)[0])].set_name(parse(arg)[2])
-			self.G.person_list[self.G.person_list[int(parse(arg)[0])].name+self.G.person_list[int(parse(arg)[0])].surname] = self.G.person_list[int(parse(arg)[0])]
-			del self.G.person_list[int(parse(arg)[0])]
+
 			print("Successfully updated!")
 
 
 
-		if parse(arg)[1] == "surname":
+		elif parse(arg)[1] == "surname":
 			self.G.person_list[int(parse(arg)[0])].set_surname(parse(arg)[2])
-			self.G.person_list[self.G.person_list[int(parse(arg)[0])].name+self.G.person_list[int(parse(arg)[0])].surname] = self.G.person_list[int(parse(arg)[0])]
-			del self.G.person_list[int(parse(arg)[0])]
+
 			print("Successfully updated!")
-			return
-		if parse(arg)[1] == "gender":
+
+		elif parse(arg)[1] == "gender":
 
 			self.G.person_list[int(parse(arg)[0])].set_gender(parse(arg)[2])
 			print("Successfully updated!")
 
-		if parse(arg)[1] == "birthdate":
+		elif parse(arg)[1] == "birthdate":
 
 			temp_person = copy.deepcopy(self.G.person_list[int(parse(arg)[0])])
 			temp_person.set_birthdate(parse(arg)[2])
@@ -357,7 +354,7 @@ class FTWA(cmd.Cmd):
 
 			self.G.person_list[int(parse(arg)[0])].set_birthdate(parse(arg)[2])
 			print("Successfully updated!")
-		if parse(arg)[1] == "deathdate":
+		elif parse(arg)[1] == "deathdate":
 
 			self.G.person_list[int(parse(arg)[0])].set_deathdate(parse(arg)[2])
 			print("Successfully updated!")
