@@ -408,7 +408,7 @@ class FamilyGraph():
 					if nodes[1].gender == Gender.MALE:
 						if relation_path[1] == Relation.SPOUSE:
 							if nodes[2].gender == Gender.FEMALE:
-								return ComplexRelation.ELTI
+								return ComplexRelation.YENGE
 					else:
 						if relation_path[1] == Relation.CHILD:
 							return ComplexRelation.YEGEN
@@ -549,6 +549,13 @@ class FamilyGraph():
 							if nodes[2].gender == Gender.FEMALE:
 								if relation_path[2] == Relation.SPOUSE:
 									return ComplexRelation.BACANAK	
+
+		if len(relation_path) ==3:
+			if nodes[0].gender == Gender.FEMALE:
+				if relation_path[0] == Relation.SPOUSE:
+					if relation_path[1] == Relation.SIBLING:
+						if relation_path[2] == Relation.SPOUSE:
+							return ComplexRelation.ELTI
 
 
 		if len(relation_path) == 3:

@@ -31,6 +31,7 @@ class FTWA(cmd.Cmd):
 		Deli 	= ftwa.Person("Deli", "Sensoy",   ftwa.Gender.MALE, date(2007, 12, 15), date(2075, 12, 15)) 
 		Riza	= ftwa.Person("Riza", "Sensoy",   ftwa.Gender.MALE, date(1950, 1, 1), date(2030, 12, 12)) 
 		Fatmagul= ftwa.Person("Fatmagul", "Sensoy", ftwa.Gender.FEMALE, birthdate = date(2000, 1, 1))
+		
 		Makbule = ftwa.Person("Makbule", "Huyuguzel", ftwa.Gender.FEMALE, date(1945,1,1))
 		Nuri	= ftwa.Person("Nuri", "Camurabatti", ftwa.Gender.MALE, date(1981,1,1))
 		Nurbanu	= ftwa.Person("Nurbanu", "Sensoy", ftwa.Gender.FEMALE, date(1982,1,1))
@@ -175,7 +176,7 @@ class FTWA(cmd.Cmd):
 
 
 	def do_create(self, arg):
-		"Creates person\nUsage: create <name> <surname> <gender> <birthdate> <deathdate>\nName and surname mandatory\nExamples: create Ali Durmaz\n\tcreate name=Ali surname=Durmaz male birthdate=1999.1.1"
+		"Creates person\nUsage: create <name> <surname> <gender> <birthdate> <deathdate>\nExamples: create Ali Durmaz\n\tcreate Ali Durmaz male 1999.1.1"
 
 		temp = ftwa.Person(*parse(arg))
 		print("Created {}".format(temp.str()))
