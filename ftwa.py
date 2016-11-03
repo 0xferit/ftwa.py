@@ -215,7 +215,7 @@ class FamilyGraph():
 				
 
 	def new_relation(self, p1: Person, r1: Relation, r2: Relation, p2: Person):
-		if ((not p1.is_placeholder() and p1.get_age() < 18) or (not p2.is_placeholder() and p2.get_age() < 18)) and r1 == Relation.SPOUSE:
+		if (( p1.birthdate != None and p1.get_age() < 18) or ( p2.birthdate != None and p2.get_age() < 18)) and r1 == Relation.SPOUSE:
 			print("[WARNING] Marriage between {} and {} is a child marriage!".format(p1.str_short(), p2.str_short()))
 
 		
