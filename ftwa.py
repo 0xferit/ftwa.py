@@ -259,18 +259,19 @@ class FamilyGraph():
 	def get_level(self, p: Person):
 
 		parent_rel = self.get_persons_relations_of_a_kind(p, Relation.PARENT)		
-		
+		print("person: {}".format(p.name))
 		parent = None
 		print(len(parent_rel))
 		for x in parent_rel:
 			print(x)
 		if parent_rel != None and len(parent_rel) > 0:
 
-			if parent_rel[0] != p.uid:
-
+			if parent_rel[0][0] != p.uid:
+				print("select {}".format(parent_rel[0][0]))
 				parent = parent_rel[0][0]
 			else:
 				parent = parent_rel[0][3]
+				print("select {}".format(parent_rel[0][3]))
 		
 
 		if parent == None :
