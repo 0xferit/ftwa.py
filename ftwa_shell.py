@@ -397,7 +397,7 @@ class FTWA(cmd.Cmd):
 		return completions
 
 	def do_level(self, arg):
-		"Get level of person. Returns shortest parental path distance\nUsage: level <person_uid>"
+		"Get level of person. Returns longest parental path distance\nUsage: level <person_uid>"
 		try:
 			print(self.G.get_level(self.G.person_list[int(parse(arg)[0])]))
 		except:
