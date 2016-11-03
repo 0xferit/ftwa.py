@@ -409,9 +409,12 @@ class FamilyGraph():
 						if relation_path[1] == Relation.SPOUSE:
 							if nodes[2].gender == Gender.FEMALE:
 								return ComplexRelation.YENGE
+					
 					else:
 						if relation_path[1] == Relation.CHILD:
 							return ComplexRelation.YEGEN
+						elif relation_path[1] == Relation.SPOUSE:
+							return ComplexRelation.ENISTE
 				else:
 					if nodes[1].gender == Gender.MALE:
 
@@ -588,8 +591,7 @@ class FamilyGraph():
 			
 
 		
-		return ComplexRelation.TANIMSIZ
-		
+		return ComplexRelation.TANIMSIZ		
 
 
 
