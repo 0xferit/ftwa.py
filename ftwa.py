@@ -277,7 +277,7 @@ class FamilyGraph():
 			return 0
 		elif parent != None:
 			print("levelup".format(parent))
-			return 1 #+ self.get_level(self.person_list[parent])
+			return 1 + self.get_level(self.person_list[parent])
 
 	def get_persons_relations(self, p: Person):
 
