@@ -42,7 +42,6 @@ class FTWA(cmd.Cmd):
 		Cimcime = ftwa.Person("Cimcime", "Durdiyen", ftwa.Gender.FEMALE, date(1999,1,1))
 		Aynur	= ftwa.Person("Aynur", "Kosasimyok", ftwa.Gender.FEMALE, date(1950,1,1))
 
-		Aynur2= ftwa.Person("Aynur", "Kosasimyok")
 
 
 		self.G.person_list[Veli.uid] = Veli
@@ -61,7 +60,6 @@ class FTWA(cmd.Cmd):
 		self.G.person_list[Cimcime.uid] = Cimcime
 		self.G.person_list[Aynur.uid] = Aynur
 		
-		self.G.person_list[Aynur2.uid] = Aynur2
 
 
 		self.G.new_relation(Ferhan, ftwa.Relation.SPOUSE, ftwa.Relation.SPOUSE, Huri)
@@ -76,19 +74,23 @@ class FTWA(cmd.Cmd):
 		self.G.new_relation(Nurbanu, ftwa.Relation.SIBLING, ftwa.Relation.SIBLING, Ferhan)
 		self.G.new_relation(Asli, ftwa.Relation.SIBLING, ftwa.Relation.SIBLING, Huri)
 		self.G.new_relation(Kerem, ftwa.Relation.SIBLING, ftwa.Relation.SIBLING, Huri)
+
 		self.G.new_relation(Makbule, ftwa.Relation.CHILD, ftwa.Relation.PARENT, Ferhan)
+
 		self.G.new_relation(Mahmut, ftwa.Relation.CHILD, ftwa.Relation.PARENT, Huri)
 
 		self.G.new_relation(Cimcime, ftwa.Relation.PARENT, ftwa.Relation.CHILD, Asli)
 		self.G.new_relation(Aynur, ftwa.Relation.CHILD, ftwa.Relation.PARENT, Huri)
+
 		self.G.new_relation(Cimcime, ftwa.Relation.PARENT, ftwa.Relation.CHILD, Emre)
+
 		self.G.new_relation(Nuri, ftwa.Relation.PARENT, ftwa.Relation.CHILD, Makbule)
+
 		self.G.new_relation(Nurbanu, ftwa.Relation.PARENT, ftwa.Relation.CHILD, Riza)
 
 		self.G.new_relation(Kerem, ftwa.Relation.PARENT, ftwa.Relation.CHILD, Aynur)
 		self.G.new_relation(Asli, ftwa.Relation.PARENT, ftwa.Relation.CHILD, Mahmut)
 
-		self.G.new_relation(Kerem, ftwa.Relation.SIBLING, ftwa.Relation.SIBLING, Aynur2	)
 
 	def do_load_demo_data(self, arg):
 		"For DEMO"
@@ -171,19 +173,19 @@ class FTWA(cmd.Cmd):
 
 
 	def do_create(self, arg):
-		"Creates person\nUsage: create <name> <surname> <gender> <birthdate> <deathdate>\nName and surname mandatory\nExamples: create Ali Durmaz\n\tcreate name=Ali surname=Durmaz birthdate=1999.1.1"
+		"Creates person\nUsage: create <name> <surname> <gender> <birthdate> <deathdate>\nName and surname mandatory\nExamples: create Ali Durmaz\n\tcreate name=Ali surname=Durmaz male birthdate=1999.1.1"
 
 		temp = ftwa.Person(*parse(arg))
 		print("Created {}".format(temp.str()))
 		self.G.person_list[temp.uid] = temp
 
 	def do_search(self, arg):
-		"Search and retrieve information of a person\nUsage: search <person>"
+		"Search and retrieve information of a person\nUsage: search <person_uid>"
 		try:
-			print(self.G.person_list[int(arg[0])].str())
+			print(self.G.person_list[int(parse(arg)[0])].str())
 		except:
 			print("[ERROR] Not Found!")
-			print(self.G.person_list.keys())
+			#print(self.G.person_list.keys())
 
 	def complete_search(self, text, line, begidx, endidx):
 		if not text:
@@ -196,9 +198,9 @@ class FTWA(cmd.Cmd):
 		return completions
 
 	def do_placeholder(self, arg):#TODO 
-		"Queries if a person is a placeholder\nUsage: placeholder <person>"
+		"Queries if a person is a placeholder\nUsage: placeholder <person_uid>"
 		try:
-			print(self.G.person_list[int(arg[0])].is_placeholder())
+			print(self.G.person_list[int(parse(arg)[0])].is_placeholder())
 		except:
 			print("[ERROR] Not Found!")
 	def complete_placeholder(self, text, line, begidx, endidx):
@@ -219,10 +221,10 @@ class FTWA(cmd.Cmd):
 		print("{} record".format(len(self.G.person_list)))
 	
 	def do_relation(self, arg):
-		"Prints relation between two persons\nUsage: relation <person1> <person2>"
+		"Prints relation between two persons\nUsage: relation <person1_uid> <person2_uid>"
 		
 		 #p1 = self.G.person_lis		
-		print(self.G.get_relation_between(self.G.person_list[int(parse(arg)[0])], self.G.person_list[int(parse(arg)[1])]).name)
+		print(self.G.get_relation_between( self.G.person_list[int(parse(arg)[0])], self.G.person_list[int(parse(arg)[1])] ).name)
 
 	def complete_relation(self, text, line, begidx, endidx):
 		if not text:
@@ -235,7 +237,7 @@ class FTWA(cmd.Cmd):
 		return completions
 
 	def do_relate(self, arg):
-		"Adds new primitive relation (CHILD, PARENT, SIBLING, SPOUSE)\nUsage: relate <person1> <person2> <relation1>"
+		"Adds new primitive relation (CHILD, PARENT, SIBLING, SPOUSE)\nUsage: relate <person1_uid> <person2_uid> <relation of p2 to p1>"
 
 		relationstr = parse(arg)[2].upper()
 
@@ -392,11 +394,11 @@ class FTWA(cmd.Cmd):
 		return completions
 
 	def do_level(self, arg):
-		"Get level of person. Returns longest parental path distance\nUsage: level <person>"
+		"Get level of person. Returns shortest parental path distance\nUsage: level <person_uid>"
 		try:
 			print(self.G.get_level(self.G.person_list[int(parse(arg)[0])]))
 		except:
-			print("[ERROR] Not Found!")	
+			print("[ERROR] Not Found! {}".format(sys.exc_info()))	
 
 	def complete_level(self, text, line, begidx, endidx):
 		if not text:
@@ -427,7 +429,7 @@ class FTWA(cmd.Cmd):
 			except:
 				Y.add_node(v.uid)
 				labels2[v.uid] = v.str_short()
-				node_sizes.append(2000/(math.pow(2, self.G.get_level(v))))
+				node_sizes.append(1200/(math.pow(2, self.G.get_level(v))))
 
 		for rel in self.G.relation_list:
 			try:
@@ -467,7 +469,7 @@ class FTWA(cmd.Cmd):
 		
 
 	def do_sub_print(self, arg):
-		"Visualizes first-degree relations relations of a node\nUsage: subprint <person>"
+		"Visualizes first-degree relations relations of a node\nUsage: subprint <person_uid>"
 
 		labels2 = {}
 		

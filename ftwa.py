@@ -170,7 +170,7 @@ class Person(metaclass=MetaPerson): #This is our Person object which creates str
 		
 
 	def str(self):
-		temp = "uid={}	name={}, surn={}, g={}, bd={}, dd={}, p={}".format(self.uid, self.name, self.surname, self.gender, self.birthdate, self.deathdate, self.is_placeholder())
+		temp = "name={}, surn={}, g={}, bd={}, dd={}, p={}".format(self.name, self.surname, self.gender, self.birthdate, self.deathdate, self.is_placeholder())
 		return temp
 
 	def str_short(self):
@@ -261,21 +261,23 @@ class FamilyGraph():
 		parent_rel = self.get_persons_relations_of_a_kind(p, Relation.PARENT)		
 		
 		parent = None
-
-		if parent_rel:
+		print(len(parent_rel))
+		for x in parent_rel:
+			print(x)
+		if parent_rel != None and len(parent_rel) > 0:
 
 			if parent_rel[0] != p.uid:
 
 				parent = parent_rel[0][0]
 			else:
 				parent = parent_rel[0][3]
-
+		
 
 		if parent == None :
 			return 0
-		else:
-
-			return 1 + self.get_level(self.person_list[parent])
+		elif parent != None:
+			print("levelup".format(parent))
+			return 1 #+ self.get_level(self.person_list[parent])
 
 	def get_persons_relations(self, p: Person):
 
@@ -397,7 +399,7 @@ class FamilyGraph():
 
 #------------------------2. DEGREE RELATIONS------------------------------------
 
-		if len(relation_path) == 2:
+		elif len(relation_path) == 2:
 			
 			
 			if relation_path[0] == Relation.SIBLING:
@@ -527,6 +529,27 @@ class FamilyGraph():
 
 #------------------------3. DEGREE RELATIONS-------------------------------------------
 
+		elif len(relation_path) == 3:
+
+			if relation_path[0] == Relation.PARENT:
+
+				if relation_path[1] == Relation.SIBLING:
+
+					if relation_path[2] == Relation.CHILD:
+						return ComplexRelation.KUZEN
+
+					
+
+
+			if nodes[0].gender == Gender.MALE:
+				if relation_path[0] == Relation.SPOUSE:
+					if nodes[1].gender == Gender.FEMALE:
+						if relation_path[1] == Relation.SIBLING:
+							if nodes[2].gender == Gender.FEMALE:
+								if relation_path[2] == Relation.SPOUSE:
+									return ComplexRelation.BACANAK	
+
+
 		if len(relation_path) == 3:
 
 			if relation_path[0] == Relation.PARENT:
@@ -535,6 +558,15 @@ class FamilyGraph():
 
 					if relation_path[2] == Relation.CHILD:
 						return ComplexRelation.KUZEN
+
+					elif relation_path[2] == Relation.SPOUSE:
+						if nodes[3].gender == Gender.MALE:
+							return ComplexRelation.ENISTE
+						else:
+							return ComplexRelation.YENGE
+
+					
+
 
 			if nodes[0].gender == Gender.MALE:
 				if relation_path[0] == Relation.SPOUSE:
@@ -546,8 +578,8 @@ class FamilyGraph():
 		
 			
 
-		else:
-			return ComplexRelation.TANIMSIZ
+		
+		return ComplexRelation.TANIMSIZ
 		
 
 
