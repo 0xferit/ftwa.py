@@ -555,7 +555,8 @@ class FamilyGraph():
 				if relation_path[0] == Relation.SPOUSE:
 					if relation_path[1] == Relation.SIBLING:
 						if relation_path[2] == Relation.SPOUSE:
-							return ComplexRelation.ELTI
+							if nodes[3].gender == Gender.FEMALE:
+								return ComplexRelation.ELTI
 
 
 		if len(relation_path) == 3:
