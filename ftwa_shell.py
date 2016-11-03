@@ -11,6 +11,7 @@ import re
 import sys
 import logging
 import copy
+import math
 
 class FTWA(cmd.Cmd):
 		
@@ -416,6 +417,7 @@ class FTWA(cmd.Cmd):
 		"Visualizes the family graph\nUsage: print"
 
 		labels2 = {}
+		node_sizes=[]
 		
 		edgelabels2 = collections.OrderedDict()
 
@@ -428,6 +430,7 @@ class FTWA(cmd.Cmd):
 			except:
 				Y.add_node(v.uid)
 				labels2[v.uid] = v.str_short()
+				node_sizes.append(2000/(math.pow(2, self.G.get_level(v))))
 
 		for rel in self.G.relation_list:
 			try:
@@ -455,7 +458,7 @@ class FTWA(cmd.Cmd):
 
 
 		plt.title("Family Graph")
-		nx.draw_networkx(G=Y, pos=pos, labels=labels2, font_size=14, style="dashed")
+		nx.draw_networkx(G=Y, pos=pos, labels=labels2, font_size=14, style="dashed", node_size=node_sizes)
 		nx.draw_networkx_edge_labels(Y,pos, edgelabels2, style="dashed")
 		#nx.draw_circular(Y)
 		

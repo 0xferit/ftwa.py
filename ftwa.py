@@ -300,12 +300,18 @@ class FamilyGraph():
 		parent = None
 
 		if parent_rel:
-			for y in parent_rel[0]:
-				if y != p.uid and type(y) == type(p.uid):
-					parent = y
-		if not parent:
+			print("parel")
+			if parent_rel[0] != p.uid:
+				print("if parel")
+				parent = parent_rel[0][0]
+			else:
+				parent = parent_rel[0][3]
+
+		print("> {}".format(parent))
+		if parent == None :
 			return 0
 		else:
+			print("up 1 level")
 			return 1 + self.get_level(self.person_list[parent])
 
 	def get_persons_relations(self, p: Person):
@@ -316,12 +322,11 @@ class FamilyGraph():
 		
 		direct = [rel for rel in self.get_persons_relations(p) if rel[1] == r and rel[0] == p.uid]
 		reverse = [rel for rel in self.get_persons_relations(p) if rel[2] == r and rel[3] == p.uid]	
-
-	
-		if direct:
-			return direct
-		else:
-			return reverse
+		
+		for x in direct+reverse:
+			print(x)
+		
+		return direct + reverse
 
 
 
