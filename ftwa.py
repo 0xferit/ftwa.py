@@ -124,26 +124,6 @@ class Person(metaclass=MetaPerson): #This is our Person object which creates str
 		else:
 			self.deathdate = d
 
-	def set_date_if_legal(self, d: date): #TODO
-		
-		if ((not p1.is_placeholder() and p1.get_age() < 18) or (not p2.is_placeholder() and p2.get_age() < 18)) and r1 == Relation.SPOUSE:
-			print("[WARNING] Marriage between {} and {} is a child marriage!".format(p1.name+p1.surname, p2.name+p2.surname))
-
-		
-		if r1 == Relation.CHILD:
-			if not self.is_older_than(p1, p2):
-				print("[ERROR] Impossible Birthdates/Deathdates! {} can't be parent of {}".format(p1.name, p2.name))
-				return
-
-		if r2 == Relation.CHILD:
-			if not self.is_older_than(p2, p1):
-				print("[ERROR] Impossible Birthdates/Deathdates! {} can't be parent of {}".format(p2.name, p1.name))
-				return
-
-		if r1 == Relation.SPOUSE or r2 == Relation.SPOUSE:
-			if self.get_relation_between(p1, p2) in ILLEGAL_MARRIAGE_RULES:
-				print("[ERROR] Illegal Marriage! {} can't be spouse of {} because their relation is {}".format(p1.name, p2.name, self.get_relation_between(p1, p2)))
-				return
 		
 	
 	def set_gender(self, g: Gender):
@@ -187,20 +167,6 @@ class Person(metaclass=MetaPerson): #This is our Person object which creates str
 		return (0 > (today.year - deathdate.year - ((today.month, today.day) < (deathdate.month, deathdate.day))))
 
 
-
-	def get_relation(self, relative): #TODO
-		current = self
-		path = []
-		while not current == relative:
-			first_degree_relatives = self.get_first_degree_relatives()
-			path.append(self)
-
-			for rel in first_degree_relatives:
-				temp_path = copy.deepcopy(path)
-				if rel == relative:
-					temp_path.append(relative)
-					return temp_path
-
 		
 
 	def str(self):
@@ -236,8 +202,6 @@ class FamilyGraph():
 		for k, v in self.person_list.items():
 			pool.append(v.uid)
 
-		for x in pool:
-			print(x)
 
 		for rel in self.relation_list:
 			if rel[0] not in pool:
@@ -272,11 +236,10 @@ class FamilyGraph():
 
 		self.relation_list.append((p1.uid, r1, r2, p2.uid))
 
-	def del_relation(self, p1: Person, r: Relation, r2: Relation, p2: Person): #TODO 
-		return	
+
 
 	def get_first_degree_relatives(self, p: Person):
-		print("here {}".format(type(p)))
+
 		temp = []
 		for relation in self.relation_list:
 			if p.uid in relation:
@@ -300,18 +263,18 @@ class FamilyGraph():
 		parent = None
 
 		if parent_rel:
-			print("parel")
+
 			if parent_rel[0] != p.uid:
-				print("if parel")
+
 				parent = parent_rel[0][0]
 			else:
 				parent = parent_rel[0][3]
 
-		print("> {}".format(parent))
+
 		if parent == None :
 			return 0
 		else:
-			print("up 1 level")
+
 			return 1 + self.get_level(self.person_list[parent])
 
 	def get_persons_relations(self, p: Person):
@@ -323,8 +286,6 @@ class FamilyGraph():
 		direct = [rel for rel in self.get_persons_relations(p) if rel[1] == r and rel[0] == p.uid]
 		reverse = [rel for rel in self.get_persons_relations(p) if rel[2] == r and rel[3] == p.uid]	
 		
-		for x in direct+reverse:
-			print(x)
 		
 		return direct + reverse
 
@@ -344,9 +305,9 @@ class FamilyGraph():
 
 		next = visit_queue.pop()
 		length-=1
-		print("mysearch next={} goal={} length={}".format(next, goal, length))
+
 		while next != goal and length > -1:
-			print("while")
+
 			visited.append(next)
 		
 			successors = [x for x in self.get_first_degree_relatives(next) if x not in visited+list(collections.deque(visit_queue))]
@@ -593,7 +554,7 @@ class FamilyGraph():
 
 
 	def get_relation_between(self, p1: Person, p2: Person):
-		print(type(p1))		
+	
 		path = self.mysearch2(p1, p2)
 		rel_path = self.node_path_to_edge_path(path)
 		complex_rel = self.translate_path_to_relation(rel_path, path)
